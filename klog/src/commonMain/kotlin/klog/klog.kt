@@ -71,9 +71,9 @@ class KLogImpl(
 ) : KLog(source, level, formatter, writer)
 
 
-abstract class KLogFactory{
-  var rootLog: KLog = KLogImpl(Level.NONE,LogFormatters.simple,LogWriters.stdOut,null)
-  abstract fun <T:Any> getLog(clazz:KClass<T>):KLog
+open class KLogFactory{
+  open var rootLog: KLog = KLogImpl(Level.NONE,LogFormatters.simple,LogWriters.stdOut,null)
+  open fun <T:Any> getLog(clazz:KClass<T>):KLog = rootLog
 }
 
 expect fun klogFactory(): KLogFactory
