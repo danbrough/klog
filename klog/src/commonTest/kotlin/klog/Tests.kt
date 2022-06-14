@@ -7,12 +7,13 @@ class Tests {
 
   companion object {
     init {
-      logFactory().rootLogger =
-        KLogImpl(Level.INFO, LogFormatters.colored(LogFormatters.simple), LogWriters.stdOut)
-    }
-  }
+      klogFactory().rootLog = KLogImpl(Level.TRACE, LogFormatters.colored(LogFormatters.simple), LogWriters.stdOut)
 
-  private val log = klog()
+    }
+
+    private val log = klog()
+
+  }
 
 
   @Test
@@ -25,7 +26,6 @@ class Tests {
     log.warn { "A warning!" }
     val err = Exception("Something bad happened")
     log.error(err.message, err)
-
 
 
   }

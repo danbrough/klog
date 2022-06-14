@@ -1,14 +1,18 @@
 package klog
 
 import platform.posix.pthread_self
+import kotlin.reflect.KClass
 
-object NativeLogFactory : BaseLogFactory() {
-/*  override var rootLogger: KLog =
-    KLogImpl(Level.TRACE, LogFormatters.colored(LogFormatters.simple), LogWriters.stdOut)*/
 
-  override fun logEntryContext() = LogEntryContext("native", pthread_self().toLong())
+actual fun logEntryContext(): LogEntryContext = LogEntryContext("native", pthread_self().toLong())
 
+
+private class NativeLogFactory : KLogFactory() {
+  override fun <T : Any> getLog(clazz: KClass<T>): KLog = rootLog
 }
 
-actual fun logFactory(): KLogFactory = NativeLogFactory
+private var logFactory: KLogFactory? = null
 
+actual fun klogFactory(): KLogFactory = logFactory ?: NativeLogFactory().also {
+  logFactory = it
+}

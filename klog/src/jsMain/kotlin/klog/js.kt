@@ -1,11 +1,13 @@
 package klog
 
-private object JSLogFactory : BaseLogFactory() {
-  override fun logEntryContext() = LogEntryContext("js", 1)
+import kotlin.reflect.KClass
 
+
+actual fun logEntryContext(): LogEntryContext = LogEntryContext("js", 1)
+
+private object JsLogFactory : KLogFactory(){
+  private var rootLogger = KLogImpl(Level.TRACE,LogFormatters.simple,LogWriters.stdOut,null)
+  override fun <T : Any> getLog(clazz: KClass<T>): KLog = rootLogger
 
 }
-
-actual fun logFactory(): KLogFactory = JSLogFactory
-
-
+actual fun klogFactory(): KLogFactory = JsLogFactory

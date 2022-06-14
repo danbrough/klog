@@ -1,5 +1,9 @@
 package klog
 
+import kotlin.jvm.Volatile
+import kotlin.native.concurrent.ThreadLocal
+import kotlin.reflect.KClass
+
 
 typealias LogWriter = (String) -> Unit
 
@@ -10,6 +14,8 @@ data class LogEntryContext(
   val functionName: String? = null,
   val className: String? = null
 )
+
+expect fun logEntryContext(): LogEntryContext
 
 typealias LogMessageFunction = (() -> LogEntryContext) -> String
 
@@ -53,9 +59,7 @@ abstract class KLog(
     if (level < this.level) return
 
     val message = "${msg ?: err?.message ?: ""} ${
-      msgProvider?.invoke(
-        logFactory()::logEntryContext
-      ) ?: ""
+      msgProvider?.invoke(::logEntryContext) ?: ""
     }".trim()
     writer.invoke(formatter.invoke(level, message, err))
   }
@@ -68,25 +72,16 @@ class KLogImpl(
   source: Any? = null,
 ) : KLog(source, level, formatter, writer)
 
-interface KLogFactory {
-  var rootLogger: KLog
-  fun <T> getLog(t: T): KLog
-  fun logEntryContext(): LogEntryContext
+
+abstract class KLogFactory{
+  var rootLog: KLog = KLogImpl(Level.NONE,LogFormatters.simple,LogWriters.stdOut,null)
+  abstract fun <T:Any> getLog(clazz:KClass<T>):KLog
 }
 
-expect fun logFactory(): KLogFactory
-
-
-abstract class BaseLogFactory : KLogFactory {
-  override var rootLogger: KLog =
-    KLogImpl(Level.NONE, LogFormatters.simple, LogWriters.stdOut)
-
-  override fun <T> getLog(t: T): KLog = rootLogger
-
-}
+expect fun klogFactory(): KLogFactory
 
 @Suppress("NOTHING_TO_INLINE")
-inline fun <T : Any> T.klog(): KLog = logFactory().getLog(this::class)
+inline fun <T : Any> T.klog(): KLog = klogFactory().getLog(this::class)
 
 
 
