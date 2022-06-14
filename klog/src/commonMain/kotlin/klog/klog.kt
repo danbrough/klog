@@ -1,7 +1,5 @@
 package klog
 
-import kotlin.jvm.Volatile
-import kotlin.native.concurrent.ThreadLocal
 import kotlin.reflect.KClass
 
 

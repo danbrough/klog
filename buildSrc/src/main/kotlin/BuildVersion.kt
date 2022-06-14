@@ -25,7 +25,7 @@ object BuildVersion {
     get() = buildVersionFormat.format(buildVersion)
 
 
-  fun Project.buildVersionIncrement() = tasks.register("buildVersionIncrement") {
+  private fun Project.buildVersionIncrement() = tasks.register("buildVersionIncrement") {
     val currentVersion = buildVersion
     println("current version $currentVersion")
     rootProject.file("gradle.properties").readLines().map {
@@ -41,7 +41,17 @@ object BuildVersion {
     }
   }
 
-  fun Project.buildVersionName() = tasks.register("buildVersionName") {
+  private fun Project.buildVersionName() = tasks.register("buildVersionName") {
     println(buildVersionName)
+  }
+
+  private fun Project.nextBuildVersionName() = tasks.register("nextBuildVersionName") {
+    println(buildVersionFormat.format(buildVersion + 1))
+  }
+
+  fun Project.buildVersionTasks() {
+    buildVersionIncrement()
+    buildVersionName()
+    nextBuildVersionName()
   }
 }

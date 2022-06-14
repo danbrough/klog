@@ -1,5 +1,4 @@
-import BuildVersion.buildVersionIncrement
-import BuildVersion.buildVersionName
+import BuildVersion.buildVersionTasks
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -54,5 +53,4 @@ allprojects {
 
 
 
-buildVersionName()
-buildVersionIncrement()
+buildVersionTasks()
