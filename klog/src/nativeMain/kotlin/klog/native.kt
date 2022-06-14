@@ -1,9 +1,11 @@
 package klog
 
+import kotlinx.cinterop.UnsafeNumber
 import platform.posix.pthread_self
 import kotlin.reflect.KClass
 
 
+@OptIn(UnsafeNumber::class)
 actual fun logEntryContext(): LogEntryContext = LogEntryContext("native", pthread_self().toLong())
 
 
