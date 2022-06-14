@@ -38,13 +38,13 @@ kotlin {
   jvm()
   linuxX64()
   android()
+  js {
+    nodejs()
+  }
 
   if (!ProjectProperties.IDE_ACTIVE) {
 
 
-    js {
-      nodejs()
-    }
     linuxArm64()
     linuxArm32Hfp()
     mingwX64()

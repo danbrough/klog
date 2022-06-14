@@ -8,11 +8,12 @@ class Tests {
   companion object {
     init {
       logFactory().rootLogger =
-        KLog(Level.TRACE, LogFormatters.colored(LogFormatters.simple), LogWriters.stdOut)
+        KLogImpl(Level.INFO, LogFormatters.colored(LogFormatters.simple), LogWriters.stdOut)
     }
   }
 
   private val log = klog()
+
 
   @Test
   fun test() {
@@ -24,6 +25,7 @@ class Tests {
     log.warn { "A warning!" }
     val err = Exception("Something bad happened")
     log.error(err.message, err)
+
 
 
   }

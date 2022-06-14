@@ -19,7 +19,9 @@ object LogFormatters {
 
   val simple: LogFormatter = { level, msg, exception ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
-    "$l $msg ${exception?.stackTraceToString()?.let { " :$it" } ?: ""}"
+    "$l $msg ${exception?.stackTraceToString()?.let { " :$it" } ?: ""}".also {
+      println("formatted: $it")
+    }
   }
 
   val verbose: LogFormatter = { level, msg, exception ->

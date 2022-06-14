@@ -18,10 +18,12 @@ enum class Level {
   TRACE, DEBUG, INFO, WARN, ERROR, NONE;
 }
 
-data class KLog(
+
+abstract class KLog(
+  val source: Any? = null,
   val level: Level,
   val formatter: LogFormatter,
-  val writer: LogWriter? = null
+  val writer: LogWriter?
 ) {
 
   fun trace(msg: String? = null, err: Exception? = null, msgProvider: LogMessageFunction? = null) =
@@ -39,7 +41,8 @@ data class KLog(
   fun error(msg: String? = null, err: Exception? = null, msgProvider: LogMessageFunction? = null) =
     log(Level.ERROR, msg, err, msgProvider)
 
-  private inline fun log(
+  @Suppress("WeakerAccess")
+  protected inline fun log(
     level: Level,
     msg: String?,
     err: Exception?,
@@ -58,6 +61,13 @@ data class KLog(
   }
 }
 
+class KLogImpl(
+  level: Level,
+  formatter: LogFormatter,
+  writer: LogWriter,
+  source: Any? = null,
+) : KLog(source, level, formatter, writer)
+
 interface KLogFactory {
   var rootLogger: KLog
   fun <T> getLog(t: T): KLog
@@ -68,7 +78,8 @@ expect fun logFactory(): KLogFactory
 
 
 abstract class BaseLogFactory : KLogFactory {
-  override var rootLogger: KLog = KLog(Level.NONE, LogFormatters.simple, null)
+  override var rootLogger: KLog =
+    KLogImpl(Level.NONE, LogFormatters.simple, LogWriters.stdOut)
 
   override fun <T> getLog(t: T): KLog = rootLogger
 
