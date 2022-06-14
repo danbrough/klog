@@ -2,6 +2,7 @@ package klog
 
 import kotlin.native.concurrent.ThreadLocal
 
+typealias LogFormatter = (Level, String, Exception?) -> String
 
 val Level.color: Int
   get() = when (this) {
@@ -15,15 +16,13 @@ val Level.color: Int
 
 @ThreadLocal
 object LogFormatters {
-  var provideLineNumber: () -> Int = { -1 }
 
-
-  val simple: LogFormatter = { level, msg, exception->
+  val simple: LogFormatter = { level, msg, exception ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
     "$l $msg ${exception?.stackTraceToString()?.let { " :$it" } ?: ""}"
   }
 
-  val verbose: LogFormatter = { level, msg, exception->
+  val verbose: LogFormatter = { level, msg, exception ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
     "$l $msg ${exception?.stackTraceToString()?.let { " :$it" } ?: ""}"
   }

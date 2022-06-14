@@ -1,17 +1,21 @@
 package klog
 
-import kotlin.native.concurrent.ThreadLocal
 
-
-typealias LogMessageFunction = (Exception?) -> String
-typealias LogFormatter = (Level, String, Exception?) -> String
 typealias LogWriter = (String) -> Unit
+
+data class LogEntryContext(
+  val threadName: String,
+  val threadID: Long,
+  val lineNumber: Int = -1,
+  val functionName: String? = null,
+  val className: String? = null
+)
+
+typealias LogMessageFunction = (() -> LogEntryContext) -> String
 
 
 enum class Level {
   TRACE, DEBUG, INFO, WARN, ERROR, NONE;
-
-
 }
 
 data class KLog(
@@ -19,7 +23,6 @@ data class KLog(
   val formatter: LogFormatter,
   val writer: LogWriter? = null
 ) {
-
 
   fun trace(msg: String? = null, err: Exception? = null, msgProvider: LogMessageFunction? = null) =
     log(Level.TRACE, msg, err, msgProvider)
@@ -46,30 +49,33 @@ data class KLog(
     if (msg == null && msgProvider == null) throw Error("Either provide a message or a message provider")
     if (level < this.level) return
 
-    val message = "${msg ?: err?.message ?: ""} ${msgProvider?.invoke(err) ?: ""}".trim()
+    val message = "${msg ?: err?.message ?: ""} ${
+      msgProvider?.invoke(
+        logFactory()::logEntryContext
+      ) ?: ""
+    }".trim()
     writer.invoke(formatter.invoke(level, message, err))
   }
+}
 
+interface KLogFactory {
+  var rootLogger: KLog
+  fun <T> getLog(t: T): KLog
+  fun logEntryContext(): LogEntryContext
+}
+
+expect fun logFactory(): KLogFactory
+
+
+abstract class BaseLogFactory : KLogFactory {
+  override var rootLogger: KLog = KLog(Level.NONE, LogFormatters.simple, null)
+
+  override fun <T> getLog(t: T): KLog = rootLogger
 
 }
 
-
-@ThreadLocal
-object KLogFactory {
-  var rootLogger: KLog = KLog(Level.NONE, LogFormatters.simple, null)
-
-  init {
-    initLogging()
-  }
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T : Any> T.klog(): KLog = logFactory().getLog(this::class)
 
 
-
-  fun <T> getLog(t: T): KLog = rootLogger
-
-}
-
-
-inline fun <T : Any> T.klog(): KLog = KLogFactory.getLog(this::class)
-
-expect fun initLogging()
 
