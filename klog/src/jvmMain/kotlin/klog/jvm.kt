@@ -1,16 +1,11 @@
 package klog
 
-import kotlin.reflect.KClass
 
+actual fun platformLogMessageContext(): LogMessageContext = jvmLogMessageContext()
 
-actual fun logEntryContext(): LogEntryContext = Thread.currentThread().let {
-  LogEntryContext(it.name, it.id)
+private object JvmLogFactory : DefaultLogRegistry() {
 }
 
-private object JvmLogFactory : KLogFactory() {
-  override fun <T : Any> getLog(clazz: KClass<T>): KLog = rootLog
-}
-
-actual fun klogFactory(): KLogFactory = JvmLogFactory
+actual fun klogRegistry(): KLogRegistry = JvmLogFactory
 
 

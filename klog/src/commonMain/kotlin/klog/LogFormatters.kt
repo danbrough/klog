@@ -2,7 +2,6 @@ package klog
 
 import kotlin.native.concurrent.ThreadLocal
 
-typealias LogFormatter = (Level, String, Exception?) -> String
 
 val Level.color: Int
   get() = when (this) {
@@ -17,19 +16,21 @@ val Level.color: Int
 @ThreadLocal
 object LogFormatters {
 
-  val simple: LogFormatter = { level, msg, exception ->
+  val simple: LogFormatter = { name,level, msg, exception, _ ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
-    "$l $msg ${exception?.stackTraceToString()?.let { " :$it" } ?: ""}"
+    "$l$name: $msg ${exception?.stackTraceToString()?.let { " :$it" } ?: ""}"
   }
 
-  val verbose: LogFormatter = { level, msg, exception ->
+  val verbose: LogFormatter = {name, level, msg, exception, ctx ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
-    "$l $msg ${exception?.stackTraceToString()?.let { " :$it" } ?: ""}"
+    "$l$name<${ctx.className}:${ctx.functionName}:${ctx.lineNumber}> $msg ${
+      exception?.stackTraceToString()?.let { " :$it" } ?: ""
+    }"
   }
 
   inline fun colored(crossinline formatter: LogFormatter): LogFormatter =
-    { level, msg, exception ->
-      "\u001b[0;${level.color}m${formatter.invoke(level, msg, exception)}\u001b[0m"
+    { name,level, msg, exception, context ->
+      "\u001b[0;${level.color}m${formatter.invoke(name,level, msg, exception, context)}\u001b[0m"
     }
 }
 

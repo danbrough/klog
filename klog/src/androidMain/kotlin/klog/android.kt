@@ -1,12 +1,9 @@
 package klog
 
-import kotlin.reflect.KClass
+actual fun platformLogMessageContext(): LogMessageContext = jvmLogMessageContext()
 
-actual fun logEntryContext(): LogEntryContext =
-  LogEntryContext("todo", -1L, -1, null, null)
-
-private object AndroidLogFactory : KLogFactory() {
+private object AndroidLogFactory : DefaultLogRegistry() {
   //override fun <T : Any> getLog(clazz: KClass<T>): KLog = rootLog
 }
 
-actual fun klogFactory(): KLogFactory = AndroidLogFactory
+actual fun klogRegistry(): KLogRegistry = AndroidLogFactory

@@ -15,6 +15,20 @@ group = projectGroup
 
 kotlin {
 
+  jvm()
+  linuxX64()
+  android()
+  js {
+    nodejs()
+  }
+
+  if (!ProjectProperties.IDE_ACTIVE) {
+    linuxArm64()
+    linuxArm32Hfp()
+    mingwX64()
+  }
+
+
   val commonMain by sourceSets.getting
 
   val commonTest by sourceSets.getting {
@@ -30,25 +44,23 @@ kotlin {
     }
   }
 
+
+  val jvmCommonMain by sourceSets.creating {
+    dependsOn(commonMain)
+  }
+
+  val androidMain by sourceSets.getting {
+    dependsOn(jvmCommonMain)
+  }
+
+  val jvmMain by sourceSets.getting {
+    dependsOn(jvmCommonMain)
+  }
+
   val nativeTest by sourceSets.creating {
     dependsOn(commonTest)
   }
 
-
-  jvm()
-  linuxX64()
-  android()
-  js {
-    nodejs()
-  }
-
-  if (!ProjectProperties.IDE_ACTIVE) {
-
-
-    linuxArm64()
-    linuxArm32Hfp()
-    mingwX64()
-  }
 
   targets.withType(KotlinNativeTarget::class).all {
     compilations["main"].defaultSourceSet {
