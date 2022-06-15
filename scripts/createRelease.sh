@@ -57,12 +57,12 @@ exit 0
 #rsync -avHSx /home/dan/.m2/repository/com/github/danbrough/ h1:/srv/https/maven/com/github/danbrough/
 
 
-sleep 1
+
 #wget "https://jitpack.io/com/github/danbrough/klog/${VERSION_NAME}/util-${VERSION_NAME}.jar" -O /tmp/rubbish.jar &
-sleep 1
+sleep 10
 BUILD_URL="https://jitpack.io/com/github/danbrough/klog/${VERSION_NAME}/build.log"
 
-sleep 1
+
 echo loading $BUILD_URL
 curl "$BUILD_URL" && exit 0
 

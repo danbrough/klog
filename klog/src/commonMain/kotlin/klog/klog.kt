@@ -29,7 +29,7 @@ data class LogMessageContextImpl(
 expect fun platformLogMessageContext(): LogMessageContext
 
 typealias LogMessageFunction = () -> String
-typealias LogFormatter = (String, Level, String, Exception?, LogMessageContext) -> String
+typealias LogFormatter = (String, Level, String, Throwable?, LogMessageContext) -> String
 
 enum class Level {
   TRACE, DEBUG, INFO, WARN, ERROR, NONE;
@@ -42,19 +42,19 @@ data class KLog(
   var writer: LogWriter?
 ) {
 
-  fun trace(msg: String? = null, err: Exception? = null, msgProvider: LogMessageFunction? = null) =
+  fun trace(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
     log(Level.TRACE, msg, err, msgProvider)
 
-  fun debug(msg: String? = null, err: Exception? = null, msgProvider: LogMessageFunction? = null) =
+  fun debug(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
     log(Level.DEBUG, msg, err, msgProvider)
 
-  fun info(msg: String? = null, err: Exception? = null, msgProvider: LogMessageFunction? = null) =
+  fun info(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
     log(Level.INFO, msg, err, msgProvider)
 
-  fun warn(msg: String? = null, err: Exception? = null, msgProvider: LogMessageFunction? = null) =
+  fun warn(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
     log(Level.WARN, msg, err, msgProvider)
 
-  fun error(msg: String? = null, err: Exception? = null, msgProvider: LogMessageFunction? = null) =
+  fun error(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
     log(Level.ERROR, msg, err, msgProvider)
 
   val isTraceEnabled: Boolean
@@ -79,7 +79,7 @@ data class KLog(
 
 
   private inline fun log(
-    level: Level, msg: String?, err: Exception?, noinline msgProvider: LogMessageFunction?
+    level: Level, msg: String?, err: Throwable?, noinline msgProvider: LogMessageFunction?
   ) {
     writer ?: return
     if (msg == null && msgProvider == null) throw Error("Either provide a message or a message provider")
