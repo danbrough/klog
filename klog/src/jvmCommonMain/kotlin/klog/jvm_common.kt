@@ -1,5 +1,7 @@
 package klog
 
+import kotlin.reflect.KClass
+
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun jvmLogMessageContext(): LogMessageContext {
@@ -7,7 +9,7 @@ inline fun jvmLogMessageContext(): LogMessageContext {
 /*  thread.stackTrace.forEach {
     println("STACK: ${it.className} method:${it.methodName} lineno:${it.lineNumber}")
   }*/
-  val stackElement = thread.stackTrace[9]
+  val stackElement = thread.stackTrace[8]
   return LogMessageContextImpl(
     thread.name,
     thread.id,
@@ -17,3 +19,4 @@ inline fun jvmLogMessageContext(): LogMessageContext {
   )
 }
 
+actual fun KClass<*>.name():String = qualifiedName!!

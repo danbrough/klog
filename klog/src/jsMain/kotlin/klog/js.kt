@@ -1,12 +1,15 @@
 package klog
 
+import kotlin.reflect.KClass
+
 
 actual fun platformLogMessageContext(): LogMessageContext =
   LogMessageContextImpl("js", 1)
 
-private object JsLogFactory : DefaultLogRegistry() {
-  // private var rootLogger = KLogImpl(Level.TRACE,LogFormatters.simple,LogWriters.stdOut,null)
+
+actual fun createKogRegistry(): KLogRegistry = object : DefaultLogRegistry() {
 
 }
 
-actual fun klogRegistry(): KLogRegistry = JsLogFactory
+
+actual fun KClass<*>.name():String = simpleName!!

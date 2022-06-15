@@ -3,9 +3,8 @@ package klog
 
 actual fun platformLogMessageContext(): LogMessageContext = jvmLogMessageContext()
 
-private object JvmLogFactory : DefaultLogRegistry() {
-}
+actual fun createKogRegistry(): KLogRegistry = object : DefaultLogRegistry() {
 
-actual fun klogRegistry(): KLogRegistry = JvmLogFactory
+}
 
 

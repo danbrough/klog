@@ -29,7 +29,12 @@ kotlin {
   }
 
 
-  val commonMain by sourceSets.getting
+  val commonMain by sourceSets.getting {
+    dependencies {
+    //  runtimeOnly(kotlin("reflect"))
+
+    }
+  }
 
   val commonTest by sourceSets.getting {
     dependencies {

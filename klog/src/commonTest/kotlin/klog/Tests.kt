@@ -8,6 +8,7 @@ import kotlin.test.Test
 
 class Tests {
 
+
   companion object {
     init {
       logFactory.rootLog =
@@ -15,7 +16,9 @@ class Tests {
 
     }
 
-    private val log = klog()
+    //have to provide the fully qualified name for the JS platform
+    //otherwise could just use `klog.klog()`
+    private val log = klog("klog.Tests")
 
   }
 
@@ -28,10 +31,12 @@ class Tests {
   @Test
   fun testLogs() {
     logFactory.reset()
+
     log.info("testings logs ..")
     runLogTest()
-    log.trace("setting level on class klog.A to DEBUG")
-    logFactory["klog.a"].level = Level.DEBUG
+
+    log.trace("setting level on class klog.a.A to DEBUG")
+    logFactory["klog.a.A"].level = Level.DEBUG
 
     log.trace("setting level on package klog.a.a to INFO")
     logFactory["klog.a.a"].level = Level.INFO

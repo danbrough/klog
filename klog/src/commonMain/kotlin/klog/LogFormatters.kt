@@ -23,7 +23,7 @@ object LogFormatters {
 
   val verbose: LogFormatter = {name, level, msg, exception, ctx ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
-    "$l$name<${ctx.className}:${ctx.functionName}:${ctx.lineNumber}> $msg ${
+    "$l$name ${ctx.functionName}():${ctx.lineNumber} $msg ${
       exception?.stackTraceToString()?.let { " :$it" } ?: ""
     }"
   }
