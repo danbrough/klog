@@ -22,6 +22,9 @@ buildscript {
   }
 }
 
+version = buildVersionName
+group = projectGroup
+
 
 kotlin {
 
