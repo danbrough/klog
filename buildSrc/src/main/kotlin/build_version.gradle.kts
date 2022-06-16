@@ -39,26 +39,29 @@ class BuildVersionPlugin @javax.inject.Inject constructor() : Plugin<Project> {
 
     println("APPLYING BUILD VERSON PLUGIN")
     BuildVersion.init(project)
-  }
-}
 
-val buildVersionIncrement by tasks.registering {
-  println("RUNNING BUILD VERSION INCREMENT")
-  val currentVersion = buildVersion
-  println("current version $currentVersion")
-  rootProject.file("gradle.properties").readLines().map {
-    if (it.contains("build.version="))
-      "build.version=${currentVersion + 1}"
-    else it
-  }.also { lines ->
-    rootProject.file("gradle.properties").writer().use { writer ->
-      lines.forEach {
-        writer.write("$it\n")
+
+    project.tasks.register("buildVersionIncrement") {
+      println("RUNNING BUILD VERSION INCREMENT")
+      val currentVersion = buildVersion
+      println("current version $currentVersion")
+      rootProject.file("gradle.properties").readLines().map {
+        if (it.contains("build.version="))
+          "build.version=${currentVersion + 1}"
+        else it
+      }.also { lines ->
+        rootProject.file("gradle.properties").writer().use { writer ->
+          lines.forEach {
+            writer.write("$it\n")
+          }
+        }
       }
+      // buildVersionName()
+      // nextBuildVersionName()
     }
+
+
   }
-  // buildVersionName()
-  // nextBuildVersionName()
 }
 
 
