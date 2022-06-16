@@ -1,5 +1,7 @@
-package klog
+package org.danbrough.klog
 
+import org.danbrough.klog.LogMessageContext
+import org.danbrough.klog.LogMessageContextImpl
 import kotlin.reflect.KClass
 
 
@@ -22,5 +24,5 @@ inline fun jvmLogMessageContext(): LogMessageContext {
 actual fun getTimeMillis(): Long = System.currentTimeMillis()
 
 
-actual fun KClass<*>.name():String = qualifiedName!!
+actual fun KClass<*>.klogName():String = qualifiedName!!
 

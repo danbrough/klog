@@ -1,25 +1,23 @@
-package klog.a.b
+package a.a
 
-import klog.klog
-import klog.name
+import org.danbrough.klog.klog
+import org.danbrough.klog.klogName
 
 
-class AB {
+class AA {
   //have to provide the fully qualified name for the JS platform
   //otherwise could just use `klog.klog()`
-  private val log = klog("klog.a.b.AB")
-
+  private val log = klog(AA::class)
 
   fun test() {
     if (!log.isTraceEnabled) log.warn("TRACING DISABLED")
     if (!log.isDebugEnabled) log.warn("DEBUG DISABLED")
     if (!log.isInfoEnabled) log.warn("INFO DISABLED")
 
-    log.trace("testing ${this::class.name()} ")
+    log.trace("testing ${this::class.klogName()} ")
     log.debug("more testing")
     log.info("finished testing")
-    log.warn("${this::class.name()} done")
+    log.warn("${this::class.klogName()} done")
     log.warn("")
-
   }
 }

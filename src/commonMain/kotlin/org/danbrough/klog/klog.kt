@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package klog
+package org.danbrough.klog
 
 import kotlin.reflect.KClass
 
@@ -18,7 +18,6 @@ interface LogMessageContext {
   val functionName: String?
   val className: String?
 }
-
 
 
 data class LogMessageContextImpl(
@@ -134,13 +133,14 @@ data class KLog(
 /*
 @return Simple class name on JS and the fully qualified elsewhere
  */
-expect fun KClass<*>.name(): String
+expect fun KClass<*>.klogName(): String
 
 inline fun <reified T : Any> T.klog(): KLog {
-  return kLogRegistry[this::class.name()]
+  return kLogRegistry[this::class.klogName()]
 }
 
 inline fun klog(tag: String): KLog = kLogRegistry[tag]
+inline fun klog(clazz: KClass<*>): KLog = kLogRegistry[clazz.klogName()]
 
 
 

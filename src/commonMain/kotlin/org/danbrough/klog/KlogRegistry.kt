@@ -1,4 +1,4 @@
-package klog
+package org.danbrough.klog
 
 
 @Suppress("LeakingThis", "MemberVisibilityCanBePrivate")

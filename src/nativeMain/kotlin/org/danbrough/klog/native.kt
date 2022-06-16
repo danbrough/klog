@@ -1,4 +1,4 @@
-package klog
+package org.danbrough.klog
 
 import kotlinx.cinterop.UnsafeNumber
 import platform.posix.pthread_self
@@ -9,7 +9,7 @@ import kotlin.reflect.KClass
 actual fun platformLogMessageContext(): LogMessageContext =
   LogMessageContextImpl("native", pthread_self().toLong())
 
-actual fun getTimeMillis(): Long = klog.native.getTimeMillisTest().toLong()
+actual fun getTimeMillis(): Long = org.danbrough.klog.native.getTimeMillisTest().toLong()
 
 
 private class NativeLogRegistry : DefaultLogRegistry() {
@@ -21,4 +21,4 @@ actual fun createKLogRegistry(): KLogRegistry = registry ?: NativeLogRegistry().
   registry = it
 }
 
-actual fun KClass<*>.name(): String = qualifiedName!!
+actual fun KClass<*>.klogName(): String = qualifiedName!!

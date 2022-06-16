@@ -85,7 +85,7 @@ kotlin {
 
     compilations["main"].apply {
       cinterops.create("klog") {
-        packageName("klog.native")
+        packageName("org.danbrough.klog.native")
         defFile(project.file("src/nativeMain/klog.def"))
       }
 

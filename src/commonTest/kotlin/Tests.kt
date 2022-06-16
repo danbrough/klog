@@ -1,10 +1,8 @@
-package klog
-
-import klog.a.A
-import klog.a.a.AA
-import klog.a.b.AB
+import a.A
+import a.a.AA
+import a.b.AB
+import org.danbrough.klog.*
 import kotlin.test.Test
-
 
 class Tests {
 
@@ -20,7 +18,7 @@ class Tests {
 
     //have to provide the fully qualified name for the JS platform
     //otherwise could just use `klog.klog()`
-    private val log = klog("klog.Tests")
+    private val log = klog("Tests")
 
   }
 
@@ -42,10 +40,10 @@ class Tests {
     runLogTest()
 
     log.trace("setting level on class klog.a.A to DEBUG")
-    kLogRegistry["klog.a.A"].level = Level.DEBUG
+    kLogRegistry["a.A"].level = Level.DEBUG
 
     log.trace("setting level on package klog.a.a to INFO")
-    kLogRegistry["klog.a.a"].level = Level.INFO
+    kLogRegistry["a.a"].level = Level.INFO
 
     runLogTest()
 

@@ -1,14 +1,14 @@
-package klog.a
+package a
 
 
-import klog.klog
-import klog.name
+import org.danbrough.klog.klog
+import org.danbrough.klog.klogName
 
 
 class A {
   //have to provide the fully qualified name for the JS platform
   //otherwise could just use `klog.klog()`
-  private val log = klog("klog.a.A")
+  private val log = klog(A::class)
 
 
   fun test() {
@@ -16,10 +16,10 @@ class A {
     if (!log.isDebugEnabled) log.warn("DEBUG DISABLED")
     if (!log.isInfoEnabled) log.warn("INFO DISABLED")
 
-    log.trace("testing ${this::class.name()} ")
+    log.trace("testing ${this::class.klogName()} ")
     log.debug("more testing")
     log.info("finished testing")
-    log.warn("${this::class.name()} done")
+    log.warn("${this::class.klogName()} done")
     log.warn("")
   }
 }

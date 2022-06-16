@@ -1,4 +1,4 @@
-package klog
+package org.danbrough.klog
 
 import kotlin.native.concurrent.ThreadLocal
 
@@ -16,12 +16,12 @@ val Level.color: Int
 @ThreadLocal
 object LogFormatters {
 
-  val simple: LogFormatter = { name,level, msg, exception, _ ->
+  val simple: LogFormatter = { name, level, msg, exception, _ ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
     "$l$name: $msg ${exception?.stackTraceToString()?.let { " :$it" } ?: ""}"
   }
 
-  val verbose: LogFormatter = {name, level, msg, exception, ctx ->
+  val verbose: LogFormatter = { name, level, msg, exception, ctx ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
     "$l$name ${ctx.functionName}():${ctx.lineNumber} $msg ${
       exception?.stackTraceToString()?.let { " :$it" } ?: ""
