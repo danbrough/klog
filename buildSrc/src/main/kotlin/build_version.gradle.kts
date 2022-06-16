@@ -27,7 +27,8 @@ object BuildVersion {
     get() = buildVersionFormat.format(buildVersion)
 
 
-  private fun Project.buildVersionIncrement() = tasks.register("buildVersionIncrement") {
+  fun Project.registerBuildVersionIncrement() = tasks.register("buildVersionIncrement") {
+    println("RUNNING BUILD VERSION INCREMENT")
     val currentVersion = buildVersion
     println("current version $currentVersion")
     rootProject.file("gradle.properties").readLines().map {
@@ -41,19 +42,42 @@ object BuildVersion {
         }
       }
     }
-  }
-
-  private fun Project.buildVersionName() = tasks.register("buildVersionName") {
-    println(buildVersionName)
-  }
-
-  private fun Project.nextBuildVersionName() = tasks.register("nextBuildVersionName") {
-    println(buildVersionFormat.format(buildVersion + 1))
-  }
-
-  fun Project.buildVersionTasks() {
-    buildVersionIncrement()
-    buildVersionName()
-    nextBuildVersionName()
+    // buildVersionName()
+    // nextBuildVersionName()
   }
 }
+
+/*private fun Project.buildVersionName() = tasks.register("buildVersionName") {
+  println(buildVersionName)
+}
+
+private fun Project.nextBuildVersionName() = tasks.register("nextBuildVersionName") {
+  println(buildVersionFormat.format(buildVersion + 1))
+}*/
+
+/*
+fun Project.buildVersionTasks() {
+  println("REGISTRING BUILD VERSION INCREMENT")
+  tasks.register("buildVersionIncrement") {
+    println("RUNNING BUILD VERSION INCREMENT")
+    val currentVersion = buildVersion
+    println("current version $currentVersion")
+    rootProject.file("gradle.properties").readLines().map {
+      if (it.contains("build.version="))
+        "build.version=${currentVersion + 1}"
+      else it
+    }.also { lines ->
+      rootProject.file("gradle.properties").writer().use { writer ->
+        lines.forEach {
+          writer.write("$it\n")
+        }
+      }
+    }
+    // buildVersionName()
+    // nextBuildVersionName()
+  }
+
+
+}
+
+*/

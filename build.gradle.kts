@@ -1,17 +1,19 @@
-import BuildVersion.buildVersionTasks
+
+import Build_version_gradle.BuildVersion.buildVersionName
+import Build_version_gradle.BuildVersion.registerBuildVersionIncrement
+import ProjectProperties.LOCAL_MAVEN_REPO
+import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import ProjectProperties.LOCAL_MAVEN_REPO
-import BuildVersion.buildVersionName
-import ProjectProperties.projectGroup
 
 plugins {
   kotlin("multiplatform")
   id("com.android.library")
+  id("build_version")
   `maven-publish`
- // id("com.android.application") apply false
- // id("org.jetbrains.kotlin.android") apply false
+  // id("com.android.application") apply false
+  // id("org.jetbrains.kotlin.android") apply false
 
 }
 
@@ -21,6 +23,8 @@ buildscript {
     gradlePluginPortal()
   }
 }
+
+
 
 version = buildVersionName
 group = projectGroup
@@ -157,5 +161,3 @@ allprojects {
 }
 
 
-
-buildVersionTasks()
