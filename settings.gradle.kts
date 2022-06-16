@@ -26,7 +26,7 @@ plugins {
 
 rootProject.name = "klog"
 
-include(":klog")
+
 
 /*include(":api")
 include(":golib")*/
