@@ -1,6 +1,4 @@
-
-import Build_version_gradle.BuildVersion.buildVersionName
-import Build_version_gradle.BuildVersion.registerBuildVersionIncrement
+import Build_version_gradle.BuildVersion
 import ProjectProperties.LOCAL_MAVEN_REPO
 import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -26,7 +24,7 @@ buildscript {
 
 
 
-version = buildVersionName
+version = BuildVersion.buildVersionName
 group = projectGroup
 
 

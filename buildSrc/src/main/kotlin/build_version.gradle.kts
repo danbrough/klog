@@ -1,51 +1,66 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-import org.gradle.api.Project
+import Build_version_gradle.BuildVersion.buildVersion
+
+//@file:Suppress("MemberVisibilityCanBePrivate")
+
 
 object BuildVersion {
 
-  val Project.buildVersion: Int
-    get() = rootProject.findProperty("build.version")?.toString()?.trim()?.toInt() ?: run {
-      rootProject.file("gradle.properties").appendText("\nbuild.version=1\n")
-      1
-    }
 
-  val Project.buildVersionOffset: Int
-    get() = rootProject.findProperty("build.version.offset")?.toString()?.trim()?.toInt() ?: run {
-      rootProject.file("gradle.properties").appendText("\nbuild.version.offset=0\n")
-      0
-    }
-
-  val Project.buildVersionFormat: String
-    get() = rootProject.findProperty("build.version.format")?.toString()?.trim() ?: run {
-      rootProject.file("gradle.properties").appendText("\nbuild.version.format=0.0.0-beta%02d\n")
-      "0.0.0-beta%02d"
-    }
+  var buildVersion = 0
+  var buildVersionOffset: Int = 0
+  var buildVersionFormat: String = "0.0.1-alpha%02d"
 
 
-  val Project.buildVersionName: String
+  val buildVersionName: String
     get() = buildVersionFormat.format(buildVersion)
 
 
-  fun Project.registerBuildVersionIncrement() = tasks.register("buildVersionIncrement") {
-    println("RUNNING BUILD VERSION INCREMENT")
-    val currentVersion = buildVersion
-    println("current version $currentVersion")
-    rootProject.file("gradle.properties").readLines().map {
-      if (it.contains("build.version="))
-        "build.version=${currentVersion + 1}"
-      else it
-    }.also { lines ->
-      rootProject.file("gradle.properties").writer().use { writer ->
-        lines.forEach {
-          writer.write("$it\n")
-        }
-      }
+  private fun Project.getProjectProperty(key: String, defValue: String): String =
+    this.rootProject.findProperty(key)?.toString()?.trim() ?: run {
+      rootProject.file("gradle.properties").appendText("\n$key=$defValue\n")
+      defValue
     }
-    // buildVersionName()
-    // nextBuildVersionName()
+
+
+  fun init(project: Project) {
+
+    buildVersion = project.getProjectProperty("build.version", "0").toInt()
+    buildVersionFormat = project.getProjectProperty("build.version.format", "0.0.1-alpha%02d")
+    buildVersionOffset = project.getProjectProperty("build.version.offset", "0").toInt()
+
   }
 }
+
+class BuildVersionPlugin @javax.inject.Inject constructor() : Plugin<Project> {
+
+  override fun apply(project: Project) {
+
+    println("APPLYING BUILD VERSON PLUGIN")
+    BuildVersion.init(project)
+  }
+}
+
+val buildVersionIncrement by tasks.registering {
+  println("RUNNING BUILD VERSION INCREMENT")
+  val currentVersion = buildVersion
+  println("current version $currentVersion")
+  rootProject.file("gradle.properties").readLines().map {
+    if (it.contains("build.version="))
+      "build.version=${currentVersion + 1}"
+    else it
+  }.also { lines ->
+    rootProject.file("gradle.properties").writer().use { writer ->
+      lines.forEach {
+        writer.write("$it\n")
+      }
+    }
+  }
+  // buildVersionName()
+  // nextBuildVersionName()
+}
+
 
 /*private fun Project.buildVersionName() = tasks.register("buildVersionName") {
   println(buildVersionName)

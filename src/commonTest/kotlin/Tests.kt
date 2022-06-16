@@ -60,7 +60,7 @@ class Tests {
     log.warn {
       "A warning!"
     }
-    val err = Exception("Something bad happened")
+    val err = Exception("The exception message")
     log.error(err.message, err)
 
   }
