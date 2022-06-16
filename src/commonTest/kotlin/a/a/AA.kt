@@ -7,7 +7,7 @@ import org.danbrough.klog.klogName
 class AA {
   //have to provide the fully qualified name for the JS platform
   //otherwise could just use `klog.klog()`
-  private val log = klog(AA::class)
+  private val log = klog("a.a.AA")
 
   fun test() {
     if (!log.isTraceEnabled) log.warn("TRACING DISABLED")

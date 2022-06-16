@@ -1,18 +1,16 @@
 package org.danbrough.klog
 
-import org.danbrough.klog.LogMessageContext
-import org.danbrough.klog.LogMessageContextImpl
 import kotlin.reflect.KClass
 
 
 @Suppress("NOTHING_TO_INLINE")
-inline fun jvmLogMessageContext(): LogMessageContext {
+inline fun jvmLogMessageContext(): KLogMessageContext {
   val thread = Thread.currentThread()
 /*  thread.stackTrace.forEach {
     println("STACK: ${it.className} method:${it.methodName} lineno:${it.lineNumber}")
   }*/
   val stackElement = thread.stackTrace[8]
-  return LogMessageContextImpl(
+  return KLogMessageContextImpl(
     thread.name,
     thread.id,
     stackElement.lineNumber,

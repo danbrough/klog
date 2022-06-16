@@ -6,8 +6,8 @@ import kotlin.reflect.KClass
 
 
 @OptIn(UnsafeNumber::class)
-actual fun platformLogMessageContext(): LogMessageContext =
-  LogMessageContextImpl("native", pthread_self().toLong())
+actual fun platformLogMessageContext(): KLogMessageContext =
+  KLogMessageContextImpl("native", pthread_self().toLong())
 
 actual fun getTimeMillis(): Long = org.danbrough.klog.native.getTimeMillisTest().toLong()
 

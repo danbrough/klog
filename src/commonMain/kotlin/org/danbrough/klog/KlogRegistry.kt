@@ -18,8 +18,8 @@ abstract class KLogRegistry {
   fun createLog(
     name: String,
     level: Level = Level.NONE,
-    formatter: LogFormatter = LogFormatters.simple,
-    writer: LogWriter? = null
+    formatter: KLogFormatter = KLogFormatters.simple,
+    writer: KLogWriter = KLogWriters.noop
   ) = KLog(this, name, level, formatter, writer)
 
   abstract operator fun get(name: String): KLog
@@ -30,8 +30,8 @@ abstract class KLogRegistry {
 
   fun initRegistry(
     level: Level = Level.NONE,
-    formatter: LogFormatter = LogFormatters.simple,
-    writer: LogWriter? = null
+    formatter: KLogFormatter = KLogFormatters.simple,
+    writer: KLogWriter = KLogWriters.noop
   ) = initRegistry(createLog(ROOT_LOG_NAME, level, formatter, writer))
 
   abstract fun applyToBranch(name: String, toApply: KLog.() -> Unit)
@@ -42,8 +42,8 @@ expect fun createKLogRegistry(): KLogRegistry
 
 open class DefaultLogRegistry(
   level: Level = Level.NONE,
-  formatter: LogFormatter = LogFormatters.simple,
-  writer: LogWriter? = null
+  formatter: KLogFormatter = KLogFormatters.simple,
+  writer: KLogWriter = KLogWriters.noop
 ) : KLogRegistry() {
 
   private var logs = mutableMapOf<String, KLog>()
@@ -68,13 +68,8 @@ open class DefaultLogRegistry(
     if (it.key.startsWith(name)) it.value.toApply()
   }
 
-
   override fun initRegistry(rootLog: KLog) {
-    logs[ROOT_LOG_NAME] = rootLog
-    getLogs().forEach {
-      if (it.name != ROOT_LOG_NAME){
-
-      }
-    }
+    logs.clear()
+    logs[ROOT_LOG_NAME] = rootLog.copy(registry = this)
   }
 }

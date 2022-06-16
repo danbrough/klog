@@ -8,7 +8,7 @@ import org.danbrough.klog.klogName
 class A {
   //have to provide the fully qualified name for the JS platform
   //otherwise could just use `klog.klog()`
-  private val log = klog(A::class)
+  private val log = klog("a.A")
 
 
   fun test() {

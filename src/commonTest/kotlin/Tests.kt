@@ -11,8 +11,8 @@ class Tests {
     init {
       kLogRegistry.initRegistry(
         Level.TRACE,
-        LogFormatters.colored(LogFormatters.verbose),
-        LogWriters.stdOut
+        KLogFormatters.colored(KLogFormatters.verbose),
+        KLogWriters.stdOut
       )
     }
 
@@ -33,16 +33,17 @@ class Tests {
 
     kLogRegistry.initRegistry(
       Level.TRACE,
-      LogFormatters.colored(LogFormatters.verbose),
-      LogWriters.stdOut
+      KLogFormatters.colored(KLogFormatters.verbose),
+      KLogWriters.stdOut
     )
+
     log.info("testings logs ..")
     runLogTest()
 
-    log.trace("setting level on class klog.a.A to DEBUG")
+    log.trace("setting level on class a.A to DEBUG")
     kLogRegistry["a.A"].level = Level.DEBUG
 
-    log.trace("setting level on package klog.a.a to INFO")
+    log.trace("setting level on package a.a to INFO")
     kLogRegistry["a.a"].level = Level.INFO
 
     runLogTest()
