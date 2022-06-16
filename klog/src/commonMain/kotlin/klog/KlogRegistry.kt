@@ -1,42 +1,80 @@
 package klog
 
 
-interface KLogRegistry {
+@Suppress("LeakingThis", "MemberVisibilityCanBePrivate")
+abstract class KLogRegistry {
+
+  companion object {
+    const val ROOT_LOG_NAME = ""
+  }
+
+
   var rootLog: KLog
-  operator fun get(name: String): KLog
-  operator fun set(name: String, log: KLog)
-  fun reset()
-}
-
-expect fun createKogRegistry(): KLogRegistry
-
-open class DefaultLogRegistry : KLogRegistry {
-  override var rootLog: KLog = KLog("", Level.NONE, LogFormatters.simple, LogWriters.stdOut)
+    get() = this[ROOT_LOG_NAME]
     set(value) {
-      field = value
-      this[""] = value
+      initRegistry(value)
     }
 
-  private var logs = mutableMapOf<String, KLog?>()
+  fun createLog(
+    name: String,
+    level: Level = Level.NONE,
+    formatter: LogFormatter = LogFormatters.simple,
+    writer: LogWriter? = null
+  ) = KLog(this, name, level, formatter, writer)
+
+  abstract operator fun get(name: String): KLog
+
+  abstract fun getLogs(): Set<KLog>
+
+  abstract fun initRegistry(rootLog: KLog)
+
+  fun initRegistry(
+    level: Level = Level.NONE,
+    formatter: LogFormatter = LogFormatters.simple,
+    writer: LogWriter? = null
+  ) = initRegistry(createLog(ROOT_LOG_NAME, level, formatter, writer))
+
+  abstract fun applyToBranch(name: String, toApply: KLog.() -> Unit)
+
+}
+
+expect fun createKLogRegistry(): KLogRegistry
+
+open class DefaultLogRegistry(
+  level: Level = Level.NONE,
+  formatter: LogFormatter = LogFormatters.simple,
+  writer: LogWriter? = null
+) : KLogRegistry() {
+
+  private var logs = mutableMapOf<String, KLog>()
+
+  init {
+    initRegistry(level, formatter, writer)
+  }
 
   override operator fun get(name: String): KLog {
-    if (name.isEmpty()) return rootLog
     val log = logs[name]
     if (log != null) return log
-    val parentName = name.substringBeforeLast('.', "")
+    val parentName = name.substringBeforeLast('.', ROOT_LOG_NAME)
     return get(parentName).copy(name = name).also {
       logs[name] = it
     }
   }
 
-  override operator fun set(name: String, log: KLog) {
-    logs = logs.filterKeys { it.startsWith(name) }.toMutableMap()
-    logs[name] = log
+  override fun getLogs(): Set<KLog> = logs.values.toSet()
+
+  //invoke [toApply] on all logs with names starting with (and including) [name]
+  override fun applyToBranch(name: String, toApply: KLog.() -> Unit) = logs.forEach {
+    if (it.key.startsWith(name)) it.value.toApply()
   }
 
-  override fun reset() {
-    val log = rootLog
-    logs.clear()
-    rootLog = log
+
+  override fun initRegistry(rootLog: KLog) {
+    logs[ROOT_LOG_NAME] = rootLog
+    getLogs().forEach {
+      if (it.name != ROOT_LOG_NAME){
+
+      }
+    }
   }
 }

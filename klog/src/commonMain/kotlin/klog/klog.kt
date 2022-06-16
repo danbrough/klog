@@ -5,12 +5,13 @@ package klog
 import kotlin.reflect.KClass
 
 
-val logFactory = createKogRegistry()
+val kLogRegistry = createKLogRegistry()
 
 
 typealias LogWriter = (String) -> Unit
 
 interface LogMessageContext {
+  val time: Long
   val threadName: String
   val threadID: Long
   val lineNumber: Int
@@ -18,13 +19,20 @@ interface LogMessageContext {
   val className: String?
 }
 
+
+
 data class LogMessageContextImpl(
   override val threadName: String,
   override val threadID: Long,
   override val lineNumber: Int = -1,
   override val functionName: String? = null,
   override val className: String? = null
-) : LogMessageContext
+) : LogMessageContext {
+  override val time: Long
+    get() = getTimeMillis()
+}
+
+expect fun getTimeMillis(): Long
 
 expect fun platformLogMessageContext(): LogMessageContext
 
@@ -32,15 +40,41 @@ typealias LogMessageFunction = () -> String
 typealias LogFormatter = (String, Level, String, Throwable?, LogMessageContext) -> String
 
 enum class Level {
-  TRACE, DEBUG, INFO, WARN, ERROR, NONE;
+  ALL, TRACE, DEBUG, INFO, WARN, ERROR, NONE;
 }
 
+@Suppress("MemberVisibilityCanBePrivate")
 data class KLog(
+  private val registry: KLogRegistry,
   val name: String,
-  var level: Level,
-  var formatter: LogFormatter,
-  var writer: LogWriter?
+  private var _level: Level,
+  private var _formatter: LogFormatter,
+  private var _writer: LogWriter?
 ) {
+
+  var level: Level
+    get() = _level
+    set(value) {
+      registry.applyToBranch(name) {
+        _level = value
+      }
+    }
+
+  var formatter: LogFormatter
+    get() = _formatter
+    set(value) {
+      registry.applyToBranch(name) {
+        _formatter = value
+      }
+    }
+
+  var writer: LogWriter?
+    get() = _writer
+    set(value) {
+      registry.applyToBranch(name) {
+        _writer = value
+      }
+    }
 
   fun trace(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
     log(Level.TRACE, msg, err, msgProvider)
@@ -69,8 +103,6 @@ data class KLog(
   val isWarnEnabled: Boolean
     get() = level <= Level.WARN
 
-
-  @Suppress("MemberVisibilityCanBePrivate")
   val isErrorEnabled: Boolean
     get() = level <= Level.ERROR
 
@@ -81,7 +113,7 @@ data class KLog(
   private inline fun log(
     level: Level, msg: String?, err: Throwable?, noinline msgProvider: LogMessageFunction?
   ) {
-    writer ?: return
+    val logWriter = writer ?: return
     if (msg == null && msgProvider == null) throw Error("Either provide a message or a message provider")
     if (level < this.level) return
 
@@ -93,11 +125,10 @@ data class KLog(
     val messageContext by lazy {
       platformLogMessageContext()
     }
-    writer!!.invoke(formatter.invoke(name, level, message, err, messageContext))
+    logWriter.invoke(formatter.invoke(name, level, message, err, messageContext))
   }
 
 }
-
 
 
 /*
@@ -106,10 +137,10 @@ data class KLog(
 expect fun KClass<*>.name(): String
 
 inline fun <reified T : Any> T.klog(): KLog {
-  return logFactory[this::class.name()]
+  return kLogRegistry[this::class.name()]
 }
 
-inline fun klog(tag: String): KLog = logFactory[tag]
+inline fun klog(tag: String): KLog = kLogRegistry[tag]
 
 
 

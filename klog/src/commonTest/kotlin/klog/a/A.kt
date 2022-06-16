@@ -20,5 +20,6 @@ class A {
     log.debug("more testing")
     log.info("finished testing")
     log.warn("${this::class.name()} done")
+    log.warn("")
   }
 }

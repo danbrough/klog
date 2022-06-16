@@ -31,8 +31,8 @@ kotlin {
 
   val commonMain by sourceSets.getting {
     dependencies {
-    //  runtimeOnly(kotlin("reflect"))
-
+      //  runtimeOnly(kotlin("reflect"))
+      implementation(kotlin("stdlib"))
     }
   }
 
@@ -68,8 +68,17 @@ kotlin {
 
 
   targets.withType(KotlinNativeTarget::class).all {
-    compilations["main"].defaultSourceSet {
-      dependsOn(nativeMain)
+
+
+    compilations["main"].apply {
+      cinterops.create("klog") {
+        packageName("klog.native")
+        defFile(project.file("src/nativeMain/klog.def"))
+      }
+
+      defaultSourceSet {
+        dependsOn(nativeMain)
+      }
     }
 
     compilations["test"].defaultSourceSet {

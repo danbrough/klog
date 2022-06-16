@@ -9,14 +9,16 @@ import kotlin.reflect.KClass
 actual fun platformLogMessageContext(): LogMessageContext =
   LogMessageContextImpl("native", pthread_self().toLong())
 
+actual fun getTimeMillis(): Long = klog.native.getTimeMillisTest().toLong()
+
 
 private class NativeLogRegistry : DefaultLogRegistry() {
 }
 
 private var registry: DefaultLogRegistry? = null
 
-actual fun createKogRegistry(): KLogRegistry = registry ?: NativeLogRegistry().also {
+actual fun createKLogRegistry(): KLogRegistry = registry ?: NativeLogRegistry().also {
   registry = it
 }
 
-actual fun KClass<*>.name():String = qualifiedName!!
+actual fun KClass<*>.name(): String = qualifiedName!!

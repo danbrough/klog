@@ -11,9 +11,11 @@ class Tests {
 
   companion object {
     init {
-      logFactory.rootLog =
-        KLog("", Level.TRACE, LogFormatters.colored(LogFormatters.verbose), LogWriters.stdOut)
-
+      kLogRegistry.initRegistry(
+        Level.TRACE,
+        LogFormatters.colored(LogFormatters.verbose),
+        LogWriters.stdOut
+      )
     }
 
     //have to provide the fully qualified name for the JS platform
@@ -29,17 +31,22 @@ class Tests {
   }
 
   @Test
-  fun testLogs() {
-    logFactory.reset()
+  fun testLogConf() {
 
+    kLogRegistry.initRegistry(
+      Level.TRACE,
+      LogFormatters.colored(LogFormatters.verbose),
+      LogWriters.stdOut
+    )
     log.info("testings logs ..")
     runLogTest()
 
     log.trace("setting level on class klog.a.A to DEBUG")
-    logFactory["klog.a.A"].level = Level.DEBUG
+    kLogRegistry["klog.a.A"].level = Level.DEBUG
 
     log.trace("setting level on package klog.a.a to INFO")
-    logFactory["klog.a.a"].level = Level.INFO
+    kLogRegistry["klog.a.a"].level = Level.INFO
+
     runLogTest()
 
   }
@@ -57,7 +64,11 @@ class Tests {
     val err = Exception("Something bad happened")
     log.error(err.message, err)
 
-    testLogs()
+  }
+
+  @Test
+  fun testTime() {
+    log.warn("time is: ${getTimeMillis()}")
   }
 
 }

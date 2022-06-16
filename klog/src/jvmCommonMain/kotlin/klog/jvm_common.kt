@@ -19,4 +19,8 @@ inline fun jvmLogMessageContext(): LogMessageContext {
   )
 }
 
+actual fun getTimeMillis(): Long = System.currentTimeMillis()
+
+
 actual fun KClass<*>.name():String = qualifiedName!!
+
