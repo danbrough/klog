@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 import org.gradle.api.Project
 
 object BuildVersion {

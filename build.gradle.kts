@@ -6,8 +6,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   kotlin("multiplatform") apply false
   id("com.android.library") apply false
-  id("com.android.application") apply false
-  id("org.jetbrains.kotlin.android") apply false
+ // id("com.android.application") apply false
+ // id("org.jetbrains.kotlin.android") apply false
 
 }
 
@@ -19,6 +19,8 @@ buildscript {
 }
 
 
+//version = BuildVersion.
+//group = ProjectProperties.groupID
 
 allprojects {
 
