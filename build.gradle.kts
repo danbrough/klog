@@ -1,4 +1,3 @@
-import Build_version_gradle.BuildVersion
 import ProjectProperties.LOCAL_MAVEN_REPO
 import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -8,7 +7,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   kotlin("multiplatform")
   id("com.android.library")
-  id("build_version")
   `maven-publish`
   // id("com.android.application") apply false
   // id("org.jetbrains.kotlin.android") apply false
@@ -21,6 +19,10 @@ buildscript {
     gradlePluginPortal()
   }
 }
+
+
+
+BuildVersion.init(project)
 
 
 
@@ -127,35 +129,34 @@ android {
 //version = BuildVersion.
 //group = ProjectProperties.groupID
 
-allprojects {
 
-  repositories {
-    maven("https://h1.danbrough.org/maven")
-    mavenCentral()
-    google()
-  }
-
-  tasks.withType<AbstractTestTask>() {
-    testLogging {
-      events = setOf(
-        TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
-      )
-      exceptionFormat = TestExceptionFormat.FULL
-      showStandardStreams = true
-      showStackTraces = true
-    }
-    outputs.upToDateWhen {
-      false
-    }
-  }
-
-  tasks.withType(KotlinCompile::class) {
-    kotlinOptions {
-      jvmTarget = ProjectProperties.KOTLIN_JVM_VERSION
-    }
-  }
-
-
+repositories {
+  maven("https://h1.danbrough.org/maven")
+  mavenCentral()
+  google()
 }
+
+tasks.withType<AbstractTestTask>() {
+  testLogging {
+    events = setOf(
+      TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
+    )
+    exceptionFormat = TestExceptionFormat.FULL
+    showStandardStreams = true
+    showStackTraces = true
+  }
+  outputs.upToDateWhen {
+    false
+  }
+}
+
+tasks.withType(KotlinCompile::class) {
+  kotlinOptions {
+    jvmTarget = ProjectProperties.KOTLIN_JVM_VERSION
+  }
+}
+
+
+
 
 
