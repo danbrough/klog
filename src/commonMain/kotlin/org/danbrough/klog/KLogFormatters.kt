@@ -2,6 +2,8 @@ package org.danbrough.klog
 
 import kotlin.native.concurrent.ThreadLocal
 
+typealias KLogFormatter = (String, Level, String, Throwable?, StatementContext) -> String
+
 
 val Level.color: Int
   get() = when (this) {
@@ -11,6 +13,7 @@ val Level.color: Int
     Level.WARN -> 33
     else -> 31
   }
+
 
 
 @ThreadLocal
@@ -23,17 +26,20 @@ object KLogFormatters {
 
   val verbose: KLogFormatter = { name, level, msg, exception, ctx ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
-    val lineInfo = ctx.functionName?.let { "${it}():${ctx.lineNumber} " } ?: ""
+    val lineInfo = ctx.line?.functionName?.let { "${it}():${ctx.line.lineNumber} " } ?: ""
     "$l$name ${lineInfo}$msg ${
       exception?.stackTraceToString()?.let { " :$it" } ?: ""
     }"
   }
 
   inline fun colored(crossinline formatter: KLogFormatter): KLogFormatter =
-    { name,level, msg, exception, context ->
-      "\u001b[0;${level.color}m${formatter.invoke(name,level, msg, exception, context)}\u001b[0m"
+    { name, level, msg, exception, context ->
+      "\u001b[0;${level.color}m${formatter.invoke(name, level, msg, exception, context)}\u001b[0m"
     }
 }
+
+
+fun KLogFormatter.colored() = KLogFormatters.colored(this)
 
 
 

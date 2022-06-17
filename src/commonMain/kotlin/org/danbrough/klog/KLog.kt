@@ -1,5 +1,23 @@
 package org.danbrough.klog
 
+data class StatementContext(
+  val threadName: String,
+  val threadID: Long,
+  val line: LineContext? = null
+) {
+  val time: Long
+    get() = getTimeMillis()
+
+  data class LineContext(
+    val lineNumber: Int = -1,
+    val functionName: String? = null,
+    val className: String? = null
+  )
+}
+
+expect fun platformStatementContext(): StatementContext
+
+
 @Suppress("MemberVisibilityCanBePrivate")
 data class KLog(
   private val registry: KLogRegistry,
@@ -67,6 +85,7 @@ data class KLog(
     get() = isErrorEnabled && writer != KLogWriters.noop
 
 
+  @Suppress("NOTING_TO_INLINE")
   private inline fun log(
     level: Level, msg: String?, err: Throwable?, noinline msgProvider: LogMessageFunction?
   ) {
@@ -80,10 +99,13 @@ data class KLog(
       msgProvider?.invoke() ?: ""
     }".trim()
 
-    val messageContext by lazy {
-      platformLogMessageContext()
+    val ctx by lazy {
+      platformStatementContext()
     }
-    logWriter.invoke(formatter.invoke(name, level, message, err, messageContext))
+    logWriter.invoke(name, level, formatter.invoke(name, level, message, err, ctx), err)
   }
 
 }
+
+
+

@@ -1,6 +1,12 @@
 package org.danbrough.klog
 
+import kotlin.native.concurrent.ThreadLocal
+
+typealias KLogWriter = (String, Level, String, Throwable?) -> Unit
+
+
+@ThreadLocal
 object KLogWriters {
-  val stdOut: KLogWriter = { println(it) }
-  val noop: KLogWriter = {}
+  val noop: KLogWriter = { _, _, _, _ -> }
+  var stdOut: KLogWriter = { _, _, msg, _ -> println(msg) }
 }

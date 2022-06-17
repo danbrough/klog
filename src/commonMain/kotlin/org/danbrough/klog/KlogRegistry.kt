@@ -7,8 +7,6 @@ abstract class KLogRegistry {
   companion object {
     const val ROOT_LOG_NAME = ""
   }
-
-
   var rootLog: KLog
     get() = this[ROOT_LOG_NAME]
     set(value) {
@@ -17,7 +15,7 @@ abstract class KLogRegistry {
 
   fun createLog(
     name: String,
-    level: Level = Level.NONE,
+    level: Level = Level.TRACE,
     formatter: KLogFormatter = KLogFormatters.simple,
     writer: KLogWriter = KLogWriters.noop
   ) = KLog(this, name, level, formatter, writer)
@@ -29,10 +27,10 @@ abstract class KLogRegistry {
   abstract fun initRegistry(rootLog: KLog)
 
   fun initRegistry(
-    level: Level = Level.NONE,
+    level: Level = Level.TRACE,
     formatter: KLogFormatter = KLogFormatters.simple,
     writer: KLogWriter = KLogWriters.noop
-  ) = initRegistry(createLog(ROOT_LOG_NAME, level, formatter, writer))
+  ) = createLog(ROOT_LOG_NAME, level, formatter, writer).apply { initRegistry(this) }
 
   abstract fun applyToBranch(name: String, toApply: KLog.() -> Unit)
 
@@ -41,7 +39,7 @@ abstract class KLogRegistry {
 expect fun createKLogRegistry(): KLogRegistry
 
 open class DefaultLogRegistry(
-  level: Level = Level.NONE,
+  level: Level = Level.TRACE,
   formatter: KLogFormatter = KLogFormatters.simple,
   writer: KLogWriter = KLogWriters.noop
 ) : KLogRegistry() {

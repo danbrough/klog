@@ -8,13 +8,13 @@ class Tests {
 
 
   companion object {
-    init {
+/*    init {
       kLogRegistry.initRegistry(
         Level.TRACE,
         KLogFormatters.colored(KLogFormatters.verbose),
         KLogWriters.stdOut
       )
-    }
+    }*/
 
     //have to provide the fully qualified name for the JS platform
     //otherwise could just use `klog.klog()`

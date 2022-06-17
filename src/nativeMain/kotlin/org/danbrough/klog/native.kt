@@ -5,9 +5,11 @@ import platform.posix.pthread_self
 import kotlin.reflect.KClass
 
 
+@Suppress("NOTHING_TO_INLINE")
 @OptIn(UnsafeNumber::class)
-actual fun platformLogMessageContext(): KLogMessageContext =
-  KLogMessageContextImpl("native", pthread_self().toLong())
+actual inline fun platformStatementContext(): StatementContext =
+  StatementContext("native", pthread_self().toLong())
+
 
 actual fun getTimeMillis(): Long = org.danbrough.klog.native.getTimeMillisTest().toLong()
 

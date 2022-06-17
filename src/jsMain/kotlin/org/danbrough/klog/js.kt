@@ -3,8 +3,8 @@ package org.danbrough.klog
 import kotlin.reflect.KClass
 
 
-actual fun platformLogMessageContext(): KLogMessageContext =
-  KLogMessageContextImpl("js", 1)
+actual fun platformStatementContext(): StatementContext =
+  StatementContext("js", 0)
 
 
 actual fun createKLogRegistry(): KLogRegistry = object : DefaultLogRegistry() {

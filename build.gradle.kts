@@ -6,9 +6,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   kotlin("multiplatform")
-  id("com.android.library")
   `maven-publish`
-  // id("com.android.application") apply false
+  id("com.android.library")
   // id("org.jetbrains.kotlin.android") apply false
 
 }
@@ -75,6 +74,14 @@ kotlin {
     dependsOn(jvmCommonMain)
   }
 
+  val androidAndroidTest by sourceSets.getting {
+    dependencies {
+      implementation(AndroidX.test.runner)
+      implementation(AndroidX.test.ext.junit.ktx)
+    }
+
+  }
+
   val jvmMain by sourceSets.getting {
     dependsOn(jvmCommonMain)
   }
@@ -118,6 +125,8 @@ android {
   defaultConfig {
     minSdk = ProjectProperties.MIN_SDK_VERSION
     targetSdk = ProjectProperties.SDK_VERSION
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
   }
 
   compileOptions {
