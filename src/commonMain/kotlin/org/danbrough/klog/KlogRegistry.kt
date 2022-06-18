@@ -17,6 +17,21 @@ abstract class KLogRegistry {
 
   abstract operator fun get(name: String): KLog
 
+  @Suppress("NOTING_TO_INLINE")
+
+  inline fun get(
+    name: String,
+    level: Level? = null,
+    noinline formatter: KLogFormatter? = null,
+    noinline writer: KLogWriter? = null
+  ): KLog =
+    this[name].also {
+      if (level != null) it.level = level
+      if (formatter != null) it.formatter = formatter
+      if (writer != null) it.writer = writer
+    }
+
+
   abstract fun getLogs(): Set<KLog>
 
   abstract fun initRegistry(rootLog: KLog): KLogRegistry
@@ -53,6 +68,7 @@ open class DefaultLogRegistry(
       logs[name] = it
     }
   }
+
 
   override fun getLogs(): Set<KLog> = logs.values.toSet()
 
