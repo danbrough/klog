@@ -37,4 +37,23 @@ class Test {
     testLog.warn("thangLog.isInfoEnabled = ${testLog.isInfoEnabled}. (Should be false)")
     log.info("this is still active as it's a parent log")
   }
+
+  @Test
+  fun formatterTest() {
+    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
+    val customFormatter: KLogFormatter = { name, level, msg, err, line ->
+      """Name: $name Level: $level 
+        Message: $msg Error:$err 
+        threadName: ${line.threadName} threadID: ${line.threadID}
+      """.trimMargin()
+    }
+
+    testLog.level = Level.TRACE
+
+    val customLog = testLog.copy(_formatter = customFormatter.colored)
+    customLog.trace("trace")
+    customLog.debug("debug")
+    customLog.info("info with exception", Exception("Example exception"))
+  }
+
 }

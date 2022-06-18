@@ -31,6 +31,7 @@ data class KLog(
   var level: Level
     get() = _level
     set(value) {
+      _level = value
       registry.applyToBranch(name) {
         _level = value
       }
@@ -39,6 +40,7 @@ data class KLog(
   var formatter: KLogFormatter
     get() = _formatter
     set(value) {
+      _formatter = value
       registry.applyToBranch(name) {
         _formatter = value
       }
@@ -47,10 +49,19 @@ data class KLog(
   var writer: KLogWriter
     get() = _writer
     set(value) {
+      _writer = value
       registry.applyToBranch(name) {
         _writer = value
       }
     }
+
+/*
+  fun copyOf(
+    level: Level = _level,
+    formatter: KLogFormatter = _formatter,
+    writer: KLogWriter = _writer
+  ) = this.copy(_level = level, _writer = writer, _formatter = formatter)
+*/
 
   fun trace(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
     log(Level.TRACE, msg, err, msgProvider)
