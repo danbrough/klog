@@ -10,7 +10,7 @@ private val log =
 
 
 class Test {
-  private val testLog = klog() //name will be "a.Thang"
+  private val testLog = klog() //name will be "a.Test"
 
   @Test
   fun test() {

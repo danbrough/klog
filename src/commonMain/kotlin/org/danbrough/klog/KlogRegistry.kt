@@ -56,9 +56,10 @@ open class DefaultLogRegistry(
 
   override fun getLogs(): Set<KLog> = logs.values.toSet()
 
+
   //invoke [toApply] on all logs with names starting with (and including) [name]
   override fun applyToBranch(name: String, toApply: KLog.() -> Unit) = logs.forEach {
-    if (it.key.startsWith(name)) it.value.toApply()
+    if (it.key == name || it.key.startsWith("$name.")) it.value.toApply()
   }
 
 }
