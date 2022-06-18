@@ -4,7 +4,15 @@ package org.danbrough.klog
 
 import kotlin.reflect.KClass
 
+typealias LogMessageFunction = () -> String
 
+enum class Level {
+  TRACE, DEBUG, INFO, WARN, ERROR;
+}
+
+expect fun createKLogRegistry(): KLogRegistry
+
+//default global KLogRegistry instance
 val kLogRegistry = createKLogRegistry()
 
 /*
@@ -22,7 +30,6 @@ inline fun <reified T : Any> T.klog(
 ): KLog = kLogRegistry.get(this::class.klogName(), level, formatter, writer)
 
 
-@Suppress("NOTING_TO_INLINE")
 inline fun klog(
   name: String,
   level: Level? = null,
@@ -31,25 +38,18 @@ inline fun klog(
 ): KLog = kLogRegistry.get(name, level, formatter, writer)
 
 
-@Suppress("NOTING_TO_INLINE")
-
 inline fun klog(
   name: String
 ): KLog = kLogRegistry[name]
 
-@Suppress("NOTING_TO_INLINE")
 inline fun klog(
-  clazz: KClass<*>, level: Level? = null,
+  clazz: KClass<*>,
+  level: Level? = null,
   noinline formatter: KLogFormatter? = null,
   noinline writer: KLogWriter? = null
 ): KLog = kLogRegistry.get(clazz.klogName(), level, formatter, writer)
 
 
-typealias LogMessageFunction = () -> String
-
-enum class Level {
-  TRACE, DEBUG, INFO, WARN, ERROR;
-}
 
 
 

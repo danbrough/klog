@@ -4,23 +4,10 @@ import a.b.AB
 import org.danbrough.klog.*
 import kotlin.test.Test
 
+private val log =
+  klog("a", Level.TRACE, KLogFormatters.verbose.colored, KLogWriters.stdOut)
+
 class Tests {
-
-
-  companion object {
-/*    init {
-      kLogRegistry.initRegistry(
-        Level.TRACE,
-        KLogFormatters.colored(KLogFormatters.verbose),
-        KLogWriters.stdOut
-      )
-    }*/
-
-    //have to provide the fully qualified name for the JS platform
-    //otherwise could just use `klog.klog()`
-    private val log = klog("Tests")
-
-  }
 
   private fun runLogTest() {
     A().test()
@@ -30,12 +17,6 @@ class Tests {
 
   @Test
   fun testLogConf() {
-
-    kLogRegistry.initRegistry(
-      Level.TRACE,
-      KLogFormatters.colored(KLogFormatters.verbose),
-      KLogWriters.stdOut
-    )
 
     log.info("testings logs ..")
     runLogTest()
@@ -55,6 +36,10 @@ class Tests {
     println("test()")
 
     log.trace { "trace with lazy message" }
+    log.level = Level.DEBUG
+    log.trace {
+      throw Error("This should not be called")
+    }
     log.debug("debug message")
     log.info { "INFO MESSAGE" }
     log.warn {

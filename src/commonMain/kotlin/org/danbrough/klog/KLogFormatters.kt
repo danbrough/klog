@@ -15,7 +15,6 @@ val Level.color: Int
   }
 
 
-
 @ThreadLocal
 object KLogFormatters {
 
@@ -27,7 +26,7 @@ object KLogFormatters {
   val verbose: KLogFormatter = { name, level, msg, exception, ctx ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
     val lineInfo = ctx.line?.functionName?.let { "${it}():${ctx.line.lineNumber} " } ?: ""
-    "$l$name ${lineInfo}$msg ${
+    "$l$name ${ctx.line?.fileName?.let { "$it:" } ?: ""}${lineInfo}$msg ${
       exception?.stackTraceToString()?.let { " :$it" } ?: ""
     }"
   }
@@ -39,7 +38,8 @@ object KLogFormatters {
 }
 
 
-fun KLogFormatter.colored() = KLogFormatters.colored(this)
+val KLogFormatter.colored: KLogFormatter
+  get() = KLogFormatters.colored(this)
 
 
 

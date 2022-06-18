@@ -6,13 +6,14 @@ import kotlin.reflect.KClass
 @Suppress("NOTHING_TO_INLINE")
 actual inline fun platformStatementContext(): StatementContext =
   Thread.currentThread().let {
-    val stackElement = it.stackTrace[8]
+    val stackElement = it.stackTrace[7]
     StatementContext(
       it.name, it.id,
       StatementContext.LineContext(
         stackElement.lineNumber,
         stackElement.methodName,
-        stackElement.className
+        stackElement.className,
+        stackElement.fileName,
       )
     )
   }
@@ -21,5 +22,4 @@ actual inline fun platformStatementContext(): StatementContext =
 actual fun getTimeMillis(): Long = System.currentTimeMillis()
 
 
-actual fun KClass<*>.klogName(): String = qualifiedName!!
-
+actual fun KClass<*>.klogName(): String = qualifiedName!!.removeSuffix(".Companion")

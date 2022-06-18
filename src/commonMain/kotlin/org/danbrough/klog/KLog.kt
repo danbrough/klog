@@ -11,7 +11,8 @@ data class StatementContext(
   data class LineContext(
     val lineNumber: Int = -1,
     val functionName: String? = null,
-    val className: String? = null
+    val className: String? = null,
+    val fileName: String? = null,
   )
 }
 

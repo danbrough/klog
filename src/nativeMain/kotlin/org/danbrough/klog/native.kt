@@ -23,4 +23,4 @@ actual fun createKLogRegistry(): KLogRegistry = registry ?: NativeLogRegistry().
   registry = it
 }
 
-actual fun KClass<*>.klogName(): String = qualifiedName!!
+actual fun KClass<*>.klogName(): String = qualifiedName!!.removeSuffix(".Companion")
