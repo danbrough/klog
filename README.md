@@ -16,6 +16,22 @@ repositories {
 dependencies {
   implementation("com.github.danbrough:klog:$latestVersion")
 }
+```
 
+```kotlin
+package a 
+
+import org.danbrough.klog.*
+
+//create a log for package "a" and everything below
+val log = klog("a") 
+
+log.trace("trace message")
+log.debug {
+  "A lazily generated debug message"
+}
+if (log.isInfoEnabled)  log.info("info message")
+log.warn("warning message")
+log.error("an error message with an exception",Error("An exception"))
 
 ```
