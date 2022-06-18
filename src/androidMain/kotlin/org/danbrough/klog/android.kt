@@ -2,7 +2,12 @@ package org.danbrough.klog
 
 
 actual fun createKLogRegistry(): KLogRegistry {
-  KLogWriters.stdOut = KLogWriters.androidLog
+
+  runCatching {
+    android.util.Log.v("org.danbrough.klog", "initialising stdout log with android log")
+    KLogWriters.stdOut = KLogWriters.androidLog
+  }
+
   return object : DefaultLogRegistry(writer = KLogWriters.androidLog) {}
 }
 

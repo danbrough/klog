@@ -7,30 +7,25 @@ abstract class KLogRegistry {
   companion object {
     const val ROOT_LOG_NAME = ""
   }
+
   var rootLog: KLog
     get() = this[ROOT_LOG_NAME]
     set(value) {
       initRegistry(value)
     }
 
-  fun createLog(
-    name: String,
-    level: Level = Level.TRACE,
-    formatter: KLogFormatter = KLogFormatters.simple,
-    writer: KLogWriter = KLogWriters.noop
-  ) = KLog(this, name, level, formatter, writer)
 
   abstract operator fun get(name: String): KLog
 
   abstract fun getLogs(): Set<KLog>
 
-  abstract fun initRegistry(rootLog: KLog)
+  abstract fun initRegistry(rootLog: KLog): KLogRegistry
 
   fun initRegistry(
     level: Level = Level.TRACE,
     formatter: KLogFormatter = KLogFormatters.simple,
     writer: KLogWriter = KLogWriters.noop
-  ) = createLog(ROOT_LOG_NAME, level, formatter, writer).apply { initRegistry(this) }
+  ) = initRegistry(KLog(this, ROOT_LOG_NAME, level, formatter, writer))
 
   abstract fun applyToBranch(name: String, toApply: KLog.() -> Unit)
 
@@ -39,9 +34,9 @@ abstract class KLogRegistry {
 expect fun createKLogRegistry(): KLogRegistry
 
 open class DefaultLogRegistry(
-  level: Level = Level.TRACE,
+  level: Level = Level.WARN,
   formatter: KLogFormatter = KLogFormatters.simple,
-  writer: KLogWriter = KLogWriters.noop
+  writer: KLogWriter = KLogWriters.stdOut
 ) : KLogRegistry() {
 
   private var logs = mutableMapOf<String, KLog>()
@@ -66,8 +61,9 @@ open class DefaultLogRegistry(
     if (it.key.startsWith(name)) it.value.toApply()
   }
 
-  override fun initRegistry(rootLog: KLog) {
+  override fun initRegistry(rootLog: KLog): KLogRegistry {
     logs.clear()
     logs[ROOT_LOG_NAME] = rootLog.copy(registry = this)
+    return this
   }
 }
