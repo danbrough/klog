@@ -20,9 +20,7 @@ buildscript {
 }
 
 
-
 BuildVersion.init(project)
-
 
 
 version = BuildVersion.buildVersionName
@@ -33,6 +31,7 @@ kotlin {
 
   jvm()
   linuxX64()
+  macosX64()
   android()
   js {
     nodejs()
@@ -79,8 +78,12 @@ kotlin {
       implementation(AndroidX.test.runner)
       implementation(AndroidX.test.ext.junit.ktx)
     }
-
   }
+
+  val androidTest by sourceSets.getting {
+    dependsOn(commonTest)
+
+}
 
   val jvmMain by sourceSets.getting {
     dependsOn(jvmCommonMain)
