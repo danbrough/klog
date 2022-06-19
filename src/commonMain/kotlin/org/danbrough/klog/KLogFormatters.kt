@@ -25,8 +25,8 @@ object KLogFormatters {
 
   val verbose: KLogFormatter = { name, level, msg, exception, ctx ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
-    val lineInfo = ctx.line?.functionName?.let { "${it}():${ctx.line.lineNumber} " } ?: ""
-    "$l$name ${ctx.line?.fileName?.let { "$it:" } ?: ""}${lineInfo}$msg ${
+    val lineInfo = ctx.line?.functionName?.let { "${ctx.line.fileName}:${ctx.line.lineNumber}:${it}() " } ?: ""
+    "$l$name\t${lineInfo}$msg ${
       exception?.stackTraceToString()?.let { " :$it" } ?: ""
     }"
   }
