@@ -6,8 +6,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   kotlin("multiplatform")
-  `maven-publish`
   id("com.android.library")
+  `maven-publish`
   // id("org.jetbrains.kotlin.android") apply false
 
 }
