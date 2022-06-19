@@ -19,8 +19,13 @@ dependencies {
 ```
 
 ### Basics 
-`./gradlew jvmTest --tests a.Test.* ` or  `./gradlew linuxX64Test --tests a.Test.* ` 
-`./gradlew jsTest --tests a.Test.* `
+```gradle 
+./gradlew jvmTest --tests a.Test.* 
+ ``` 
+or 
+```gradle 
+./gradlew linuxX64Test --tests a.Test.* 
+ ```
 
 ```kotlin
 package a
