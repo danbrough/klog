@@ -41,7 +41,7 @@ class Test {
   @Test
   fun formatterTest() {
     @Suppress("UNUSED_ANONYMOUS_PARAMETER")
-    val customFormatter: KLogFormatter = { name, level, msg, err, line ->
+    val customFormatter: KMessageFormatter = { name, level, msg, err, line ->
       """Name: $name Level: $level 
         Message: $msg Error:$err 
         threadName: ${line.threadName} threadID: ${line.threadID}
@@ -50,7 +50,7 @@ class Test {
 
     testLog.level = Level.TRACE
 
-    val customLog = testLog.copy(_formatter = customFormatter.colored)
+    val customLog = testLog.clone(messageFormatter = customFormatter.colored)
     customLog.trace("trace")
     customLog.debug("debug")
     customLog.info("info with exception", Exception("Example exception"))

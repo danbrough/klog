@@ -14,7 +14,7 @@ abstract class KLogRegistry {
   inline fun get(
     name: String,
     level: Level? = null,
-    noinline formatter: KLogFormatter? = null,
+    noinline formatter: KMessageFormatter? = null,
     noinline writer: KLogWriter? = null
   ): KLog = this[name].also {
     applyToBranch(name) {
@@ -35,14 +35,14 @@ abstract class KLogRegistry {
 @Suppress("LeakingThis")
 open class DefaultLogRegistry(
   level: Level = Level.WARN,
-  formatter: KLogFormatter = KLogFormatters.simple,
+  formatter: KMessageFormatter = KLogFormatters.simple,
   writer: KLogWriter = KLogWriters.stdOut
 ) : KLogRegistry() {
 
   private var logs = mutableMapOf<String, KLog>()
 
   init {
-    logs[ROOT_LOG_NAME] = KLog(this, ROOT_LOG_NAME, level, formatter, writer)
+    logs[ROOT_LOG_NAME] = KLog(this, ROOT_LOG_NAME, KLogOptions(level, formatter, writer))
   }
 
   override operator fun get(name: String): KLog {

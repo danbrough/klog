@@ -18,42 +18,64 @@ data class StatementContext(
 
 expect fun platformStatementContext(): StatementContext
 
+//for formatting the [KLog.name] field
+typealias KNameFormatter = (String) -> String
+
+data class KLogOptions(
+  var level: Level,
+  var messageFormatter: KMessageFormatter,
+  var writer: KLogWriter,
+  var nameFormatter: KNameFormatter? = null
+)
 
 @Suppress("MemberVisibilityCanBePrivate")
 data class KLog(
   private val registry: KLogRegistry,
   val name: String,
-  private var _level: Level,
-  private var _formatter: KLogFormatter,
-  private var _writer: KLogWriter
+  private val options: KLogOptions
 ) {
 
   var level: Level
-    get() = _level
+    get() = options.level
     set(value) {
-      _level = value
       registry.applyToBranch(name) {
-        _level = value
+        options.level = value
       }
     }
 
-  var formatter: KLogFormatter
-    get() = _formatter
+  var formatter: KMessageFormatter
+    get() = options.messageFormatter
     set(value) {
-      _formatter = value
       registry.applyToBranch(name) {
-        _formatter = value
+        options.messageFormatter = value
       }
     }
 
   var writer: KLogWriter
-    get() = _writer
+    get() = options.writer
     set(value) {
-      _writer = value
       registry.applyToBranch(name) {
-        _writer = value
+        options.writer = value
       }
     }
+
+
+  /**
+   * @return A copy of this [KLog] with modified options
+   */
+  fun clone(
+    level: Level = options.level,
+    writer: KLogWriter = options.writer,
+    messageFormatter: KMessageFormatter = options.messageFormatter,
+    nameFormatter: KNameFormatter? = options.nameFormatter
+  ): KLog = copy(
+    options = options.copy(
+      level = level,
+      messageFormatter = messageFormatter,
+      writer = writer,
+      nameFormatter = nameFormatter
+    )
+  )
 
 /*
   fun copyOf(
@@ -78,6 +100,9 @@ data class KLog(
   fun error(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
     log(Level.ERROR, msg, err, msgProvider)
 
+  val displayName: String
+    get() = options.nameFormatter?.invoke(name) ?: name
+
   val isTraceEnabled: Boolean
     get() = level <= Level.TRACE
 
@@ -97,7 +122,6 @@ data class KLog(
     get() = isErrorEnabled && writer != KLogWriters.noop
 
 
-  @Suppress("NOTING_TO_INLINE")
   private inline fun log(
     level: Level, msg: String?, err: Throwable?, noinline msgProvider: LogMessageFunction?
   ) {
@@ -114,8 +138,9 @@ data class KLog(
     val ctx by lazy {
       platformStatementContext()
     }
-    logWriter.invoke(name, level, formatter.invoke(name, level, message, err, ctx), err)
+    logWriter.invoke(displayName, level, formatter.invoke(name, level, message, err, ctx), err)
   }
+
 
 }
 

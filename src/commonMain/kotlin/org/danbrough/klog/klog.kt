@@ -25,7 +25,7 @@ inline fun <reified T : Any> T.klog(): KLog = kLogRegistry[this::class.klogName(
 
 inline fun <reified T : Any> T.klog(
   level: Level? = null,
-  noinline formatter: KLogFormatter? = null,
+  noinline formatter: KMessageFormatter? = null,
   noinline writer: KLogWriter? = null
 ): KLog = kLogRegistry.get(this::class.klogName(), level, formatter, writer)
 
@@ -33,7 +33,7 @@ inline fun <reified T : Any> T.klog(
 inline fun klog(
   name: String,
   level: Level? = null,
-  noinline formatter: KLogFormatter? = null,
+  noinline formatter: KMessageFormatter? = null,
   noinline writer: KLogWriter? = null
 ): KLog = kLogRegistry.get(name, level, formatter, writer)
 
@@ -45,7 +45,7 @@ inline fun klog(
 inline fun klog(
   clazz: KClass<*>,
   level: Level? = null,
-  noinline formatter: KLogFormatter? = null,
+  noinline formatter: KMessageFormatter? = null,
   noinline writer: KLogWriter? = null
 ): KLog = kLogRegistry.get(clazz.klogName(), level, formatter, writer)
 
