@@ -17,16 +17,12 @@ class AndroidTests {
     }
   }*/
 
-  private val log = klog().also {
-    it.level = Level.TRACE
-    it.formatter = KLogFormatters.verbose.colored()
-    it.writer = KLogWriters.stdOut
-  }
+  private val log = klog(Level.TRACE,KLogFormatters.verbose.colored)
 
   @Test
   fun test() {
     Log.i("TEST", "############################################################################")
-    kLogRegistry.rootLog.level = Level.DEBUG
+
     log.trace("trace")
     log.debug("debug")
     log.info("info")

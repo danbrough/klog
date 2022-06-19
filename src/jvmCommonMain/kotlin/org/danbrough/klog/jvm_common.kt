@@ -3,10 +3,16 @@ package org.danbrough.klog
 import kotlin.reflect.KClass
 
 
+val stackDepth: Int = (runCatching {
+  Class.forName("android.util.Log")
+  8
+}.getOrNull() ?: 7)
+
+
 @Suppress("NOTHING_TO_INLINE")
 actual inline fun platformStatementContext(): StatementContext =
   Thread.currentThread().let {
-    val stackElement = it.stackTrace[7]
+    val stackElement = it.stackTrace[stackDepth]
     StatementContext(
       it.name, it.id,
       StatementContext.LineContext(
