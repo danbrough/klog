@@ -1,23 +1,24 @@
 package org.danbrough.klog
 
-import kotlinx.cinterop.UnsafeNumber
-import platform.posix.pthread_self
+import kotlinx.cinterop.toLong
 import kotlin.reflect.KClass
 
 
 @Suppress("NOTHING_TO_INLINE")
-@OptIn(UnsafeNumber::class)
 actual inline fun platformStatementContext(): StatementContext =
-  StatementContext("native", pthread_self().toLong())
+  StatementContext("native", platform.posix.pthread_self().toLong())
 
 
-actual fun getTimeMillis(): Long = org.danbrough.klog.native.getTimeMillisTest().toLong()
+actual fun getTimeMillis(): Long = org.danbrough.klog.posix.getTimeMillisTest().toLong()
+
+//actual fun getTimeMillis(): Long = -1
 
 
 private class NativeLogRegistry : DefaultLogRegistry() {
 }
 
-private var registry: DefaultLogRegistry? = null
+private
+var registry: DefaultLogRegistry? = null
 
 actual fun createKLogRegistry(): KLogRegistry = registry ?: NativeLogRegistry().also {
   registry = it

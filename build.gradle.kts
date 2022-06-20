@@ -30,14 +30,18 @@ group = projectGroup
 kotlin {
 
   jvm()
-  linuxX64()
-  macosX64()
   android()
+  macosX64()
+  linuxX64()
+
   js {
     nodejs()
   }
 
+  println("IDE ACTIVE: ${ProjectProperties.IDE_ACTIVE}")
+
   if (!ProjectProperties.IDE_ACTIVE) {
+
     linuxArm64()
     linuxArm32Hfp()
     mingwX64()
@@ -57,41 +61,42 @@ kotlin {
     }
   }
 
-  val nativeMain by sourceSets.creating {
+
+  val posixMain by sourceSets.creating {
     dependsOn(commonMain)
-    dependencies {
-      implementation(KotlinX.coroutines.core)
+  }
+  val posixTest by sourceSets.creating {
+    dependsOn(commonTest)
+  }
+
+
+  sourceSets {
+
+    val jvmCommonMain by creating {
+      dependsOn(commonMain)
+    }
+
+    val androidMain by getting {
+      dependsOn(jvmCommonMain)
+    }
+
+    val androidAndroidTest by getting {
+      dependencies {
+        implementation(AndroidX.test.runner)
+        implementation(AndroidX.test.ext.junit.ktx)
+      }
+    }
+
+    val androidTest by getting {
+      dependsOn(commonTest)
+
+    }
+
+    val jvmMain by getting {
+      dependsOn(jvmCommonMain)
     }
   }
 
-
-  val jvmCommonMain by sourceSets.creating {
-    dependsOn(commonMain)
-  }
-
-  val androidMain by sourceSets.getting {
-    dependsOn(jvmCommonMain)
-  }
-
-  val androidAndroidTest by sourceSets.getting {
-    dependencies {
-      implementation(AndroidX.test.runner)
-      implementation(AndroidX.test.ext.junit.ktx)
-    }
-  }
-
-  val androidTest by sourceSets.getting {
-    dependsOn(commonTest)
-
-}
-
-  val jvmMain by sourceSets.getting {
-    dependsOn(jvmCommonMain)
-  }
-
-  val nativeTest by sourceSets.creating {
-    dependsOn(commonTest)
-  }
 
 
   targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class).all {
@@ -99,18 +104,19 @@ kotlin {
 
     compilations["main"].apply {
       cinterops.create("klog") {
-        packageName("org.danbrough.klog.native")
-        defFile(project.file("src/nativeMain/klog.def"))
+        packageName("org.danbrough.klog.posix")
+        defFile(project.file("src/posixMain/klog.def"))
       }
 
       defaultSourceSet {
-        dependsOn(nativeMain)
+        dependsOn(posixMain)
       }
     }
 
     compilations["test"].defaultSourceSet {
-      dependsOn(nativeTest)
+      dependsOn(posixTest)
     }
+
   }
 }
 
