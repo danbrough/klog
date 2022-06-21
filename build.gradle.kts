@@ -1,5 +1,6 @@
 import ProjectProperties.LOCAL_MAVEN_REPO
 import ProjectProperties.projectGroup
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -8,6 +9,7 @@ plugins {
   kotlin("multiplatform")
   id("com.android.library")
   `maven-publish`
+  signing
 }
 
 buildscript {
@@ -22,6 +24,7 @@ BuildVersion.init(project)
 
 version = BuildVersion.buildVersionName
 group = projectGroup
+
 
 
 kotlin {
@@ -148,8 +151,27 @@ kotlin {
 publishing {
   repositories {
     maven(LOCAL_MAVEN_REPO)
+
+    maven {
+      val releaseRepo = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+      val snapshotRepo = "https://oss.sonatype.org/content/repositories/snapshots/"
+
+      val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
+      setUrl(if (isReleaseVersion) releaseRepo else snapshotRepo)
+
+      credentials {
+        username = project.property("ossrhUsername")?.toString()
+        password = project.property("ossrhPassword")?.toString()
+      }
+
+    }
   }
+
+  
+
+
 }
+
 
 android {
   compileSdk = ProjectProperties.SDK_VERSION
