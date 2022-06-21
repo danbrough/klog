@@ -30,7 +30,8 @@ kotlin {
   android()
 
   linuxX64()
-
+  macosX64()
+  
   js {
     nodejs()
   }
