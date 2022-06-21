@@ -32,14 +32,8 @@ kotlin {
   jvm()
   android()
   macosX64()
-  macosArm64()
-
   linuxX64()
-	linuxArm64()
-	linuxArm32Hfp()
-	iosX64()
-
-
+  
   js {
     nodejs()
   }
@@ -48,9 +42,36 @@ kotlin {
 
   if (!ProjectProperties.IDE_ACTIVE) {
 
+    androidNativeArm32()
+    androidNativeArm64()
+    androidNativeX64()
+    androidNativeX86()
+    //iosArm32()
+    iosArm64()
+    iosSimulatorArm64()
+    iosX64()
+
+    macosArm64()
+
     linuxArm64()
     linuxArm32Hfp()
+
+
+
     mingwX64()
+    //mingwX86()
+
+    tvosArm64()
+    tvosSimulatorArm64()
+    tvosX64()
+    //wasm()
+    //wasm32()
+    //watchosArm32()
+    //watchosArm64()
+    //watchosSimulatorArm64()
+    //watchosX64()
+    //watchosX86()
+
   }
 
 
