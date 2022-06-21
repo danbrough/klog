@@ -32,7 +32,13 @@ kotlin {
   jvm()
   android()
   macosX64()
+  macosArm64()
+
   linuxX64()
+	linuxArm64()
+	linuxArm32Hfp()
+	iosX64()
+
 
   js {
     nodejs()
