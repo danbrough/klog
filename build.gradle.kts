@@ -125,7 +125,7 @@ kotlin {
 
   targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class).all {
 
-    println("NATIVE-TARGET: $name")
+//    println("NATIVE-TARGET: $name")
 
     compilations["main"].apply {
       cinterops.create("klog") {
