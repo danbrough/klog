@@ -1,8 +1,6 @@
 package org.danbrough.klog
 
 import android.util.Log
-
-
 actual fun createKLogRegistry(): KLogRegistry {
 
   runCatching {

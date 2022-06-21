@@ -8,8 +8,6 @@ plugins {
   kotlin("multiplatform")
   id("com.android.library")
   `maven-publish`
-  // id("org.jetbrains.kotlin.android") apply false
-
 }
 
 buildscript {
@@ -33,12 +31,10 @@ kotlin {
   android()
   macosX64()
   linuxX64()
-  
+
   js {
     nodejs()
   }
-
-  println("IDE ACTIVE: ${ProjectProperties.IDE_ACTIVE}")
 
   if (!ProjectProperties.IDE_ACTIVE) {
 
@@ -46,6 +42,7 @@ kotlin {
     androidNativeArm64()
     androidNativeX64()
     androidNativeX86()
+
     //iosArm32()
     iosArm64()
     iosSimulatorArm64()
@@ -56,16 +53,16 @@ kotlin {
     linuxArm64()
     linuxArm32Hfp()
 
-
-
     mingwX64()
     //mingwX86()
 
     tvosArm64()
     tvosSimulatorArm64()
     tvosX64()
+
     //wasm()
     //wasm32()
+
     //watchosArm32()
     //watchosArm64()
     //watchosSimulatorArm64()
@@ -88,10 +85,10 @@ kotlin {
     }
   }
 
-
   val posixMain by sourceSets.creating {
     dependsOn(commonMain)
   }
+
   val posixTest by sourceSets.creating {
     dependsOn(commonTest)
   }
@@ -116,7 +113,6 @@ kotlin {
 
     val androidTest by getting {
       dependsOn(commonTest)
-
     }
 
     val jvmMain by getting {
