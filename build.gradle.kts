@@ -31,7 +31,7 @@ kotlin {
 
   linuxX64()
   macosX64()
-  
+
   js {
     nodejs()
   }
@@ -72,29 +72,30 @@ kotlin {
   }
 
 
-  val commonMain by sourceSets.getting {
-    dependencies {
-      //  runtimeOnly(kotlin("reflect"))
-      implementation(kotlin("stdlib"))
-    }
-  }
-
-  val commonTest by sourceSets.getting {
-    dependencies {
-      implementation(kotlin("test"))
-    }
-  }
-
-  val posixMain by sourceSets.creating {
-    dependsOn(commonMain)
-  }
-
-  val posixTest by sourceSets.creating {
-    dependsOn(commonTest)
-  }
 
 
   sourceSets {
+    val commonMain by getting {
+      dependencies {
+        //  runtimeOnly(kotlin("reflect"))
+        implementation(kotlin("stdlib"))
+      }
+    }
+
+    val commonTest by getting {
+      dependencies {
+        implementation(kotlin("test"))
+      }
+    }
+
+    val posixMain by creating {
+      dependsOn(commonMain)
+    }
+
+    val posixTest by creating {
+      dependsOn(commonTest)
+    }
+
 
     val jvmCommonMain by creating {
       dependsOn(commonMain)
@@ -133,12 +134,12 @@ kotlin {
       }
 
       defaultSourceSet {
-        dependsOn(posixMain)
+        dependsOn(sourceSets["posixMain"])
       }
     }
 
     compilations["test"].defaultSourceSet {
-      dependsOn(posixTest)
+      dependsOn(sourceSets["posixTest"])
     }
 
   }
