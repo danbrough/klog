@@ -28,7 +28,7 @@ kotlin {
 
   jvm()
   android()
-  macosX64()
+
   linuxX64()
 
   js {
@@ -36,29 +36,29 @@ kotlin {
   }
 
   if (!ProjectProperties.IDE_ACTIVE) {
-
-    androidNativeArm32()
-    androidNativeArm64()
-    androidNativeX64()
-    androidNativeX86()
-
-    //iosArm32()
-    iosArm64()
-    //iosSimulatorArm64()
-    iosX64()
-
-    macosArm64()
-
     linuxArm64()
     linuxArm32Hfp()
 
     mingwX64()
     //mingwX86()
 
+    androidNativeArm32()
+    androidNativeArm64()
+    androidNativeX64()
+    androidNativeX86()
+
+    /*//iosArm32()
+    iosArm64()
+    //iosSimulatorArm64()
+    iosX64()
+
+    macosArm64()
+    macosX64()
+
     tvosArm64()
     //tvosSimulatorArm64()
     tvosX64()
-
+*/
     //wasm()
     //wasm32()
 
@@ -123,6 +123,7 @@ kotlin {
 
   targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class).all {
 
+    println("NATIVE-TARGET: $name")
 
     compilations["main"].apply {
       cinterops.create("klog") {
