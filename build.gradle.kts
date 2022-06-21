@@ -48,7 +48,7 @@ kotlin {
     androidNativeX64()
     androidNativeX86()
 
-    /*//iosArm32()
+    //iosArm32()
     iosArm64()
     //iosSimulatorArm64()
     iosX64()
@@ -59,7 +59,7 @@ kotlin {
     tvosArm64()
     //tvosSimulatorArm64()
     tvosX64()
-*/
+
     //wasm()
     //wasm32()
 
