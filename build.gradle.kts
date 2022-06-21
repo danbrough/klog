@@ -21,6 +21,8 @@ buildscript {
 BuildVersion.init(project)
 
 
+println("LOCAL_MAVEN_REPO=$LOCAL_MAVEN_REPO")
+
 version = BuildVersion.buildVersionName
 group = projectGroup
 
