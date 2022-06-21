@@ -44,7 +44,7 @@ kotlin {
 
     //iosArm32()
     iosArm64()
-    iosSimulatorArm64()
+    //iosSimulatorArm64()
     iosX64()
 
     macosArm64()
@@ -56,7 +56,7 @@ kotlin {
     //mingwX86()
 
     tvosArm64()
-    tvosSimulatorArm64()
+    //tvosSimulatorArm64()
     tvosX64()
 
     //wasm()
