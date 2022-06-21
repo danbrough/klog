@@ -149,7 +149,7 @@ android {
 
 
 repositories {
-  maven("https://h1.danbrough.org/maven")
+  //maven("https://h1.danbrough.org/maven")
   mavenCentral()
   google()
 }
