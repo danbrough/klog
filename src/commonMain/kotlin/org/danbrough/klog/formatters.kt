@@ -39,7 +39,7 @@ object KMessageFormatters {
 
 
 val KMessageFormatter.colored: KMessageFormatter
-  get() = KLogMessageFormatters.colored(this)
+  get() = KMessageFormatters.colored(this)
 
 
 
