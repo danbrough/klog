@@ -6,7 +6,7 @@ import org.danbrough.klog.*
 val log = klog(
   "org.danbrough.klog.demo",
   level = Level.TRACE,
-  messageFormatter = KLogFormatters.verbose.colored,
+  messageFormatter = KMessageFormatters.verbose.colored,
   writer = KLogWriters.stdOut
 )
 
