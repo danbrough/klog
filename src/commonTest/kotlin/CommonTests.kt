@@ -7,7 +7,7 @@ import kotlin.test.Test
 private val log =
   klog("a", Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
 
-class Tests {
+class CommonTests {
 
   private fun runLogTest() {
     A().test()
