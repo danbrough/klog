@@ -76,8 +76,10 @@ object BuildVersion {
 
 
     project.task("printHostProperties") {
-      System.getProperties().forEach { key, value ->
-        println("PROP $key -> $value")
+      doLast {
+        System.getProperties().forEach { key, value ->
+          println("PROP $key -> $value")
+        }
       }
 //os.name -> Mac OS X // Linux
 
