@@ -29,7 +29,10 @@ group = projectGroup
 kotlin {
 
   jvm()
-  android()
+
+  android {
+    publishLibraryVariants("release")
+  }
 
   linuxX64()
   macosX64()
