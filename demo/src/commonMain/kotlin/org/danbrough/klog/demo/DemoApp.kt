@@ -8,12 +8,16 @@ val log = klog(
   level = Level.TRACE,
   messageFormatter = KMessageFormatters.verbose.colored,
   writer = KLogWriters.stdOut
-)
+).also {
+  it.messageFormatter = KMessageFormatters.verbose.colored
+}
 
 fun main() {
   log.trace("trace")
   log.debug("debug")
   log.info("running the main app")
-  log.warn("")
+  log.warn {
+    "this is the message"
+  }
   log.error("")
 }

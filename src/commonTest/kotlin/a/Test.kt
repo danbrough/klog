@@ -6,7 +6,7 @@ import kotlin.test.Test
 
 //create a log for package "a" and everything below
 private val log =
-  klog("a", Level.TRACE, KLogWriters.stdOut, messageFormatter = KLogMessageFormatters.verbose.colored)
+  klog("a", Level.TRACE, KLogWriters.stdOut, messageFormatter = KMessageFormatters.verbose.colored)
 
 
 class Test {
