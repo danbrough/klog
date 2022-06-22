@@ -16,7 +16,7 @@ val Level.color: Int
 
 
 @ThreadLocal
-object KLogFormatters {
+object KLogMessageFormatters {
 
   val simple: KMessageFormatter = { name, level, msg, exception, _ ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
@@ -39,7 +39,7 @@ object KLogFormatters {
 
 
 val KMessageFormatter.colored: KMessageFormatter
-  get() = KLogFormatters.colored(this)
+  get() = KLogMessageFormatters.colored(this)
 
 
 

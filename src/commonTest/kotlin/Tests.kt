@@ -5,7 +5,7 @@ import org.danbrough.klog.*
 import kotlin.test.Test
 
 private val log =
-  klog("a", Level.TRACE, KLogFormatters.verbose.colored, KLogWriters.stdOut)
+  klog("a", Level.TRACE, KLogMessageFormatters.verbose.colored, KLogWriters.stdOut)
 
 class Tests {
 

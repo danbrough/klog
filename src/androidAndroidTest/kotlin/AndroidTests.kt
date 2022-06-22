@@ -17,7 +17,7 @@ class AndroidTests {
     }
   }*/
 
-  private val log = klog(Level.TRACE,KLogFormatters.verbose.colored)
+  private val log = klog(Level.TRACE,KLogMessageFormatters.verbose.colored)
 
   @Test
   fun test() {
