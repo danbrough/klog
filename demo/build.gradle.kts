@@ -22,6 +22,7 @@ repositories {
 kotlin {
   jvm()
   android()
+  macosX64()
 
   sourceSets {
     commonMain {
