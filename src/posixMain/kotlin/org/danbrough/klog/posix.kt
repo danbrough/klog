@@ -1,5 +1,6 @@
 package org.danbrough.klog
 
+import platform.posix.pthread_self
 import kotlin.reflect.KClass
 
 
@@ -8,7 +9,9 @@ actual inline fun platformStatementContext(): StatementContext =
   StatementContext("native", -1L)
 
 
-actual fun getTimeMillis(): Long = org.danbrough.klog.posix.getTimeMillisTest().toLong()
+actual fun getTimeMillis(): Long = org.danbrough.klog.posix.timeInMillisSinceEpoch().toLong()
+
+private val log = klog("org.danbrough.klog")
 
 
 //actual fun getTimeMillis(): Long = -1

@@ -1,7 +1,4 @@
-import org.danbrough.klog.KMessageFormatters
-import org.danbrough.klog.Level
-import org.danbrough.klog.colored
-import org.danbrough.klog.klog
+import org.danbrough.klog.*
 import kotlin.test.Test
 
 class MacOSTests {

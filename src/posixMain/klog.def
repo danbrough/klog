@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 #include <sys/time.h>
-unsigned long long getTimeMillisTest(){
+unsigned long long timeInMillisSinceEpoch(){
 
 struct timeval tv;
 
