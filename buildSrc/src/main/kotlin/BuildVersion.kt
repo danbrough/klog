@@ -74,5 +74,13 @@ object BuildVersion {
       }
     }
 
+
+    project.task("printHostProperties") {
+      System.getProperties().forEach { key, value ->
+        println("PROP $key -> $value")
+      }
+    }
+
+
   }
 }

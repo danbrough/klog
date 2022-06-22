@@ -4,10 +4,10 @@ import a.b.AB
 import org.danbrough.klog.*
 import kotlin.test.Test
 
-private val log =
-  klog("a", Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
 
 class CommonTests {
+  private val log =
+    klog("a", Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
 
   private fun runLogTest() {
     A().test()
