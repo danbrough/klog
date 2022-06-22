@@ -23,6 +23,8 @@ kotlin {
   jvm()
   android()
   macosX64()
+  linuxX64()
+  mingwX64()
 
   sourceSets {
     commonMain {
