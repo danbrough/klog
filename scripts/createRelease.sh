@@ -69,3 +69,4 @@ curl "$BUILD_URL" && exit 0
 
 
 
+rsync -avHSx build/maven/org/danbrough/ h1:/srv/https/maven/org/danbrough/
