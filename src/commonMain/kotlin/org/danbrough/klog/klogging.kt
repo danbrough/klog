@@ -25,17 +25,19 @@ inline fun <reified T : Any> T.klog(): KLog = kLogRegistry[this::class.klogName(
 
 inline fun <reified T : Any> T.klog(
   level: Level? = null,
-  noinline formatter: KMessageFormatter? = null,
-  noinline writer: KLogWriter? = null
-): KLog = kLogRegistry.get(this::class.klogName(), level, formatter, writer)
+  noinline writer: KLogWriter? = null,
+  noinline messageFormatter: KMessageFormatter? = null,
+  noinline nameFormatter: KNameFormatter? = null,
+): KLog = kLogRegistry.get(this::class.klogName(), level, writer, messageFormatter, nameFormatter)
 
 
 inline fun klog(
   name: String,
   level: Level? = null,
-  noinline formatter: KMessageFormatter? = null,
-  noinline writer: KLogWriter? = null
-): KLog = kLogRegistry.get(name, level, formatter, writer)
+  noinline writer: KLogWriter? = null,
+  noinline messageFormatter: KMessageFormatter? = null,
+  noinline nameFormatter: KNameFormatter? = null,
+): KLog = kLogRegistry.get(name, level, writer, messageFormatter, nameFormatter)
 
 
 inline fun klog(
@@ -45,9 +47,10 @@ inline fun klog(
 inline fun klog(
   clazz: KClass<*>,
   level: Level? = null,
-  noinline formatter: KMessageFormatter? = null,
-  noinline writer: KLogWriter? = null
-): KLog = kLogRegistry.get(clazz.klogName(), level, formatter, writer)
+  noinline writer: KLogWriter? = null,
+  noinline messageFormatter: KMessageFormatter? = null,
+  noinline nameFormatter: KNameFormatter? = null,
+): KLog = kLogRegistry.get(clazz.klogName(), level, writer, messageFormatter, nameFormatter)
 
 
 

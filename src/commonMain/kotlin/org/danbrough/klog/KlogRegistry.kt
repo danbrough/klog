@@ -14,11 +14,15 @@ abstract class KLogRegistry {
   inline fun get(
     name: String,
     level: Level? = null,
+    noinline writer: KLogWriter? = null,
     noinline messageFormatter: KMessageFormatter? = null,
-    noinline writer: KLogWriter? = null
-  ): KLog = this[name].also {
+    noinline nameFormatter: KNameFormatter? = null,
+
+    ): KLog = this[name].also {
     if (level != null) it.level = level
     if (messageFormatter != null) it.messageFormatter = messageFormatter
+    if (writer != null) it.writer = writer
+    if (nameFormatter != null) it.nameFormatter = nameFormatter
   }
 
   abstract fun getLogs(): Set<KLog>
