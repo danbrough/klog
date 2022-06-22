@@ -8,8 +8,10 @@ class KLogDemoApp : Application() {
   private val log = klog(
     "org.danbrough.klog.demo",
     level = Level.TRACE,
-    formatter = KLogFormatters.verbose.colored,
+    messageFormatter = KMessageFormatters.verbose.colored,
     writer = KLogWriters.androidLog
   )
+
+
 
 }
