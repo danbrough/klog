@@ -32,14 +32,14 @@ data class KLogOptions(
 data class KLog(
   private val registry: KLogRegistry,
   val name: String,
-  private val options: KLogOptions
+  val options: KLogOptions
 ) {
 
   var level: Level
     get() = options.level
     set(value) {
       registry.applyToBranch(name) {
-        options.level = value
+        this.options.level = value
       }
     }
 

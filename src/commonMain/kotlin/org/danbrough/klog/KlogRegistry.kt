@@ -24,6 +24,17 @@ abstract class KLogRegistry {
     }
   }
 
+  @Suppress("NOTING_TO_INLINE")
+  inline fun get(
+    name: String,
+    options:KLogOptions
+  ): KLog = this[name].also {
+    applyToBranch(name) {
+      if (level != null) this.level = level
+      if (formatter != null) this.formatter = formatter
+      if (writer != null) this.writer = writer
+    }
+  }
 
   abstract fun getLogs(): Set<KLog>
 
