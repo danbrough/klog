@@ -79,6 +79,8 @@ object BuildVersion {
       System.getProperties().forEach { key, value ->
         println("PROP $key -> $value")
       }
+
+      //os.arch -> x86_64
     }
 
 
