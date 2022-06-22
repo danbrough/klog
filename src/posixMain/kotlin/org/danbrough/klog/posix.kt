@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 
 @Suppress("NOTHING_TO_INLINE")
 actual inline fun platformStatementContext(): StatementContext =
-  StatementContext("native", platform.posix.pthread_self().toString().toLong())
+  StatementContext("native", platform.posix.pthread_self().toLong())
 
 
 //actual fun getTimeMillis(): Long = org.danbrough.klog.posix.getTimeMillisTest().toLong()
