@@ -14,26 +14,11 @@ abstract class KLogRegistry {
   inline fun get(
     name: String,
     level: Level? = null,
-    noinline formatter: KMessageFormatter? = null,
+    noinline messageFormatter: KMessageFormatter? = null,
     noinline writer: KLogWriter? = null
   ): KLog = this[name].also {
-    applyToBranch(name) {
-      if (level != null) this.level = level
-      if (formatter != null) this.formatter = formatter
-      if (writer != null) this.writer = writer
-    }
-  }
-
-  @Suppress("NOTING_TO_INLINE")
-  inline fun get(
-    name: String,
-    options:KLogOptions
-  ): KLog = this[name].also {
-    applyToBranch(name) {
-      if (level != null) this.level = level
-      if (formatter != null) this.formatter = formatter
-      if (writer != null) this.writer = writer
-    }
+    if (level != null) it.level = level
+    if (messageFormatter != null) it.messageFormatter = messageFormatter
   }
 
   abstract fun getLogs(): Set<KLog>
@@ -50,23 +35,23 @@ open class DefaultLogRegistry(
   writer: KLogWriter = KLogWriters.stdOut
 ) : KLogRegistry() {
 
-  private var logs = mutableMapOf<String, KLog>()
+  private var logs = mutableMapOf<String, KLogImpl>()
 
   init {
-    logs[ROOT_LOG_NAME] = KLog(this, ROOT_LOG_NAME, KLogOptions(level, formatter, writer))
+    logs[ROOT_LOG_NAME] = KLogImpl(this, ROOT_LOG_NAME, level, writer, formatter)
   }
 
-  override operator fun get(name: String): KLog {
-    val log = logs[name]
-    if (log != null) return log
-    val parentName = name.substringBeforeLast('.', ROOT_LOG_NAME)
-    return get(parentName).copy(name = name).also {
-      logs[name] = it
+  override operator fun get(name: String): KLog =
+    logs[name] ?: getParent(name).copy(name = name).also {
+      logs[name] = it as KLogImpl
     }
-  }
+
+  private fun getParent(name: String): KLogImpl =
+    name.substringBeforeLast('.', ROOT_LOG_NAME).let { parentName ->
+      logs[parentName] ?: getParent(parentName)
+    }
 
   override fun getLogs(): Set<KLog> = logs.values.toSet()
-
 
   //invoke [toApply] on all logs with names starting with (and including) [name]
   override fun applyToBranch(name: String, toApply: KLog.() -> Unit) = logs.forEach {

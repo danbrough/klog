@@ -50,7 +50,7 @@ class Test {
 
     testLog.level = Level.TRACE
 
-    val customLog = testLog.clone(messageFormatter = customFormatter.colored)
+    val customLog = testLog.copy(messageFormatter = customFormatter.colored)
     customLog.trace("trace")
     customLog.debug("debug")
     customLog.info("info with exception", Exception("Example exception"))

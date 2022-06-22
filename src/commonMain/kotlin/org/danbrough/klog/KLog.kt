@@ -28,80 +28,30 @@ data class KLogOptions(
   var nameFormatter: KNameFormatter? = null
 )
 
-@Suppress("MemberVisibilityCanBePrivate")
-data class KLog(
-  private val registry: KLogRegistry,
-  val name: String,
-  val options: KLogOptions
-) {
-
+interface KLog {
+  val name: String
   var level: Level
-    get() = options.level
-    set(value) {
-      registry.applyToBranch(name) {
-        this.options.level = value
-      }
-    }
-
-  var formatter: KMessageFormatter
-    get() = options.messageFormatter
-    set(value) {
-      registry.applyToBranch(name) {
-        options.messageFormatter = value
-      }
-    }
-
   var writer: KLogWriter
-    get() = options.writer
-    set(value) {
-      registry.applyToBranch(name) {
-        options.writer = value
-      }
-    }
-
-
-  /**
-   * @return A copy of this [KLog] with modified options
-   */
-  fun clone(
-    level: Level = options.level,
-    writer: KLogWriter = options.writer,
-    messageFormatter: KMessageFormatter = options.messageFormatter,
-    nameFormatter: KNameFormatter? = options.nameFormatter
-  ): KLog = copy(
-    options = options.copy(
-      level = level,
-      messageFormatter = messageFormatter,
-      writer = writer,
-      nameFormatter = nameFormatter
-    )
-  )
-
-/*
-  fun copyOf(
-    level: Level = _level,
-    formatter: KLogFormatter = _formatter,
-    writer: KLogWriter = _writer
-  ) = this.copy(_level = level, _writer = writer, _formatter = formatter)
-*/
-
-  fun trace(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
-    log(Level.TRACE, msg, err, msgProvider)
-
-  fun debug(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
-    log(Level.DEBUG, msg, err, msgProvider)
-
-  fun info(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
-    log(Level.INFO, msg, err, msgProvider)
-
-  fun warn(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
-    log(Level.WARN, msg, err, msgProvider)
-
-  fun error(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null) =
-    log(Level.ERROR, msg, err, msgProvider)
+  var messageFormatter: KMessageFormatter
+  var nameFormatter: KNameFormatter?
 
   val displayName: String
-    get() = options.nameFormatter?.invoke(name) ?: name
+    get() = nameFormatter?.invoke(name) ?: name
+
+  fun copy(
+    name: String = this.name, level: Level = this.level, writer: KLogWriter = this.writer,
+    messageFormatter: KMessageFormatter = this.messageFormatter, nameFormatter: KNameFormatter? = this.nameFormatter
+  ): KLog
+
+  fun trace(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
+
+  fun debug(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
+
+  fun info(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
+
+  fun warn(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
+
+  fun error(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
 
   val isTraceEnabled: Boolean
     get() = level <= Level.TRACE
@@ -120,6 +70,72 @@ data class KLog(
 
   val isEnabled: Boolean
     get() = isErrorEnabled && writer != KLogWriters.noop
+}
+
+@Suppress("MemberVisibilityCanBePrivate")
+data class KLogImpl(
+  private val registry: KLogRegistry,
+  override val name: String,
+  private var _level: Level,
+  private var _writer: KLogWriter,
+  private var _messageFormatter: KMessageFormatter,
+  private var _nameFormatter: KNameFormatter? = null
+) : KLog {
+
+  override var level: Level
+    get() = _level
+    set(value) {
+      registry.applyToBranch(name) {
+        (this as KLogImpl)._level = value
+      }
+    }
+
+  override var writer: KLogWriter
+    get() = _writer
+    set(value) {
+      registry.applyToBranch(name) {
+        (this as KLogImpl)._writer = value
+      }
+    }
+
+  override var messageFormatter: KMessageFormatter
+    get() = _messageFormatter
+    set(value) {
+      registry.applyToBranch(name) {
+        (this as KLogImpl)._messageFormatter = value
+      }
+    }
+
+  override var nameFormatter: KNameFormatter?
+    get() = _nameFormatter
+    set(value) {
+      registry.applyToBranch(name) {
+        (this as KLogImpl)._nameFormatter = value
+      }
+    }
+
+  override fun copy(
+    name: String,
+    level: Level,
+    writer: KLogWriter,
+    messageFormatter: KMessageFormatter,
+    nameFormatter: KNameFormatter?
+  ): KLog = KLogImpl(registry, name, level, writer, messageFormatter, nameFormatter)
+
+  override fun trace(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
+    log(Level.TRACE, msg, err, msgProvider)
+
+  override fun debug(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
+    log(Level.DEBUG, msg, err, msgProvider)
+
+  override fun info(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
+    log(Level.INFO, msg, err, msgProvider)
+
+  override fun warn(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
+    log(Level.WARN, msg, err, msgProvider)
+
+  override fun error(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
+    log(Level.ERROR, msg, err, msgProvider)
 
 
   private inline fun log(
@@ -138,7 +154,8 @@ data class KLog(
     val ctx by lazy {
       platformStatementContext()
     }
-    logWriter.invoke(displayName, level, formatter.invoke(name, level, message, err, ctx), err)
+
+    logWriter.invoke(displayName, level, messageFormatter.invoke(name, level, message, err, ctx), err)
   }
 
 
