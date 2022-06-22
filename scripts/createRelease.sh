@@ -47,26 +47,5 @@ git tag "$VERSION_NAME" && git push && git push origin "$VERSION_NAME"
 
 #./gradlew publishToMavenLocal || exit 1
 ./gradlew publishAllPublicationsToMavenRepository
-exit 0
 
-#find ~/.m2/repository/com/github/danbrough/androidutils/ -type f -name 'maven-metadata-local.xml' | \
-#while read n; do
-#  mv "${n}"   "$(echo $n | sed  -e 's:-local::g')"
-#done
-#
-#rsync -avHSx /home/dan/.m2/repository/com/github/danbrough/ h1:/srv/https/maven/com/github/danbrough/
-
-
-
-#wget "https://jitpack.io/com/github/danbrough/klog/${VERSION_NAME}/util-${VERSION_NAME}.jar" -O /tmp/rubbish.jar &
-#sleep 10
-#BUILD_URL="https://jitpack.io/com/github/danbrough/klog/${VERSION_NAME}/build.log"
-
-
-echo loading $BUILD_URL
-curl "$BUILD_URL" && exit 0
-
-
-
-
-rsync -avHSx build/maven/org/danbrough/ h1:/srv/https/maven/org/danbrough/
+./scripts/syncmaven.sh
