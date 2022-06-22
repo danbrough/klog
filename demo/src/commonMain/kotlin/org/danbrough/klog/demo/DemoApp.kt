@@ -11,5 +11,9 @@ val log = klog(
 )
 
 fun main() {
+  log.trace("trace")
+  log.debug("debug")
   log.info("running the main app")
+  log.warn("")
+  log.error("")
 }

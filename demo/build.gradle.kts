@@ -29,6 +29,12 @@ kotlin {
         implementation("org.danbrough:klog:_")
       }
     }
+
+    commonTest {
+      dependencies {
+        implementation(kotlin("test"))
+      }
+    }
   }
 }
 
