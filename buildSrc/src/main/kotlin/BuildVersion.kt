@@ -27,8 +27,13 @@ object BuildVersion {
       }
     }
 
+    val snapshotVersion = getProjectProperty("build.snapshot", "true").toBoolean()
+    val snapshotFormat = getProjectProperty("build.snapshot.format", "0.0.1-SNAPSHOT")
+
     buildVersion = getProjectProperty("build.version", "0").toInt()
-    buildVersionFormat = getProjectProperty("build.version.format", "0.0.1-alpha%02d")
+    buildVersionFormat =
+      if (snapshotVersion) snapshotFormat else
+        getProjectProperty("build.version.format", "0.0.1-alpha%02d")
     buildVersionOffset = getProjectProperty("build.version.offset", "0").toInt()
 
 
@@ -65,7 +70,7 @@ object BuildVersion {
 
     project.task("nextBuildVersionName") {
       doLast {
-        println(buildVersionFormat.format(buildVersion+1))
+        println(buildVersionFormat.format(buildVersion + 1))
       }
     }
 
