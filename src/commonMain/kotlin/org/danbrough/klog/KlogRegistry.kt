@@ -35,7 +35,7 @@ abstract class KLogRegistry {
 @Suppress("LeakingThis")
 open class DefaultLogRegistry(
   level: Level = Level.WARN,
-  formatter: KMessageFormatter = KLogMessageFormatters.simple,
+  formatter: KMessageFormatter = KMessageFormatters.simple,
   writer: KLogWriter = KLogWriters.stdOut
 ) : KLogRegistry() {
 

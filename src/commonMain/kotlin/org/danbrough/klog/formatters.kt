@@ -16,7 +16,7 @@ val Level.color: Int
 
 
 @ThreadLocal
-object KLogMessageFormatters {
+object KMessageFormatters {
 
   val simple: KMessageFormatter = { name, level, msg, exception, _ ->
     val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
