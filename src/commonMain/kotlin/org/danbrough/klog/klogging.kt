@@ -21,15 +21,21 @@ val kLogRegistry = createKLogRegistry()
 expect fun KClass<*>.klogName(): String
 expect fun getTimeMillis(): Long
 
-inline fun <reified T : Any> T.klog(): KLog = kLogRegistry[this::class.klogName()]
+inline fun <reified T : Any> T.klog(): KLog =
+  kLogRegistry.get(this::class.klogName(), null, null, null)
 
 inline fun <reified T : Any> T.klog(
   level: Level? = null,
+  coloured: Boolean = false,
+  verbose: Boolean = false,
   noinline writer: KLogWriter? = null,
   noinline messageFormatter: KMessageFormatter? = null,
   noinline nameFormatter: KNameFormatter? = null,
 ): KLog = kLogRegistry.get(this::class.klogName(), level, writer, messageFormatter, nameFormatter)
 
+inline fun <reified T : Any> T.klog(
+  config: KLog.() -> Unit
+): KLog = kLogRegistry.get(this::class.klogName(), null, null, null).also(config)
 
 inline fun klog(
   name: String,
@@ -42,7 +48,7 @@ inline fun klog(
 
 inline fun klog(
   name: String
-): KLog = kLogRegistry[name]
+): KLog = kLogRegistry.get(name, null, null, null, null)
 
 inline fun klog(
   clazz: KClass<*>,

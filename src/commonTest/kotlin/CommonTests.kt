@@ -30,13 +30,13 @@ class CommonTests {
     runLogTest()
 
   }*/
-/*
+
 
   @Test
   fun test() {
     println("test()")
 
-    log.trace { "trace with lazy message" }
+    /*log.trace { "trace with lazy message" }
     log.level = Level.DEBUG
     log.trace {
       throw Error("This should not be called")
@@ -47,10 +47,11 @@ class CommonTests {
       "A warning!"
     }
     val err = Exception("The exception message")
-    log.error(err.message, err)
+    log.error(err.message, err)*/
 
   }
 
+  /*
   @Test
   fun testTime() {
     log.warn("time is: ${getTimeMillis()}")

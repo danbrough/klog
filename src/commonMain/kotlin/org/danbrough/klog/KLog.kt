@@ -21,12 +21,6 @@ expect fun platformStatementContext(): StatementContext
 //for formatting the [KLog.name] field
 typealias KNameFormatter = (String) -> String
 
-data class KLogOptions(
-  var level: Level,
-  var messageFormatter: KMessageFormatter,
-  var writer: KLogWriter,
-  var nameFormatter: KNameFormatter? = null
-)
 
 interface KLog {
   val name: String
@@ -39,17 +33,31 @@ interface KLog {
     get() = nameFormatter?.invoke(name) ?: name
 
   fun copy(
-    name: String = this.name, level: Level = this.level, writer: KLogWriter = this.writer,
-    messageFormatter: KMessageFormatter = this.messageFormatter, nameFormatter: KNameFormatter? = this.nameFormatter
+    name: String = this.name,
+    level: Level = this.level,
+    writer: KLogWriter = this.writer,
+    messageFormatter: KMessageFormatter = this.messageFormatter,
+    nameFormatter: KNameFormatter? = this.nameFormatter
   ): KLog
+
+
+  fun trace(msg: String? = null, err: Throwable? = null) = trace(msg, err, null)
 
   fun trace(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
 
+  fun debug(msg: String? = null, err: Throwable? = null) = debug(msg, err, null)
+
   fun debug(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
+
+  fun info(msg: String? = null, err: Throwable? = null) = info(msg, err, null)
 
   fun info(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
 
+  fun warn(msg: String? = null, err: Throwable? = null) = warn(msg, err, null)
+
   fun warn(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
+
+  fun error(msg: String? = null, err: Throwable? = null) = error(msg, err, null)
 
   fun error(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
 
@@ -128,6 +136,7 @@ data class KLogImpl(
   override fun debug(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
     log(Level.DEBUG, msg, err, msgProvider)
 
+
   override fun info(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
     log(Level.INFO, msg, err, msgProvider)
 
@@ -155,7 +164,12 @@ data class KLogImpl(
       platformStatementContext()
     }
 
-    logWriter.invoke(displayName, level, messageFormatter.invoke(name, level, message, err, ctx), err)
+    logWriter.invoke(
+      displayName,
+      level,
+      messageFormatter.invoke(name, level, message, err, ctx),
+      err
+    )
   }
 
 
