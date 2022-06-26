@@ -35,7 +35,10 @@ class CommonTests {
   @Test
   fun test() {
     println("test()")
-
+    val log =
+      klog("a", Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
+    println("GOT LOG $log")
+    log.trace("A trace message")
     /*log.trace { "trace with lazy message" }
     log.level = Level.DEBUG
     log.trace {

@@ -31,13 +31,13 @@ abstract class KLogRegistry {
 
 }
 
-private val debugMessage: (String)->Unit = {}//::println
+private val debugMessage: (String)->Unit = ::println
 
 @Suppress("LeakingThis")
 open class DefaultLogRegistry(
   level: Level = Level.WARN,
   formatter: KMessageFormatter = KMessageFormatters.simple,
-  writer: KLogWriter = KLogWriters.stdOut
+  writer: KLogWriter = KLogWriters.noop
 ) : KLogRegistry() {
 
   private var logs = mutableMapOf<String, KLogImpl>()
@@ -61,9 +61,9 @@ open class DefaultLogRegistry(
   private fun getParent(name: String): KLogImpl {
     debugMessage("getParent() for $name")
     return name.substringBeforeLast('.', ROOT_LOG_NAME).let { parentName ->
-      debugMessage("parentName: $parentName")
+      debugMessage("parentName: \"$parentName\"")
       logs[parentName]?.also {
-        debugMessage("returning log with name: $parentName")
+        debugMessage("returning log with name: \"$parentName\"")
       } ?: getParent(parentName)
     }
   }
