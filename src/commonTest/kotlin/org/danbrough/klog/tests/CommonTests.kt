@@ -44,20 +44,10 @@ class CommonTests {
   }*/
 
   @Test
-  fun test() {
-
+  fun test1() {
     println("test1()")
     println("klogname: ${this::class.klogName()}")
-
-    println("registry: $kLogRegistry")
-    val log by lazy {
-      println("CREATING A LOG!!!")
-      klog(
-        level = Level.TRACE,
-        messageFormatter = KMessageFormatters.verbose.colored,
-        writer = KLogWriters.stdOut
-      )
-    }
+    val log = klog(Level.TRACE,KLogWriters.stdOut, KMessageFormatters.verbose.colored, )
     println("LOG: $log")
 
     log.info("an info message")

@@ -10,7 +10,13 @@ class LinuxX64Tests {
   fun test1() {
     println("test1()")
     println("klogname: ${this::class.klogName()}")
-    val log = klog(level = Level.TRACE, messageFormatter = KMessageFormatters.verbose.colored, writer = KLogWriters.stdOut)
+    val log by lazy {
+      klog(
+        level = Level.TRACE,
+        KLogWriters.stdOut,
+        KMessageFormatters.verbose.colored
+      )
+    }
     println("LOG: $log")
 
     log.info("an info message")

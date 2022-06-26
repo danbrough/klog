@@ -22,7 +22,6 @@ expect fun KClass<*>.klogName(): String
 expect fun getTimeMillis(): Long
 
 @Suppress("NOTHING_TO_INLINE")
-
 inline fun <reified T : Any> T.klog(): KLog =
   kLogRegistry.get(this::class.klogName(), null, null, null)
 
