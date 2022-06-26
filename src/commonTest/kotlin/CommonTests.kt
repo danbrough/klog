@@ -6,8 +6,6 @@ import kotlin.test.Test
 
 
 class CommonTests {
-  private val log =
-    klog("a", Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
 
   private fun runLogTest() {
     A().test()
@@ -15,8 +13,10 @@ class CommonTests {
     AB().test()
   }
 
-  @Test
+/*  @Test
   fun testLogConf() {
+     val log =
+      klog("a", Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
 
     log.info("testings logs ..")
     runLogTest()
@@ -29,7 +29,8 @@ class CommonTests {
 
     runLogTest()
 
-  }
+  }*/
+/*
 
   @Test
   fun test() {
@@ -54,5 +55,6 @@ class CommonTests {
   fun testTime() {
     log.warn("time is: ${getTimeMillis()}")
   }
+*/
 
 }
