@@ -1,3 +1,6 @@
+package  org.danbrough.klog.tests
+
+
 import a.A
 import a.a.AA
 import a.b.AB
@@ -31,27 +34,37 @@ class CommonTests {
 
   }*/
 
+/*  private val log by lazy {
+    println("CREATING A LOG!")
+    klog(
+      level = Level.TRACE,
+      messageFormatter = KMessageFormatters.verbose.colored,
+      writer = KLogWriters.stdOut
+    )
+  }*/
 
   @Test
   fun test() {
-    println("test()")
-    val log =
-      klog("a", Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
-    println("GOT LOG $log")
-    log.trace("A trace message")
-    /*log.trace { "trace with lazy message" }
-    log.level = Level.DEBUG
-    log.trace {
-      throw Error("This should not be called")
-    }
-    log.debug("debug message")
-    log.info { "INFO MESSAGE" }
-    log.warn {
-      "A warning!"
-    }
-    val err = Exception("The exception message")
-    log.error(err.message, err)*/
 
+    println("test1()")
+    println("klogname: ${this::class.klogName()}")
+
+    println("registry: $kLogRegistry")
+    val log by lazy {
+      println("CREATING A LOG!!!")
+      klog(
+        level = Level.TRACE,
+        messageFormatter = KMessageFormatters.verbose.colored,
+        writer = KLogWriters.stdOut
+      )
+    }
+    println("LOG: $log")
+
+    log.info("an info message")
+
+    log.trace {
+      "A lazy trace message"
+    }
   }
 
   /*

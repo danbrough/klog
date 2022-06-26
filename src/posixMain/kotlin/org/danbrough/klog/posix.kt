@@ -17,14 +17,18 @@ private val log = klog("org.danbrough.klog")
 //actual fun getTimeMillis(): Long = -1
 
 
-private class NativeLogRegistry : DefaultLogRegistry() {
+internal class NativeLogRegistry : DefaultLogRegistry() {
 }
 
+/*
 private
 var registry: DefaultLogRegistry? = null
+*/
 
-actual fun createKLogRegistry(): KLogRegistry = registry ?: NativeLogRegistry().also {
-  registry = it
+private val nativeLogRegistry by lazy {
+  println("Creating NativeLogRegistry")
+  NativeLogRegistry()
 }
 
+actual fun createKLogRegistry(): KLogRegistry = nativeLogRegistry
 actual fun KClass<*>.klogName(): String = qualifiedName!!.removeSuffix(".Companion")
