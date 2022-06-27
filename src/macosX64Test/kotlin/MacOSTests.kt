@@ -1,7 +1,7 @@
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.danbrough.klog.*
 import kotlin.test.Test
-
-
 
 
 class MacOSTests {
@@ -22,5 +22,13 @@ class MacOSTests {
     log.trace {
       "A lazy trace message"
     }
+
+    
+    log.info("PTHREAD: ${pthread_self()} ")
+    runBlocking(Dispatchers.Default) {
+      log.info("inside coroutine: $this")
+      log.info("PTHREAD: ${pthread_self()} ")
+    }
+
   }
 }
