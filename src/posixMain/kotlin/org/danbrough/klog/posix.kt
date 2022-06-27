@@ -6,7 +6,7 @@ import kotlin.reflect.KClass
 
 @Suppress("NOTHING_TO_INLINE")
 actual inline fun platformStatementContext(): StatementContext =
-  StatementContext("native", pthread_self().toLong())
+  StatementContext("native", -1L)
 
 
 actual fun getTimeMillis(): Long = org.danbrough.klog.posix.timeInMillisSinceEpoch().toLong()
