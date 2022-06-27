@@ -3,6 +3,7 @@ import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.konan.target.Family
 
 plugins {
   kotlin("multiplatform")
@@ -102,6 +103,14 @@ kotlin {
       dependsOn(commonTest)
     }
 
+    val appleMain by creating {
+      dependsOn(posixMain)
+    }
+
+    val linuxMain by creating {
+      dependsOn(posixMain)
+    }
+
 
     val jvmCommonMain by creating {
       dependsOn(commonMain)
@@ -131,16 +140,27 @@ kotlin {
 
   targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class).all {
 
-//    println("NATIVE-TARGET: $name")
+    println("NATIVE-TARGET: $name : apple:${this.konanTarget.family.isAppleFamily} linux:${this.konanTarget.family}")
 
     compilations["main"].apply {
+
       cinterops.create("klog") {
         packageName("org.danbrough.klog.posix")
         defFile(project.file("src/posixMain/klog.def"))
       }
 
+      val family = if (konanTarget.family.isAppleFamily) {
+        "apple"
+      } else if (konanTarget.family == Family.ANDROID || konanTarget.family == Family.LINUX) {
+        "linux"
+      } else if (konanTarget.family == Family.MINGW) {
+        "posix"
+      } else {
+        "posix"
+      }
+
       defaultSourceSet {
-        dependsOn(sourceSets["posixMain"])
+        dependsOn(sourceSets["${family}Main"])
       }
     }
 
@@ -158,8 +178,8 @@ publishing {
     maven {
       val releaseRepo = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
       val snapshotRepo = "https://oss.sonatype.org/content/repositories/snapshots/"
-
       val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
+
       setUrl(if (isReleaseVersion) releaseRepo else snapshotRepo)
 
       credentials {

@@ -20,6 +20,7 @@ val kLogRegistry = createKLogRegistry()
  */
 expect fun KClass<*>.klogName(): String
 expect fun getTimeMillis(): Long
+expect fun getThreadID(): Long
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun <reified T : Any> T.klog(): KLog =

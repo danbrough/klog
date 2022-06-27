@@ -24,6 +24,8 @@ class MacOSTests {
       "A lazy trace message"
     }
 
+
+
     
     log.info("PTHREAD: ${pthread_self()?.rawValue} ")
     runBlocking(Dispatchers.Default) {
