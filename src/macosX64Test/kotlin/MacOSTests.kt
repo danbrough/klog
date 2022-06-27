@@ -1,6 +1,7 @@
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.danbrough.klog.*
+import platform.posix.pthread_self
 import kotlin.test.Test
 
 
@@ -24,10 +25,10 @@ class MacOSTests {
     }
 
     
-    log.info("PTHREAD: ${pthread_self()} ")
+    log.info("PTHREAD: ${pthread_self()?.rawValue} ")
     runBlocking(Dispatchers.Default) {
       log.info("inside coroutine: $this")
-      log.info("PTHREAD: ${pthread_self()} ")
+      log.info("PTHREAD: ${pthread_self()?.rawValue} ")
     }
 
   }
