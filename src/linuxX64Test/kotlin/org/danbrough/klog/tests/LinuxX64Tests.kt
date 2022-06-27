@@ -1,7 +1,10 @@
 package org.danbrough.klog.tests
 
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.danbrough.klog.*
+import platform.posix.pthread_self
 import kotlin.test.Test
 
 class LinuxX64Tests {
@@ -24,6 +27,12 @@ class LinuxX64Tests {
 
     log.trace {
       "A lazy trace message"
+    }
+
+    log.info("PTHREAD: ${pthread_self()} ")
+    runBlocking(Dispatchers.Default) {
+      log.info("inside coroutine: $this")
+      log.info("PTHREAD: ${pthread_self()} ")
     }
   }
 }
