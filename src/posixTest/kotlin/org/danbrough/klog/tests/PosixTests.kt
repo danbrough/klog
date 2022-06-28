@@ -9,12 +9,11 @@ import org.danbrough.klog.*
 
 class PosixTests {
 
-  private val log =
-    klog(
-      level = Level.TRACE,
-      messageFormatter = KMessageFormatters.verbose.colored,
-      writer = KLogWriters.stdOut
-    )
+  private val log = klog(
+    level = Level.TRACE,
+    messageFormatter = KMessageFormatters.verbose.colored,
+    writer = KLogWriters.stdOut
+  )
 
 
   @Test
@@ -25,6 +24,10 @@ class PosixTests {
     val threadID = pthread_self()
     printf("THREAD ID: %x\n", threadID)
 
+    pthread_self().also {
+
+    }
+
     log.info("PTHREAD: ${pthread_self()} ")
     runBlocking(Dispatchers.Default) {
       log.info("inside coroutine: $this")
@@ -32,5 +35,6 @@ class PosixTests {
     }
 
 
+    log.warn("threadIDD: ${org.danbrough.klog.posix.threadID()}")
   }
 }

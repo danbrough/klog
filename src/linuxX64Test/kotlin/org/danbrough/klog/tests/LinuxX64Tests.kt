@@ -34,5 +34,7 @@ class LinuxX64Tests {
       log.info("inside coroutine: $this")
       log.info("PTHREAD: ${pthread_self()} ")
     }
+
+    log.warn("threadID: ${org.danbrough.klog.posix.threadID()}")
   }
 }

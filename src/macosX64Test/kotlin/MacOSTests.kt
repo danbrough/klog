@@ -32,6 +32,7 @@ class MacOSTests {
       log.info("inside coroutine: $this")
       log.info("PTHREAD: ${pthread_self()?.rawValue} ")
     }
+
     log.info("outside coroutine: ${pthread_self()?.rawValue} ")
 
   }

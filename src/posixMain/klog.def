@@ -1,9 +1,13 @@
 
+compilerOpts.mac = -DMACOS=1
+
 
 ---
 
 #include <stdio.h>
 #include <sys/time.h>
+#include <pthread.h>
+
 unsigned long long timeInMillisSinceEpoch(){
 
 struct timeval tv;
@@ -16,4 +20,12 @@ unsigned long long millisecondsSinceEpoch =
 
     return millisecondsSinceEpoch;
 
+}
+
+pthread_t threadID(){
+#ifdef MACOS
+    return pthread_self()->__sig;
+#else
+    return pthread_self();
+#endif
 }
