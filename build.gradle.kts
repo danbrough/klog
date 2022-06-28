@@ -140,7 +140,7 @@ kotlin {
 
   targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class).all {
 
-    println("NATIVE-TARGET: $name : apple:${this.konanTarget.family.isAppleFamily} linux:${this.konanTarget.family}")
+    //println("NATIVE-TARGET: $name : apple:${this.konanTarget.family.isAppleFamily} linux:${this.konanTarget.family}")
 
     compilations["main"].apply {
 
@@ -219,6 +219,7 @@ android {
 repositories {
   mavenCentral()
   google()
+  maven("https://h1.danbrough.org/maven")
 }
 
 

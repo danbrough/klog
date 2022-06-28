@@ -12,8 +12,6 @@ actual inline fun platformStatementContext(): StatementContext =
 actual fun getTimeMillis(): Long = org.danbrough.klog.posix.timeInMillisSinceEpoch().toLong()
 
 
-actual fun getThreadID(): Long = -1L
-
 private object NativeRegistry : DefaultLogRegistry()
 
 actual fun createKLogRegistry(): KLogRegistry = NativeRegistry.also {
