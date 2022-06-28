@@ -22,7 +22,7 @@ class PosixTests {
 
 
     val threadID = pthread_self()
-    printf("THREAD ID: %llu\n", threadID)
+    printf("THREAD ID: %x\n", threadID)
 
     log.info("PTHREAD: ${pthread_self()} ")
     runBlocking(Dispatchers.Default) {
