@@ -136,7 +136,6 @@ data class KLogImpl(
   override fun debug(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
     log(Level.DEBUG, msg, err, msgProvider)
 
-
   override fun info(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
     log(Level.INFO, msg, err, msgProvider)
 

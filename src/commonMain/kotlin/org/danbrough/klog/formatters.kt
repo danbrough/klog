@@ -24,11 +24,21 @@ object KMessageFormatters {
   }
 
   val verbose: KMessageFormatter = { name, level, msg, exception, ctx ->
-    val l = level.toString().let { if (it.length < 5) " $it:" else "$it:" }
-    val lineInfo = ctx.line?.functionName?.let { "${ctx.line.fileName}:${ctx.line.lineNumber}:${it}() " } ?: ""
-    "$l$name\t${lineInfo}$msg ${
-      exception?.stackTraceToString()?.let { " :$it" } ?: ""
-    }"
+    buildString {
+      append(level.toString().let { if (it.length < 5) " $it:" else "$it:" })
+      append(name)
+      append('\t')
+      val threadID = ctx.threadID
+      if (threadID != 0L)
+        append("<$threadID>")
+      append(msg)
+
+
+
+      ctx.line?.functionName?.also { append("${ctx.line.fileName}:${ctx.line.lineNumber}:${it}() ") }
+
+      exception?.stackTraceToString()?.also { append(" :$it") }
+    }
   }
 
   inline fun colored(crossinline formatter: KMessageFormatter): KMessageFormatter =

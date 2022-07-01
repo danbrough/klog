@@ -1,22 +1,20 @@
 package org.danbrough.klog
 
-import platform.posix.pthread_self
+import org.danbrough.klog.posix.threadID
+import org.danbrough.klog.posix.timeInMillisSinceEpoch
 import kotlin.reflect.KClass
 
 
 @Suppress("NOTHING_TO_INLINE")
 actual inline fun platformStatementContext(): StatementContext =
-  StatementContext("native", -1L)
+  StatementContext("native", threadID().toLong())
 
 
-actual fun getTimeMillis(): Long = org.danbrough.klog.posix.timeInMillisSinceEpoch().toLong()
+actual fun getTimeMillis(): Long = timeInMillisSinceEpoch().toLong()
 
+object PosixKLogRegistry : DefaultLogRegistry()
 
-private object NativeRegistry : DefaultLogRegistry()
-
-actual fun createKLogRegistry(): KLogRegistry = NativeRegistry.also {
-  println("PLATFORM NAME: ${Platform.osFamily.name}")
-}
+actual fun createKLogRegistry(): KLogRegistry = PosixKLogRegistry
 
 
 actual fun KClass<*>.klogName(): String = qualifiedName!!.removeSuffix(".Companion")

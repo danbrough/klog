@@ -3,7 +3,7 @@ import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.konan.target.Family
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
   kotlin("multiplatform")
@@ -85,6 +85,9 @@ kotlin {
       dependencies {
         //  runtimeOnly(kotlin("reflect"))
         implementation(kotlin("stdlib"))
+        // https://mvnrepository.com/artifact/io.ktor/ktor-utils
+        implementation(Ktor.utils)
+
       }
     }
 
@@ -102,15 +105,6 @@ kotlin {
     val posixTest by creating {
       dependsOn(commonTest)
     }
-
-    val appleMain by creating {
-      dependsOn(posixMain)
-    }
-
-    val linuxMain by creating {
-      dependsOn(posixMain)
-    }
-
 
     val jvmCommonMain by creating {
       dependsOn(commonMain)
@@ -138,7 +132,7 @@ kotlin {
 
 
 
-  targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class).all {
+  targets.withType(KotlinNativeTarget::class).all {
 
     //println("NATIVE-TARGET: $name : apple:${this.konanTarget.family.isAppleFamily} linux:${this.konanTarget.family}")
 
@@ -149,18 +143,8 @@ kotlin {
         defFile(project.file("src/posixMain/klog.def"))
       }
 
-      val family = if (konanTarget.family.isAppleFamily) {
-        "apple"
-      } else if (konanTarget.family == Family.ANDROID || konanTarget.family == Family.LINUX) {
-        "linux"
-      } else if (konanTarget.family == Family.MINGW) {
-        "posix"
-      } else {
-        "posix"
-      }
-
       defaultSourceSet {
-        dependsOn(sourceSets["${family}Main"])
+        dependsOn(sourceSets["posixMain"])
       }
     }
 

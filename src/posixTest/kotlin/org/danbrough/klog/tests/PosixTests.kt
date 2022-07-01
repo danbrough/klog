@@ -18,7 +18,7 @@ class PosixTests {
 
   @Test
   fun pthreadTest() {
-    log.info("RUNNING PTHREAD TEST")
+    log.debug("RUNNING PTHREAD TEST")
 
 
     val threadID = pthread_self()
@@ -32,5 +32,6 @@ class PosixTests {
 
 
     log.warn("threadIDD: ${org.danbrough.klog.posix.threadID()}")
+    printf("THREAD ID FINALLY: %llu\n",org.danbrough.klog.posix.threadID())
   }
 }
