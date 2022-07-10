@@ -2,15 +2,21 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   `kotlin-dsl`
+ // kotlin("multiplatform") version "1.7.10"
+
 }
 
 repositories {
+  gradlePluginPortal()
   mavenCentral()
+  google()
 }
 
+/*
 kotlinDslPluginOptions {
   jvmTarget.set(provider { java.targetCompatibility.toString() })
 }
+*/
 
 /*
 

@@ -1,3 +1,4 @@
+import Common_gradle.Common.message
 import ProjectProperties.LOCAL_MAVEN_REPO
 import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -26,6 +27,24 @@ version = BuildVersion.buildVersionName
 group = projectGroup
 
 
+val dudeTest: Task by tasks.creating {
+  doLast {
+
+    println("message: $message")
+
+    println(
+      "Special message: ${
+        project.properties.getOrDefault(
+          "specialMessage",
+          "specialMessage no set"
+        )
+      }"
+    )
+    println("org.gradle.project.message=${System.getProperty("org.gradle.project.message")}")
+    println("project.property(\"message\")=${project.property("message")}")
+  }
+}
+
 
 kotlin {
 
@@ -36,7 +55,7 @@ kotlin {
   }
 
   linuxX64()
-  macosX64()
+  //macosX64()
 
   js {
     nodejs()
@@ -75,6 +94,7 @@ kotlin {
     //watchosX64()
     //watchosX86()
 
+
   }
 
 
@@ -86,7 +106,7 @@ kotlin {
         //  runtimeOnly(kotlin("reflect"))
         implementation(kotlin("stdlib"))
         // https://mvnrepository.com/artifact/io.ktor/ktor-utils
-        implementation(Ktor.utils)
+        //implementation(Ktor.utils)
 
       }
     }

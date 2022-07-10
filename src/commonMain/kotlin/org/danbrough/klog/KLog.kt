@@ -146,6 +146,7 @@ data class KLogImpl(
     log(Level.ERROR, msg, err, msgProvider)
 
 
+  @Suppress("NOTING_TO_INLINE")
   private inline fun log(
     level: Level, msg: String?, err: Throwable?, noinline msgProvider: LogMessageFunction?
   ) {

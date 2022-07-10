@@ -7,10 +7,9 @@ import java.net.URI
 import java.io.File
 
 object ProjectProperties {
-  const val SDK_VERSION = 31
+  const val SDK_VERSION = 33
   const val MIN_SDK_VERSION = 23
-  const val BUILD_TOOLS_VERSION = "31.0.0"
-  var KOTLIN_VERSION = "1.7.0"
+  const val BUILD_TOOLS_VERSION = "33.0.0"
   val JAVA_VERSION = JavaVersion.VERSION_11
 
   val IDE_ACTIVE = System.getProperty("idea.active", "false").toBoolean()
