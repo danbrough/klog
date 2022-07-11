@@ -17,19 +17,15 @@ object Common {
       val propType = property.returnType
 
 
-      val value =
-        System.getProperties().let {
-          if (it.containsKey(propName))
-            it.getProperty(propName)
-          else if (it.containsKey("org.gradle.project.$propName"))
-            it.getProperty("org.gradle.project.$propName")
-          else null
-        } ?: project.localProperties.getOrElse(propName) {
-          project.properties.getOrDefault(
-            propName,
-            null
-          )
-        } ?: return defaultValue as T
+      val value = System.getProperties().let {
+        if (it.containsKey(propName)) it.getProperty(propName)
+        else if (it.containsKey("org.gradle.project.$propName")) it.getProperty("org.gradle.project.$propName")
+        else null
+      } ?: project.localProperties.getOrElse(propName) {
+        project.properties.getOrDefault(
+          propName, null
+        )
+      } ?: return defaultValue as T
 
       value as String
       return when (propType.jvmErasure) {
@@ -45,11 +41,10 @@ object Common {
   }
 
 
-  private fun createProperty(name: String? = null, defaultValue: Any? = null) =
+  internal fun createProperty(name: String? = null, defaultValue: Any? = null) =
     ProjectProperty(name, defaultValue)
 
   val Project.message: String by createProperty()
-
 
   private var _localProperties: Properties? = null
 
@@ -67,13 +62,65 @@ object Common {
 
 object BuildVersion {
 
-  var buildVersion = 0
-  var buildVersionOffset: Int = 0
-  var buildVersionFormat: String = "0.0.1-alpha%02d"
+  val Project.buildVersion: Int by Common.createProperty("build.version", defaultValue = 0)
+  val Project.buildVersionOffset: Int by Common.createProperty(defaultValue = 0)
+  val Project.buildVersionFormat: String by Common.createProperty(defaultValue = "0.0.1-alpha%02d")
 
-  val buildVersionName: String
-    get() = buildVersionFormat.format(buildVersion)
+  val Project.buildVersionName: String
+    get() = buildVersionName()
 
+
+  fun Project.buildVersionName(version: Int = buildVersion) = buildVersionFormat.format(version)
+
+  fun Project.buildVersionTasks() {
+
+    tasks.create("buildVersion") {
+      doLast {
+        println(this@buildVersionTasks.buildVersion)
+      }
+    }
+
+    tasks.create("buildVersionName") {
+      doLast {
+        println(this@buildVersionTasks.buildVersionName())
+      }
+    }
+
+    tasks.create("buildVersionNameNext") {
+      doLast {
+        println(this@buildVersionTasks.buildVersionName(this@buildVersionTasks.buildVersion + 1))
+      }
+    }
+
+
+    tasks.create("buildVersionIncrement") {
+      doLast {
+        val currentVersion = buildVersion
+        this@buildVersionTasks.rootProject.file("gradle.properties").readLines().map {
+          if (it.contains("build.version=")) "build.version=${currentVersion + 1}"
+          else it
+        }.also { lines ->
+          this@buildVersionTasks.rootProject.file("gradle.properties").writer().use { writer ->
+            lines.forEach {
+              writer.write("$it\n")
+            }
+          }
+        }
+      }
+      println(this@buildVersionTasks.buildVersionName)
+    }
+  }
+
+
+/*
+  val buildVersionTask: Task by tasks.creating {
+    doLast {
+      println(buildVersion)
+    }
+  }
+*/
+
+/*
   fun init(project: Project) {
 
     val getProjectProperty: (String, String) -> String = { key, defValue ->
@@ -127,5 +174,5 @@ object BuildVersion {
         println(buildVersionFormat.format(buildVersion + 1))
       }
     }
-  }
+  }*/
 }

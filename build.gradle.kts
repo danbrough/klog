@@ -1,10 +1,12 @@
-import Common_gradle.Common.message
+import Common_gradle.BuildVersion.buildVersion
+import Common_gradle.BuildVersion.buildVersionName
+import Common_gradle.BuildVersion.buildVersionTasks
 import ProjectProperties.LOCAL_MAVEN_REPO
 import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   kotlin("multiplatform")
@@ -20,11 +22,12 @@ buildscript {
   }
 }
 
+buildVersionTasks()
 
-//BuildVersion.init(project)
-
-version = BuildVersion.buildVersionName
+version = buildVersionName
 group = projectGroup
+
+
 
 
 kotlin {
