@@ -1,6 +1,4 @@
-import Common_gradle.BuildVersion.buildVersion
 import Common_gradle.BuildVersion.buildVersionName
-import Common_gradle.BuildVersion.buildVersionTasks
 import ProjectProperties.LOCAL_MAVEN_REPO
 import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -11,6 +9,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   kotlin("multiplatform")
   id("com.android.library")
+  id("common")
   `maven-publish`
   signing
 }
@@ -22,11 +21,10 @@ buildscript {
   }
 }
 
-buildVersionTasks()
+//buildVersionTasks()
 
 version = buildVersionName
 group = projectGroup
-
 
 
 

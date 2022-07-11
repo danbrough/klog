@@ -1,13 +1,83 @@
 @file:Suppress("ObjectPropertyName", "MemberVisibilityCanBePrivate")
 
-import org.gradle.api.Project
+import Common_gradle.BuildVersion.buildVersion
+import Common_gradle.BuildVersion.buildVersionName
 import java.io.FileReader
-import java.util.Properties
+import java.util.*
 import kotlin.reflect.KProperty
 import kotlin.reflect.jvm.jvmErasure
 
 
+class ProjectProperty2(val name: String?, val defaultValue: Any?) {
+
+  @Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
+  inline operator fun <T : Any?> getValue(thisRef: Any, property: KProperty<*>): T {
+    val propName = name ?: property.name
+    val propType = property.returnType
+
+    val value = System.getProperties().let {
+      if (it.containsKey(propName)) it.getProperty(propName)
+      else if (it.containsKey("org.gradle.project.$propName")) it.getProperty("org.gradle.project.$propName")
+      else null
+    } ?: project.properties.getOrDefault(
+      propName, null
+    )
+    ?: return defaultValue as T
+
+    value as String
+    return when (propType.jvmErasure) {
+      String::class -> value
+      Int::class -> value.toInt()
+      Float::class -> value.toFloat()
+      Double::class -> value.toDouble()
+      Long::class -> value.toLong()
+      Boolean::class -> value.toBoolean()
+      else -> throw Error("Invalid property type: $propType")
+    } as T
+  }
+}
+
+
+tasks.create("buildVersion") {
+  doLast {
+    println(project.buildVersion)
+  }
+}
+
+tasks.create("buildVersionName") {
+  doLast {
+    println(project.buildVersionName)
+  }
+}
+
+tasks.create("buildVersionNext") {
+  doLast {
+    println("NEXT: " + project.buildVersionName(project.buildVersion + 1))
+  }
+}
+
+
+
+tasks.create("buildVersionIncrement") {
+  doLast {
+    val currentVersion = project.buildVersion
+    rootProject.file("gradle.properties").readLines().map {
+      if (it.contains("build.version=")) "build.version=${currentVersion + 1}"
+      else it
+    }.also { lines ->
+      rootProject.file("gradle.properties").writer().use { writer ->
+        lines.forEach {
+          writer.write("$it\n")
+        }
+      }
+    }
+    println(project.buildVersionName(project.buildVersion + 1))
+  }
+}
+
 object Common {
+
+  val count = 192
 
   class ProjectProperty(val name: String?, val defaultValue: Any?) {
 
@@ -41,10 +111,11 @@ object Common {
   }
 
 
-  internal fun createProperty(name: String? = null, defaultValue: Any? = null) =
+  fun createProperty(name: String? = null, defaultValue: Any? = null) =
     ProjectProperty(name, defaultValue)
 
-  val Project.message: String by createProperty()
+
+  val Project.message: String by createProperty("message", "default message")
 
   private var _localProperties: Properties? = null
 
@@ -55,12 +126,10 @@ object Common {
         _localProperties = props
       }
     }
-
-
 }
 
-
 object BuildVersion {
+
 
   val Project.buildVersion: Int by Common.createProperty("build.version", defaultValue = 0)
   val Project.buildVersionOffset: Int by Common.createProperty(defaultValue = 0)
@@ -71,45 +140,6 @@ object BuildVersion {
 
 
   fun Project.buildVersionName(version: Int = buildVersion) = buildVersionFormat.format(version)
-
-  fun Project.buildVersionTasks() {
-
-    tasks.create("buildVersion") {
-      doLast {
-        println(this@buildVersionTasks.buildVersion)
-      }
-    }
-
-    tasks.create("buildVersionName") {
-      doLast {
-        println(this@buildVersionTasks.buildVersionName())
-      }
-    }
-
-    tasks.create("buildVersionNameNext") {
-      doLast {
-        println(this@buildVersionTasks.buildVersionName(this@buildVersionTasks.buildVersion + 1))
-      }
-    }
-
-
-    tasks.create("buildVersionIncrement") {
-      doLast {
-        val currentVersion = buildVersion
-        this@buildVersionTasks.rootProject.file("gradle.properties").readLines().map {
-          if (it.contains("build.version=")) "build.version=${currentVersion + 1}"
-          else it
-        }.also { lines ->
-          this@buildVersionTasks.rootProject.file("gradle.properties").writer().use { writer ->
-            lines.forEach {
-              writer.write("$it\n")
-            }
-          }
-        }
-      }
-      println(this@buildVersionTasks.buildVersionName)
-    }
-  }
 
 
 /*
