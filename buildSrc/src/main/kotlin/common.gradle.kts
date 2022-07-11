@@ -71,7 +71,6 @@ object BuildVersion {
   var buildVersionOffset: Int = 0
   var buildVersionFormat: String = "0.0.1-alpha%02d"
 
-
   val buildVersionName: String
     get() = buildVersionFormat.format(buildVersion)
 

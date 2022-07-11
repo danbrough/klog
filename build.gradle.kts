@@ -21,7 +21,7 @@ buildscript {
 }
 
 
-BuildVersion.init(project)
+//BuildVersion.init(project)
 
 version = BuildVersion.buildVersionName
 group = projectGroup
