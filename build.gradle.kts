@@ -27,25 +27,6 @@ version = BuildVersion.buildVersionName
 group = projectGroup
 
 
-val dudeTest: Task by tasks.creating {
-  doLast {
-
-    println("message: $message")
-
-    println(
-      "Special message: ${
-        project.properties.getOrDefault(
-          "specialMessage",
-          "specialMessage no set"
-        )
-      }"
-    )
-    println("org.gradle.project.message=${System.getProperty("org.gradle.project.message")}")
-    println("project.property(\"message\")=${project.property("message")}")
-  }
-}
-
-
 kotlin {
 
   jvm()
