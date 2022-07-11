@@ -6,7 +6,7 @@ import a.a.AA
 import a.b.AB
 import org.danbrough.klog.*
 import kotlin.test.Test
-
+import kotlinx.coroutines.runBlocking
 
 class CommonTests {
 
@@ -34,20 +34,20 @@ class CommonTests {
 
   }*/
 
-/*  private val log by lazy {
-    println("CREATING A LOG!")
-    klog(
-      level = Level.TRACE,
-      messageFormatter = KMessageFormatters.verbose.colored,
-      writer = KLogWriters.stdOut
-    )
-  }*/
+  /*  private val log by lazy {
+      println("CREATING A LOG!")
+      klog(
+        level = Level.TRACE,
+        messageFormatter = KMessageFormatters.verbose.colored,
+        writer = KLogWriters.stdOut
+      )
+    }*/
+  val log = klog(Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
 
   @Test
   fun test1() {
     println("test1()")
     println("klogname: ${this::class.klogName()}")
-    val log = klog(Level.TRACE,KLogWriters.stdOut, KMessageFormatters.verbose.colored, )
     println("LOG: $log")
 
     log.info("an info message")
@@ -55,13 +55,19 @@ class CommonTests {
     log.trace {
       "A lazy trace message"
     }
+
+
+
+    runBlocking {
+      log.info("inside coroutine")
+    }
   }
 
-  /*
+
   @Test
   fun testTime() {
     log.warn("time is: ${getTimeMillis()}")
   }
-*/
+
 
 }

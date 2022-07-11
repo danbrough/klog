@@ -116,6 +116,10 @@ kotlin {
       dependsOn(jvmCommonMain)
     }
 
+    val jvmMain by getting {
+      dependsOn(jvmCommonMain)
+    }
+
     val androidAndroidTest by getting {
       dependencies {
         implementation(AndroidX.test.runner)
@@ -127,9 +131,7 @@ kotlin {
       dependsOn(commonTest)
     }
 
-    val jvmMain by getting {
-      dependsOn(jvmCommonMain)
-    }
+
   }
 
 

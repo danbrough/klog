@@ -12,6 +12,8 @@ object ProjectProperties {
 
   const val KOTLIN_JVM_VERSION = "11"
 
+
+
 /*
   fun getHostPlatform(): Platform {
     val osName = System.getProperty("os.name").toString()

@@ -31,11 +31,13 @@ object KMessageFormatters {
       val threadID = ctx.threadID
       if (threadID != 0L)
         append("<$threadID>")
+
+
+
+      ctx.line?.functionName?.also { append("${ctx.line.fileName}:${ctx.line.lineNumber}:${it}(): ") }
+
       append(msg)
 
-
-
-      ctx.line?.functionName?.also { append("${ctx.line.fileName}:${ctx.line.lineNumber}:${it}() ") }
 
       exception?.stackTraceToString()?.also { append(" :$it") }
     }

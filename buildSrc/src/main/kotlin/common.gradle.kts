@@ -77,7 +77,6 @@ tasks.create("buildVersionIncrement") {
 
 object Common {
 
-  val count = 192
 
   class ProjectProperty(val name: String?, val defaultValue: Any?) {
 
