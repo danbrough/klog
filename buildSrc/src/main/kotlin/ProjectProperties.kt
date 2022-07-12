@@ -8,10 +8,15 @@ object ProjectProperties {
   const val BUILD_TOOLS_VERSION = "33.0.0"
   val JAVA_VERSION = JavaVersion.VERSION_11
 
+  fun test() {
+    System.getProperties().forEach {
+      println("PROP: ${it.key} -> ${it.value}")
+    }
+  }
+
   val IDE_ACTIVE = System.getProperty("idea.active", "false").toBoolean()
 
   const val KOTLIN_JVM_VERSION = "11"
-
 
 
 /*

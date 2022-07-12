@@ -6,8 +6,8 @@ import a.a.AA
 import a.b.AB
 import org.danbrough.klog.*
 import kotlin.test.Test
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.Dispatchers
+//import kotlinx.coroutines.runBlocking
+//import kotlinx.coroutines.Dispatchers
 
 class CommonTests {
 
@@ -59,9 +59,9 @@ class CommonTests {
 
 
 
-    runBlocking(Dispatchers.Default) {
+/*    runBlocking(Dispatchers.Default) {
       log.info("inside coroutine")
-    }
+    }*/
   }
 
 

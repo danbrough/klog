@@ -2,6 +2,8 @@
 
 import Common_gradle.BuildVersion.buildVersion
 import Common_gradle.BuildVersion.buildVersionName
+import Common_gradle.Common.getProjectProperty
+import Common_gradle.Common.localProperties
 import java.io.FileReader
 import java.util.*
 import kotlin.reflect.KProperty
@@ -56,8 +58,6 @@ tasks.create("buildVersionNext") {
   }
 }
 
-
-
 tasks.create("buildVersionIncrement") {
   doLast {
     val currentVersion = project.buildVersion
@@ -75,8 +75,32 @@ tasks.create("buildVersionIncrement") {
   }
 }
 
-object Common {
 
+
+object Common {
+  @Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
+  inline fun <reified T : Any?> Project.getProjectProperty(propName: String, defaultValue: T): T {
+    val value = System.getProperties().let {
+      if (it.containsKey(propName)) it.getProperty(propName)
+      else if (it.containsKey("org.gradle.project.$propName")) it.getProperty("org.gradle.project.$propName")
+      else null
+    } ?: project.localProperties.getOrElse(propName) {
+      project.properties.getOrDefault(
+        propName, null
+      )
+    } ?: return defaultValue
+
+    value as String
+    return when (T::class) {
+      String::class -> value
+      Int::class -> value.toInt()
+      Float::class -> value.toFloat()
+      Double::class -> value.toDouble()
+      Long::class -> value.toLong()
+      Boolean::class -> value.toBoolean()
+      else -> throw Error("Invalid property type: ${T::class}")
+    } as T
+  }
 
   class ProjectProperty(val name: String?, val defaultValue: Any?) {
 
@@ -114,25 +138,29 @@ object Common {
     ProjectProperty(name, defaultValue)
 
 
-  val Project.message: String by createProperty("message", "default message")
-
   private var _localProperties: Properties? = null
 
   val Project.localProperties: Properties
     get() = _localProperties ?: rootProject.file("local.properties").let { localPropsFile ->
       Properties().also { props ->
-        if (localPropsFile.exists()) props.load(FileReader(localPropsFile))
+        if (localPropsFile.exists()) FileReader(localPropsFile).use { props.load(it) }
         _localProperties = props
       }
     }
 }
 
 object BuildVersion {
+  val Project.message: String?
+    get() = this.getProjectProperty("message", null)
 
 
   val Project.buildVersion: Int by Common.createProperty("build.version", defaultValue = 0)
   val Project.buildVersionOffset: Int by Common.createProperty(defaultValue = 0)
-  val Project.buildVersionFormat: String by Common.createProperty(defaultValue = "0.0.1-alpha%02d")
+  val Project.buildIsSnapshot: Boolean by Common.createProperty("build.snapshot", true)
+  val Project.buildVersionFormat: String by Common.createProperty(
+    "build.snapshot.format",
+    defaultValue = "0.0.1-SNAPSHOT"
+  )
 
   val Project.buildVersionName: String
     get() = buildVersionName()

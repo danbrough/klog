@@ -1,4 +1,5 @@
 import Common_gradle.BuildVersion.buildVersionName
+import Common_gradle.BuildVersion.message
 import ProjectProperties.LOCAL_MAVEN_REPO
 import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -27,9 +28,12 @@ version = buildVersionName
 group = projectGroup
 
 
+
+
 tasks.create("testTask") {
   doLast {
-    println("MESSAGE: ${project.property("message")}")
+    println("MESSAGE: $message")
+    ProjectProperties.test()
   }
 }
 
