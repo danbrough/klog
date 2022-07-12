@@ -14,7 +14,7 @@ actual inline fun platformStatementContext(): StatementContext =
   Thread.currentThread().let {
     val stackElement = it.stackTrace[stackDepth]
     StatementContext(
-      it.name, it.id,
+      it.name, it.name,
       StatementContext.LineContext(
         stackElement.lineNumber,
         stackElement.methodName,

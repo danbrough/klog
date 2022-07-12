@@ -29,9 +29,8 @@ object KMessageFormatters {
       append(name)
       append('\t')
       val threadID = ctx.threadID
-      if (threadID != 0L)
+      if (threadID.isNotEmpty())
         append("<$threadID>")
-
 
 
       ctx.line?.functionName?.also { append("${ctx.line.fileName}:${ctx.line.lineNumber}:${it}(): ") }

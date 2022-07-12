@@ -7,6 +7,7 @@ import a.b.AB
 import org.danbrough.klog.*
 import kotlin.test.Test
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.Dispatchers
 
 class CommonTests {
 
@@ -58,7 +59,7 @@ class CommonTests {
 
 
 
-    runBlocking {
+    runBlocking(Dispatchers.Default) {
       log.info("inside coroutine")
     }
   }

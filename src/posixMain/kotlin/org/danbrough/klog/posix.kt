@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 
 @Suppress("NOTHING_TO_INLINE")
 actual inline fun platformStatementContext(): StatementContext =
-  StatementContext("native", threadID().toLong())
+  StatementContext("native", threadID().toString())
 
 
 actual fun getTimeMillis(): Long = timeInMillisSinceEpoch().toLong()

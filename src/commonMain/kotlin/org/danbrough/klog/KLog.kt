@@ -2,7 +2,7 @@ package org.danbrough.klog
 
 data class StatementContext(
   val threadName: String,
-  val threadID: Long,
+  val threadID: String = "",
   val line: LineContext? = null
 ) {
   val time: Long

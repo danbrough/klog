@@ -27,6 +27,11 @@ version = buildVersionName
 group = projectGroup
 
 
+tasks.create("testTask") {
+  doLast {
+    println("MESSAGE: ${project.property("message")}")
+  }
+}
 
 kotlin {
 
@@ -176,6 +181,9 @@ publishing {
       }
 
     }
+
+    maven(rootProject.buildDir.resolve("stuff").toURI())
+
   }
 
 
