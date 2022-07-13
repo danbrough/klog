@@ -5,6 +5,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.konan.target.KonanTarget
 
 plugins {
   kotlin("multiplatform")
@@ -32,6 +33,12 @@ group = projectGroup
 tasks.create("testTask") {
   doLast {
     println("MESSAGE: $message")
+
+    println("OS.NAME: ${System.getProperty("os.name")}")
+    println("OS.ARCH: ${System.getProperty("os.arch")}")
+    KonanTarget.predefinedTargets.forEach {
+      println("TARGET: ${it.key}: ${it.value}")
+    }
   }
 }
 
@@ -250,10 +257,6 @@ publishing {
 }
 
 
-publishing.publications.all {
-  println("PUBLICATION: $name")
-}
-
 signing {
   publishing.publications.all {
     sign(this)
@@ -313,6 +316,7 @@ repositories {
 
   maven("https://h1.danbrough.org/maven")
 }
+
 
 
 allprojects {
