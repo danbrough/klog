@@ -1,8 +1,6 @@
 plugins {
   kotlin("multiplatform")
   id("com.android.application")
-  `maven-publish`
-  signing
 }
 
 buildscript {
@@ -13,18 +11,17 @@ buildscript {
 }
 
 repositories {
-  maven("https://h1.danbrough.org/maven")
   mavenCentral()
   google()
+  maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
+  maven("https://h1.danbrough.org/maven")
 }
 
 
 kotlin {
   jvm()
   android()
-  macosX64()
   linuxX64()
-  mingwX64()
 
   sourceSets {
     commonMain {

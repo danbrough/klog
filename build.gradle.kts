@@ -1,6 +1,5 @@
 import Common_gradle.BuildVersion.buildVersionName
 import Common_gradle.BuildVersion.message
-import ProjectProperties.LOCAL_MAVEN_REPO
 import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
@@ -33,7 +32,6 @@ group = projectGroup
 tasks.create("testTask") {
   doLast {
     println("MESSAGE: $message")
-    ProjectProperties.test()
   }
 }
 
@@ -52,7 +50,7 @@ kotlin {
     nodejs()
   }
 
-  if (!ProjectProperties.IDE_ACTIVE) {
+/*  if (!ProjectProperties.IDE_ACTIVE) {
     linuxArm64()
     linuxArm32Hfp()
 
@@ -86,7 +84,7 @@ kotlin {
     //watchosX86()
 
 
-  }
+  }*/
 
 
 
@@ -168,29 +166,99 @@ kotlin {
   }
 }
 
+object Meta {
+  const val desc = "KLog - Logging for Kotlin"
+  const val license = "Apache-2.0"
+  const val licenseUrl = "https://opensource.org/licenses/Apache-2.0"
+  const val githubRepo = "danbrough/klog"
+
+  /*const val release = "https://s01.oss.sonatype.org/service/local/"
+  const val snapshot = "https://s01.oss.sonatype.org/content/repositories/snapshots/"*/
+  const val release = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+  const val snapshot = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+}
+
+
 publishing {
   repositories {
-    maven(LOCAL_MAVEN_REPO)
+    //maven(LOCAL_MAVEN_REPO)
+
+/*
+    repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+    authentication(userName: ossrhUsername, password: ossrhPassword)
+  }
+
+    snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+    authentication(userName: ossrhUsername, password: ossrhPassword)
+  }
+*/
+    maven(rootProject.buildDir.resolve("stuff").toURI())
 
     maven {
-      val releaseRepo = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-      val snapshotRepo = "https://oss.sonatype.org/content/repositories/snapshots/"
-      val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
 
-      setUrl(if (isReleaseVersion) releaseRepo else snapshotRepo)
+      name = "oss"
+
+
+      val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
+      val mavenUrl = if (isReleaseVersion) Meta.release else Meta.snapshot
+      println("MAVEN URL: $mavenUrl isRelease: $isReleaseVersion")
+
+      setUrl(mavenUrl)
 
       credentials {
-        username = project.property("ossrhUsername")?.toString()
-        password = project.property("ossrhPassword")?.toString()
+        username = project.property("ossrhUsername")!!.toString().trim()
+        password = project.property("ossrhPassword")!!.toString().trim()
       }
-
     }
-
-    maven(rootProject.buildDir.resolve("stuff").toURI())
 
   }
 
 
+  publications["kotlinMultiplatform"].apply {
+    this as MavenPublication
+
+
+
+    println("PUBLICATION: ${this.name}")
+
+
+    pom {
+
+      licenses {
+        license {
+          name.set(Meta.license)
+          url.set(Meta.licenseUrl)
+        }
+      }
+
+      scm {
+        connection.set("scm:git:git@github.com:danbrough/klog.git")
+        developerConnection.set("scm:git:git@github.com:danbrough/klog.git")
+        url.set("https://github.com/danbrough/klog/")
+      }
+
+      developers {
+        developer {
+          id.set("danbrough")
+          name.set("Dan Brough")
+          email.set("dan@danbrough.org")
+        }
+      }
+    }
+
+  }
+}
+
+
+publishing.publications.all {
+  println("PUBLICATION: $name")
+}
+
+signing {
+  publishing.publications.all {
+    sign(this)
+  }
+  // sign(publishing.publications["kotlinMultiplatform"])
 }
 
 
@@ -211,6 +279,29 @@ android {
     targetCompatibility = ProjectProperties.JAVA_VERSION
   }
 
+  signingConfigs.register("release") {
+    storeFile = file("/home/dan/.android/keystore")
+    keyAlias = "klog"
+    storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
+    keyPassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
+  }
+
+
+  buildTypes {
+
+    getByName("debug") {
+      //debuggable(true)
+    }
+
+    getByName("release") {
+      isMinifyEnabled = true
+      proguardFiles(
+        getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+      )
+      signingConfig = signingConfigs.getByName("release")
+    }
+  }
+
 }
 //version = BuildVersion.
 //group = ProjectProperties.groupID
@@ -219,6 +310,7 @@ android {
 repositories {
   mavenCentral()
   google()
+
   maven("https://h1.danbrough.org/maven")
 }
 

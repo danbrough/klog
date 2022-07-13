@@ -19,5 +19,5 @@ fun main() {
   log.warn {
     "this is the message"
   }
-  log.error("")
+  log.error("an error occurred", Error("Example error"))
 }

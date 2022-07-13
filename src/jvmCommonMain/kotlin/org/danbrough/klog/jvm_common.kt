@@ -21,9 +21,7 @@ actual inline fun platformStatementContext(): StatementContext =
         stackElement.className,
         stackElement.fileName,
       )
-    ).also {
-      println("CREATED CTX: $it")
-    }
+    )
   }
 
 
