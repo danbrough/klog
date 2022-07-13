@@ -54,6 +54,7 @@ kotlin {
   //macosX64()
 
   js {
+    moduleName = "klog_danbrough"
     nodejs()
   }
 

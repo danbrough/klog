@@ -34,6 +34,7 @@ object KMessageFormatters {
 
 
       ctx.line?.functionName?.also { append("${ctx.line.fileName}:${ctx.line.lineNumber}:${it}(): ") }
+        ?: append(" ")
 
       append(msg)
 

@@ -6,7 +6,6 @@ import org.danbrough.klog.*
 
 class KLogDemoApp : Application() {
 
-
   val log = klog(
     "org.danbrough.klog.demo",
     level = Level.TRACE,

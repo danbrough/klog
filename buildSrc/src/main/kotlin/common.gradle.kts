@@ -6,37 +6,6 @@ import Common_gradle.Common.getProjectProperty
 import java.io.FileReader
 import java.util.*
 import kotlin.reflect.KProperty
-import kotlin.reflect.jvm.jvmErasure
-
-
-class ProjectProperty2(val name: String?, val defaultValue: Any?) {
-
-  @Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
-  inline operator fun <T : Any?> getValue(thisRef: Any, property: KProperty<*>): T {
-    val propName = name ?: property.name
-    val propType = property.returnType
-
-    val value = System.getProperties().let {
-      if (it.containsKey(propName)) it.getProperty(propName)
-      else if (it.containsKey("org.gradle.project.$propName")) it.getProperty("org.gradle.project.$propName")
-      else null
-    } ?: project.properties.getOrDefault(
-      propName, null
-    )
-    ?: return defaultValue as T
-
-    value as String
-    return when (propType.jvmErasure) {
-      String::class -> value
-      Int::class -> value.toInt()
-      Float::class -> value.toFloat()
-      Double::class -> value.toDouble()
-      Long::class -> value.toLong()
-      Boolean::class -> value.toBoolean()
-      else -> throw Error("Invalid property type: $propType")
-    } as T
-  }
-}
 
 
 tasks.create("buildVersion") {
@@ -101,6 +70,7 @@ object Common {
     } as T
   }
 
+
   class ProjectProperty(val name: String?, val defaultValue: Any?) {
 
     @Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
@@ -143,3 +113,5 @@ object BuildVersion {
 
   fun Project.buildVersionName(version: Int = buildVersion) = buildVersionFormat.format(version)
 }
+
+

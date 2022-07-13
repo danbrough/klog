@@ -1,5 +1,7 @@
 package org.danbrough.klog.demo
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.danbrough.klog.*
 
 
@@ -20,4 +22,10 @@ fun main() {
     "this is the message"
   }
   log.error("an error occurred", Error("Example error"))
+
+
+  runBlocking(Dispatchers.Default) {
+    log.trace("inside coroutine")
+  }
+  log.trace("finished")
 }

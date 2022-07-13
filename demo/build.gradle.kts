@@ -20,6 +20,12 @@ repositories {
 
 kotlin {
   jvm()
+
+  js {
+    moduleName = "klog_danbrough_demo"
+    nodejs()
+  }
+
   android()
   linuxX64()
 
@@ -27,6 +33,7 @@ kotlin {
     commonMain {
       dependencies {
         implementation("org.danbrough:klog:_")
+        implementation(KotlinX.coroutines.core)
       }
     }
 
@@ -36,22 +43,24 @@ kotlin {
       }
     }
   }
+
+
 }
 
 android {
-  compileSdk = ProjectProperties.SDK_VERSION
+  compileSdk = 31
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
   namespace = "org.danbrough.klog.demo"
 
   defaultConfig {
-    minSdk = ProjectProperties.MIN_SDK_VERSION
-    targetSdk = ProjectProperties.SDK_VERSION
+    minSdk = 32
+    targetSdk = 31
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
   }
 
   compileOptions {
-    sourceCompatibility = ProjectProperties.JAVA_VERSION
+    sourceCompatibility = JavaVersio
     targetCompatibility = ProjectProperties.JAVA_VERSION
   }
 
