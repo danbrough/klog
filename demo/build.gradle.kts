@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
   kotlin("multiplatform")
   id("com.android.application")
@@ -13,7 +16,7 @@ buildscript {
 repositories {
   mavenCentral()
   google()
-  maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
+  //maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
   maven("https://h1.danbrough.org/maven")
 }
 
@@ -22,7 +25,6 @@ kotlin {
   jvm()
 
   js {
-    moduleName = "klog_danbrough_demo"
     nodejs()
   }
 
@@ -53,24 +55,38 @@ android {
   namespace = "org.danbrough.klog.demo"
 
   defaultConfig {
-    minSdk = 32
+    minSdk = 23
     targetSdk = 31
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
   }
 
   compileOptions {
-    sourceCompatibility = JavaVersio
-    targetCompatibility = ProjectProperties.JAVA_VERSION
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
   }
 
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class) {
   kotlinOptions {
-    jvmTarget = ProjectProperties.KOTLIN_JVM_VERSION
+    jvmTarget = "11"
   }
 }
 
+
+tasks.withType<AbstractTestTask>() {
+  testLogging {
+    events = setOf(
+      TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
+    )
+    exceptionFormat = TestExceptionFormat.FULL
+    showStandardStreams = true
+    showStackTraces = true
+  }
+  outputs.upToDateWhen {
+    false
+  }
+}
 
 

@@ -200,7 +200,9 @@ publishing {
     authentication(userName: ossrhUsername, password: ossrhPassword)
   }
 */
-    maven(rootProject.buildDir.resolve("stuff").toURI())
+    maven(rootProject.buildDir.resolve("m2").toURI()){
+      name = "m2"
+    }
 
     maven {
 
