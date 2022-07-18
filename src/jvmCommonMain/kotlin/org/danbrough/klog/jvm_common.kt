@@ -3,29 +3,27 @@ package org.danbrough.klog
 import kotlin.reflect.KClass
 
 
+/*
 val stackDepth: Int = (runCatching {
   Class.forName("android.util.Log")
   8
 }.getOrNull() ?: 7).also {
   println("STACK DEPTH: $it")
 }
+*/
 
 
-private val log = klog("KLOG", Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
-
-fun listSysProps() {
-  log.error("JVM NAME: ${System.getProperty("java.vm.name")}")
-  log.error("JAVA VENDOR: ${System.getProperty("java.vendor")}")
-  System.getProperties().let { props ->
-    props.keys.forEach {
-      println("PROP: $it:\t${props[it]}")
+val stackDepth: Int
+  get() =
+    (if (System.getProperty("java.vendor").toString().contains("Android")) 10 else 8).also {
+      println("STACK DEPTH: $it")
     }
-  }
-}
+
 
 @Suppress("NOTHING_TO_INLINE")
 actual inline fun platformStatementContext(): StatementContext =
   Thread.currentThread().let {
+    println("GETTING STACK ELEMENT AT $stackDepth")
     val stackElement = it.stackTrace[stackDepth]
     StatementContext(
       it.name, it.name,

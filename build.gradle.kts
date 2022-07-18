@@ -135,6 +135,10 @@ kotlin {
       dependsOn(jvmCommonMain)
     }
 
+    val androidTest by getting {
+      dependsOn(jvmCommonTest)
+    }
+
     val jvmMain by getting {
       dependsOn(jvmCommonMain)
     }
@@ -151,11 +155,6 @@ kotlin {
         implementation(AndroidX.test.ext.junit.ktx)
       }
     }
-
-    val androidTest by getting {
-      dependsOn(jvmCommonTest)
-    }
-
 
   }
 
