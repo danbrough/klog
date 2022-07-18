@@ -5,7 +5,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.konan.target.KonanTarget
+
 
 plugins {
   kotlin("multiplatform")
@@ -30,16 +30,16 @@ group = projectGroup
 
 
 
+
 tasks.create("testTask") {
   doLast {
     println("MESSAGE: $message")
 
-    println("OS.NAME: ${System.getProperty("os.name")}")
-    println("OS.ARCH: ${System.getProperty("os.arch")}")
-    KonanTarget.predefinedTargets.forEach {
-      println("TARGET: ${it.key}: ${it.value}")
-    }
+    val osName = System.getProperty("os.name")
+    val osArch = System.getProperty("os.arch")
+
   }
+
 }
 
 kotlin {
@@ -51,7 +51,7 @@ kotlin {
   }
 
   linuxX64()
-  //macosX64()
+//macosX64()
 
   js {
     moduleName = "klog_danbrough"
@@ -100,10 +100,10 @@ kotlin {
   sourceSets {
     val commonMain by getting {
       dependencies {
-        //  runtimeOnly(kotlin("reflect"))
+//  runtimeOnly(kotlin("reflect"))
         implementation(kotlin("stdlib"))
-        // https://mvnrepository.com/artifact/io.ktor/ktor-utils
-        //implementation(Ktor.utils)
+// https://mvnrepository.com/artifact/io.ktor/ktor-utils
+//implementation(Ktor.utils)
 
       }
     }
@@ -162,7 +162,7 @@ kotlin {
 
   targets.withType(KotlinNativeTarget::class).all {
 
-    //println("NATIVE-TARGET: $name : apple:${this.konanTarget.family.isAppleFamily} linux:${this.konanTarget.family}")
+//println("NATIVE-TARGET: $name : apple:${this.konanTarget.family.isAppleFamily} linux:${this.konanTarget.family}")
 
     compilations["main"].apply {
 
@@ -198,7 +198,7 @@ object Meta {
 
 publishing {
   repositories {
-    //maven(LOCAL_MAVEN_REPO)
+//maven(LOCAL_MAVEN_REPO)
 
 /*
     repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
@@ -271,7 +271,7 @@ signing {
   publishing.publications.all {
     sign(this)
   }
-  // sign(publishing.publications["kotlinMultiplatform"])
+// sign(publishing.publications["kotlinMultiplatform"])
 }
 
 
@@ -303,7 +303,7 @@ android {
   buildTypes {
 
     getByName("debug") {
-      //debuggable(true)
+//debuggable(true)
     }
 
     getByName("release") {

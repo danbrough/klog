@@ -44,7 +44,6 @@ tasks.create("buildVersionIncrement") {
 }
 
 
-
 object Common {
   @Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
   inline fun <reified T : Any?> Project.getProjectProperty(propName: String, defaultValue: T): T {
@@ -122,9 +121,53 @@ object BuildVersion {
 
 
   fun Project.buildVersionName(version: Int = buildVersion) = buildVersionFormat.format(version)
-
-
-
 }
 
+/*
+import org.jetbrains.kotlin.konan.target.KonanTarget
+import org.jetbrains.kotlin.konan.target.Family
+import org.jetbrains.kotlin.konan.target.Architecture
+ */
+/*
+
+object BuildEnvironment {
+  val Project.hostTarget: org.jetbrains.kotlin.konan.target.KonanTarget?
+    get() {
+      val osName = System.getProperty("os.name")
+
+      val hostArchitecture: org.jetbrains.kotlin.konan.target.Architecture = when (val osArch = System.getProperty("os.arch")) {
+        "amd64", "x86_64" -> org.jetbrains.kotlin.konan.target.Architecture.X64
+        "arm64", "aarch64" -> org.jetbrains.kotlin.konan.target.Architecture.ARM64
+        else -> throw Error("Unknown os.arch value: $osArch")
+      }
+
+      return when {
+        osName == "Linux" -> {
+          when (hostArchitecture) {
+            org.jetbrains.kotlin.konan.target.Architecture.ARM64 -> org.jetbrains.kotlin.konan.target.KonanTarget.LINUX_ARM64
+            org.jetbrains.kotlin.konan.target.Architecture.X64 -> org.jetbrains.kotlin.konan.target.KonanTarget.LINUX_X64
+            else -> null
+          }
+        }
+
+        osName.startsWith("Mac") -> {
+          when (hostArchitecture) {
+            org.jetbrains.kotlin.konan.target.Architecture.X64 -> org.jetbrains.kotlin.konan.target.KonanTarget.MACOS_X64
+            org.jetbrains.kotlin.konan.target.Architecture.ARM64 -> org.jetbrains.kotlin.konan.target.KonanTarget.MACOS_ARM64
+            else -> null
+          }
+        }
+
+        osName.startsWith("Windows") -> {
+          when (hostArchitecture) {
+            org.jetbrains.kotlin.konan.target.Architecture.X64 -> org.jetbrains.kotlin.konan.target.KonanTarget.MINGW_X64
+            else -> null
+          }
+        }
+        else -> null
+      }
+    }
+
+}
+*/
 
