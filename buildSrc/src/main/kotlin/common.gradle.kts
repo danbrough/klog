@@ -102,10 +102,20 @@ object BuildVersion {
   val Project.buildVersion: Int by Common.createProperty("build.version", defaultValue = 0)
   val Project.buildVersionOffset: Int by Common.createProperty(defaultValue = 0)
   val Project.buildIsSnapshot: Boolean by Common.createProperty("build.snapshot", true)
-  val Project.buildVersionFormat: String by Common.createProperty(
+
+  private val Project.versionFormatRegular: String by Common.createProperty(
+    "build.version.format",
+    defaultValue = "0.0.1-alpha%02d"
+  )
+
+  private val Project.versionFormatSnapshot: String by Common.createProperty(
     "build.snapshot.format",
     defaultValue = "0.0.1-SNAPSHOT"
   )
+
+  val Project.buildVersionFormat: String
+    get() = if (buildIsSnapshot) versionFormatSnapshot else versionFormatRegular
+
 
   val Project.buildVersionName: String
     get() = buildVersionName()

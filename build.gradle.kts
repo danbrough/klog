@@ -127,6 +127,10 @@ kotlin {
       dependsOn(commonMain)
     }
 
+    val jvmCommonTest by creating {
+      dependsOn(commonTest)
+    }
+
     val androidMain by getting {
       dependsOn(jvmCommonMain)
     }
@@ -135,7 +139,13 @@ kotlin {
       dependsOn(jvmCommonMain)
     }
 
+    val jvmTest by getting {
+      dependsOn(jvmCommonTest)
+    }
+
     val androidAndroidTest by getting {
+      dependsOn(jvmCommonTest)
+
       dependencies {
         implementation(AndroidX.test.runner)
         implementation(AndroidX.test.ext.junit.ktx)
@@ -143,7 +153,7 @@ kotlin {
     }
 
     val androidTest by getting {
-      dependsOn(commonTest)
+      dependsOn(jvmCommonTest)
     }
 
 
@@ -200,7 +210,9 @@ publishing {
     authentication(userName: ossrhUsername, password: ossrhPassword)
   }
 */
-    maven(rootProject.buildDir.resolve("m2").toURI()){
+    maven(
+      project.properties["MAVEN_REPO"]?.toString() ?: project.buildDir.resolve("m2").toURI()
+    ) {
       name = "m2"
     }
 
@@ -211,7 +223,6 @@ publishing {
 
       val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
       val mavenUrl = if (isReleaseVersion) Meta.release else Meta.snapshot
-      println("MAVEN URL: $mavenUrl isRelease: $isReleaseVersion")
 
       setUrl(mavenUrl)
 
@@ -227,9 +238,6 @@ publishing {
   publications["kotlinMultiplatform"].apply {
     this as MavenPublication
 
-
-
-    println("PUBLICATION: ${this.name}")
 
 
     pom {

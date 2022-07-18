@@ -43,7 +43,8 @@ class CommonTests {
         writer = KLogWriters.stdOut
       )
     }*/
-  val log = klog(Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
+  private val log = klog(Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
+
 
   @Test
   fun test1() {
