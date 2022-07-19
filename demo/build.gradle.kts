@@ -24,12 +24,25 @@ repositories {
 kotlin {
   jvm()
 
-  js {
-    nodejs()
-  }
 
   android()
-  linuxX64()
+  val osName = System.getProperty("os.name")
+  if (osName == "Linux") {
+    linuxX64()
+    linuxArm32Hfp()
+    linuxArm64()
+
+    js {
+      nodejs()
+    }
+
+  } else if (osName.startsWith("Mac")) {
+    macosArm64()
+    macosX64()
+  } else if (osName.startsWith("Windows")) {
+    mingwX64()
+  }
+
 
   sourceSets {
     commonMain {
