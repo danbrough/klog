@@ -15,9 +15,9 @@ val stackDepth: Int = (runCatching {
 
 val stackDepth: Int
   get() =
-    (if (System.getProperty("java.vendor").toString().contains("Android")) 10 else 8)/*.also {
+    (if (System.getProperty("java.vendor").toString().contains("Android")) 10 else 8).also {
       println("STACK DEPTH: $it")
-    }*/
+    }
 
 
 @Suppress("NOTHING_TO_INLINE")
