@@ -33,7 +33,6 @@ group = projectGroup
 tasks.create("testTask") {
   doLast {
     println("MESSAGE: $message")
-
     println("OS.NAME: ${System.getProperty("os.name")}")
     println("OS.ARCH: ${System.getProperty("os.arch")}")
     KonanTarget.predefinedTargets.forEach {
@@ -54,7 +53,7 @@ kotlin {
   //macosX64()
 
   js {
-    moduleName = "klog_danbrough"
+    //moduleName = "klog_danbrough"
     nodejs()
   }
 
