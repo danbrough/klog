@@ -52,11 +52,13 @@ kotlin {
   }
 
 
-  when(hostTarget){
-    KonanTarget.LINUX_X64 -> linuxX64()
-    KonanTarget.MACOS_X64 -> macosX64()
-    KonanTarget.MACOS_ARM64 -> macosArm64()
-    KonanTarget.MINGW_X64 -> mingwX64()
+  if (hostTarget.family.isAppleFamily) {
+    macosArm64()
+    macosX64()
+  } else {
+    linuxX64()
+    linuxArm64()
+    linuxArm32Hfp()
   }
 
   //macosX64()
@@ -234,8 +236,6 @@ publishing {
 
   publications["kotlinMultiplatform"].apply {
     this as MavenPublication
-
-
 
     pom {
 

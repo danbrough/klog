@@ -1,10 +1,8 @@
 @file:Suppress("ObjectPropertyName", "MemberVisibilityCanBePrivate")
 
-import Common_gradle.BuildEnvironment.hostTarget
 import Common_gradle.BuildVersion.buildVersion
 import Common_gradle.BuildVersion.buildVersionName
 import Common_gradle.Common.getProjectProperty
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import java.io.FileReader
 import java.util.*
 import kotlin.reflect.KProperty
@@ -133,12 +131,12 @@ object BuildVersion {
 
 object BuildEnvironment {
 
-  val Project.hostTarget: KonanTarget?
+  val Project.hostTarget: KonanTarget
     get() {
       val osName = System.getProperty("os.name")
-
+      val osArch = System.getProperty("os.arch")
       val hostArchitecture: Architecture =
-        when (val osArch = System.getProperty("os.arch")) {
+        when ( osArch ) {
           "amd64", "x86_64" -> Architecture.X64
           "arm64", "aarch64" -> Architecture.ARM64
           else -> throw Error("Unknown os.arch value: $osArch")
@@ -168,6 +166,6 @@ object BuildEnvironment {
           }
         }
         else -> null
-      }
+      } ?: throw Error("Unknown build host: $osName:$osArch")
     }
 }
