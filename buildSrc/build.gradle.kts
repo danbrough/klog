@@ -15,8 +15,8 @@ kotlinDslPluginOptions {
 
 dependencies {
   //implementation(gradleKotlinDsl())
-  implementation(kotlin("gradle-plugin","1.7.10"))
-  implementation("com.android.tools.build:gradle:7.3.0-beta05")
+  implementation(kotlin("gradle-plugin", "1.7.10"))
+  implementation("com.android.tools.build:gradle:7.2.1")
   //compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
   //implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:_")
   /*implementation(kotlin("gradle-plugin","1.6.21"))
@@ -40,43 +40,21 @@ kotlin {
   jvmToolchain {
     check(this is JavaToolchainSpec)
     languageVersion.set(JavaLanguageVersion.of(8))
-
   }
 */
 
+  val optIns = listOf(
+    "kotlin.RequiresOptIn",
+    "kotlin.ExperimentalStdlibApi",
+    "kotlin.io.path.ExperimentalPathApi",
+  )
+
   sourceSets.all {
     languageSettings {
-      listOf(
-        "kotlin.RequiresOptIn",
-        "kotlin.ExperimentalStdlibApi",
-        "kotlin.io.path.ExperimentalPathApi",
-      ).forEach {
+      optIns.forEach {
         optIn(it)
       }
     }
   }
-
-
 }
-
-
-/*
-tasks.withType(KotlinCompile::class) {
-
-  kotlinOptions {
-    listOf(
-      "kotlin.RequiresOptIn",
-      "kotlin.ExperimentalStdlibApi",
-      "kotlin.ExperimentalMultiplatform",
-
-      //  "kotlinx.serialization.InternalSerializationApi",
-    //  "kotlinx.serialization.ExperimentalSerializationApi",
-      // "kotlinx.coroutines.ExperimentalCoroutinesApi",
-      // "kotlin.time.ExperimentalTime",
-    ).map { "-Xopt-in=$it" }.also {
-      freeCompilerArgs = freeCompilerArgs + it
-    }
-  }
-}
-*/
 

@@ -1,8 +1,10 @@
 @file:Suppress("ObjectPropertyName", "MemberVisibilityCanBePrivate")
 
+import Common_gradle.BuildEnvironment.hostTarget
 import Common_gradle.BuildVersion.buildVersion
 import Common_gradle.BuildVersion.buildVersionName
 import Common_gradle.Common.getProjectProperty
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import java.io.FileReader
 import java.util.*
 import kotlin.reflect.KProperty
@@ -47,46 +49,6 @@ tasks.create("buildVersionIncrement") {
 
 
 object Common {
-
-
-  val Project.hostTarget: KonanTarget?
-    get() {
-      val osName = System.getProperty("os.name")
-
-      val hostArchitecture: Architecture =
-        when (val osArch = System.getProperty("os.arch")) {
-          "amd64", "x86_64" -> Architecture.X64
-          "arm64", "aarch64" -> Architecture.ARM64
-          else -> throw Error("Unknown os.arch value: $osArch")
-        }
-
-      return when {
-        osName == "Linux" -> {
-          when (hostArchitecture) {
-            Architecture.ARM64 -> KonanTarget.LINUX_ARM64
-            Architecture.X64 -> KonanTarget.LINUX_X64
-            else -> null
-          }
-        }
-
-        osName.startsWith("Mac") -> {
-          when (hostArchitecture) {
-            Architecture.X64 -> KonanTarget.MACOS_X64
-            Architecture.ARM64 -> KonanTarget.MACOS_ARM64
-            else -> null
-          }
-        }
-
-        osName.startsWith("Windows") -> {
-          when (hostArchitecture) {
-            Architecture.X64 -> KonanTarget.MINGW_X64
-            else -> null
-          }
-        }
-        else -> null
-      }
-    }
-
 
   @Suppress("UNCHECKED_CAST", "NOTHING_TO_INLINE")
   inline fun <reified T : Any?> Project.getProjectProperty(propName: String, defaultValue: T): T {
@@ -169,3 +131,43 @@ object BuildVersion {
 }
 
 
+object BuildEnvironment {
+
+  val Project.hostTarget: KonanTarget?
+    get() {
+      val osName = System.getProperty("os.name")
+
+      val hostArchitecture: Architecture =
+        when (val osArch = System.getProperty("os.arch")) {
+          "amd64", "x86_64" -> Architecture.X64
+          "arm64", "aarch64" -> Architecture.ARM64
+          else -> throw Error("Unknown os.arch value: $osArch")
+        }
+
+      return when {
+        osName == "Linux" -> {
+          when (hostArchitecture) {
+            Architecture.ARM64 -> KonanTarget.LINUX_ARM64
+            Architecture.X64 -> KonanTarget.LINUX_X64
+            else -> null
+          }
+        }
+
+        osName.startsWith("Mac") -> {
+          when (hostArchitecture) {
+            Architecture.X64 -> KonanTarget.MACOS_X64
+            Architecture.ARM64 -> KonanTarget.MACOS_ARM64
+            else -> null
+          }
+        }
+
+        osName.startsWith("Windows") -> {
+          when (hostArchitecture) {
+            Architecture.X64 -> KonanTarget.MINGW_X64
+            else -> null
+          }
+        }
+        else -> null
+      }
+    }
+}

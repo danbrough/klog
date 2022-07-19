@@ -1,6 +1,6 @@
 import Common_gradle.BuildVersion.buildVersionName
 import Common_gradle.BuildVersion.message
-import Common_gradle.Common.hostTarget
+import Common_gradle.BuildEnvironment.hostTarget
 import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
@@ -51,7 +51,14 @@ kotlin {
     publishLibraryVariants("release")
   }
 
-  linuxX64()
+
+  when(hostTarget){
+    KonanTarget.LINUX_X64 -> linuxX64()
+    KonanTarget.MACOS_X64 -> macosX64()
+    KonanTarget.MACOS_ARM64 -> macosArm64()
+    KonanTarget.MINGW_X64 -> mingwX64()
+  }
+
   //macosX64()
 
   js {
@@ -199,17 +206,7 @@ object Meta {
 
 publishing {
   repositories {
-    //maven(LOCAL_MAVEN_REPO)
 
-/*
-    repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
-    authentication(userName: ossrhUsername, password: ossrhPassword)
-  }
-
-    snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
-    authentication(userName: ossrhUsername, password: ossrhPassword)
-  }
-*/
     maven(
       project.properties["MAVEN_REPO"]?.toString() ?: project.buildDir.resolve("m2").toURI()
     ) {
