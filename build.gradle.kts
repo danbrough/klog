@@ -57,7 +57,7 @@ kotlin {
     macosX64()
   } else {
     macosArm64()
-
+    macosArm64()
     linuxX64()
     linuxArm64()
     linuxArm32Hfp()
