@@ -1,12 +1,12 @@
 import Common_gradle.BuildVersion.buildVersionName
 import Common_gradle.BuildVersion.message
+import Common_gradle.Common.hostTarget
 import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.konan.target.KonanTarget
-import java.lang.System
 
 plugins {
   kotlin("multiplatform")
@@ -29,43 +29,6 @@ version = buildVersionName
 group = projectGroup
 
 
-val Project.hostTarget: org.jetbrains.kotlin.konan.target.KonanTarget?
-  get() {
-    val osName = System.getProperty("os.name")
-
-    val hostArchitecture: org.jetbrains.kotlin.konan.target.Architecture =
-      when (val osArch = System.getProperty("os.arch")) {
-        "amd64", "x86_64" -> org.jetbrains.kotlin.konan.target.Architecture.X64
-        "arm64", "aarch64" -> org.jetbrains.kotlin.konan.target.Architecture.ARM64
-        else -> throw Error("Unknown os.arch value: $osArch")
-      }
-
-    return when {
-      osName == "Linux" -> {
-        when (hostArchitecture) {
-          org.jetbrains.kotlin.konan.target.Architecture.ARM64 -> org.jetbrains.kotlin.konan.target.KonanTarget.LINUX_ARM64
-          org.jetbrains.kotlin.konan.target.Architecture.X64 -> org.jetbrains.kotlin.konan.target.KonanTarget.LINUX_X64
-          else -> null
-        }
-      }
-
-      osName.startsWith("Mac") -> {
-        when (hostArchitecture) {
-          org.jetbrains.kotlin.konan.target.Architecture.X64 -> org.jetbrains.kotlin.konan.target.KonanTarget.MACOS_X64
-          org.jetbrains.kotlin.konan.target.Architecture.ARM64 -> org.jetbrains.kotlin.konan.target.KonanTarget.MACOS_ARM64
-          else -> null
-        }
-      }
-
-      osName.startsWith("Windows") -> {
-        when (hostArchitecture) {
-          org.jetbrains.kotlin.konan.target.Architecture.X64 -> org.jetbrains.kotlin.konan.target.KonanTarget.MINGW_X64
-          else -> null
-        }
-      }
-      else -> null
-    }
-  }
 
 
 tasks.create("testTask") {
@@ -76,6 +39,7 @@ tasks.create("testTask") {
     KonanTarget.predefinedTargets.forEach {
       println("TARGET: ${it.key}: ${it.value}")
     }
+    println("HOST TARGET: $hostTarget")
   }
 }
 
