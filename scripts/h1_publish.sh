@@ -37,5 +37,6 @@ function publish_linux() {
 if [ "$MACHTYPE" = "x86_64-apple-darwin21" ]; then
   publish_mac
 else
-  publish_linux
+  publish_linux || exit 1
+  ssh mac /Users/dan/workspace/klog/scripts/h1_publish.sh
 fi

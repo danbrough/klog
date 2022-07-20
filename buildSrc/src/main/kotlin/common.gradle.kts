@@ -97,9 +97,6 @@ object Common {
 }
 
 object BuildVersion {
-  val Project.message: String?
-    get() = this.getProjectProperty("message", null)
-
 
   val Project.buildVersion: Int by Common.createProperty("build.version", defaultValue = 0)
   val Project.buildVersionOffset: Int by Common.createProperty(defaultValue = 0)

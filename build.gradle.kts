@@ -1,5 +1,4 @@
 import Common_gradle.BuildVersion.buildVersionName
-import Common_gradle.BuildVersion.message
 import Common_gradle.BuildEnvironment.hostTarget
 import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -33,7 +32,6 @@ group = projectGroup
 
 tasks.create("testTask") {
   doLast {
-    println("MESSAGE: $message")
     println("OS.NAME: ${System.getProperty("os.name")}")
     println("OS.ARCH: ${System.getProperty("os.arch")}")
     KonanTarget.predefinedTargets.forEach {
@@ -51,22 +49,14 @@ kotlin {
     publishLibraryVariants("release")
   }
 
+    macosArm64()
+    macosX64()
 
-  if (hostTarget.family.isAppleFamily) {
-    macosArm64()
-    macosX64()
-  } else {
-    macosX64()
-    macosArm64()
     linuxX64()
     linuxArm64()
-    linuxArm32Hfp()
-  }
 
-  //macosX64()
 
   js {
-    //moduleName = "klog_danbrough"
     nodejs()
   }
 
