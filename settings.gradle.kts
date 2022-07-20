@@ -17,4 +17,3 @@ plugins {
 rootProject.name = "klog"
 
 
-include(":demo2")
