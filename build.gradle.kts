@@ -9,11 +9,11 @@ import org.jetbrains.kotlin.konan.target.KonanTarget
 
 plugins {
   kotlin("multiplatform")
-  // id("com.android.library")
+  id("com.android.library")
   id("common")
   `maven-publish`
   signing
-  id("org.jetbrains.dokka") version "1.6.21" 
+  id("org.jetbrains.dokka")
 
 
 }
@@ -24,6 +24,14 @@ buildscript {
     gradlePluginPortal()
   }
 }
+
+repositories {
+  mavenCentral()
+  google()
+
+  maven("https://h1.danbrough.org/maven")
+}
+
 
 //buildVersionTasks()
 
@@ -47,16 +55,15 @@ tasks.create("testTask") {
 kotlin {
 
   jvm()
-/*
+
   android {
     publishLibraryVariants("release")
-  }*/
+  }
 
   macosArm64()
   macosX64()
 
   linuxX64()
-  linuxArm64()
 
 
 /*
@@ -147,8 +154,8 @@ kotlin {
       dependsOn(jvmCommonTest)
     }
 
-/*
-      val androidMain by getting {
+
+    val androidMain by getting {
       dependsOn(jvmCommonMain)
     }
 
@@ -157,14 +164,14 @@ kotlin {
     }
 
 
-  val androidAndroidTest by getting {
+    val androidAndroidTest by getting {
       dependsOn(jvmCommonTest)
 
       dependencies {
         implementation(AndroidX.test.runner)
         implementation(AndroidX.test.ext.junit.ktx)
       }
-    }*/
+    }
 
   }
 
@@ -300,7 +307,7 @@ signing {
 }
 
 
-/*android {
+android {
   compileSdk = ProjectProperties.SDK_VERSION
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
   namespace = projectGroup
@@ -340,17 +347,8 @@ signing {
     }
   }
 
-}*/
-//version = BuildVersion.
-//group = ProjectProperties.groupID
-
-
-repositories {
-  mavenCentral()
-  google()
-
-  maven("https://h1.danbrough.org/maven")
 }
+
 
 
 
