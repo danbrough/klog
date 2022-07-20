@@ -18,7 +18,10 @@ function publish_mac(){
 
   git pull
   rm -rf build/m2
-  ./gradlew  publishMacosArm64PublicationToM2Repository  publishMacosX64PublicationToM2Repository || exit 1
+  ./gradlew  \
+    publishMacosArm64PublicationToM2Repository  \
+    publishMacosX64PublicationToM2Repository || exit 1
+    
   rsync -avHSx ./build/m2/ h1:/srv/https/maven/
 }
 
