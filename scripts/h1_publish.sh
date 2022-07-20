@@ -15,11 +15,12 @@ function publish_mac(){
 # Let  re-use ssh-agent and/or gpg-agent between logins
   $KEYCHAIN $HOME/.ssh/id_rsa
 #/usr/bin/keychain --timeout 1440 $HOME/.ssh/id_rsa
+  # shellcheck disable=SC1090
   source $HOME/.keychain/$HOSTNAME-sh
 
   git pull
   rm -rf build/m2
-  ./gradlew  \
+  ./gradlew "$@" \
     publishMacosArm64PublicationToM2Repository  \
     publishMacosX64PublicationToM2Repository || exit 1
 
@@ -35,7 +36,7 @@ function publish_linux() {
 }
 
 if [ "$MACHTYPE" = "x86_64-apple-darwin21" ]; then
-  publish_mac
+  publish_mac "$@"
 else
   publish_linux || exit 1
   ssh mac /Users/dan/workspace/klog/scripts/h1_publish.sh
