@@ -2,6 +2,7 @@ package org.danbrough.klog
 
 import org.danbrough.klog.posix.threadID
 import org.danbrough.klog.posix.timeInMillisSinceEpoch
+import kotlin.native.concurrent.ThreadLocal
 import kotlin.reflect.KClass
 
 
@@ -12,6 +13,7 @@ actual inline fun platformStatementContext(): StatementContext =
 
 actual fun getTimeMillis(): Long = timeInMillisSinceEpoch().toLong()
 
+@ThreadLocal
 object PosixKLogRegistry : DefaultLogRegistry()
 
 actual fun createKLogRegistry(): KLogRegistry = PosixKLogRegistry

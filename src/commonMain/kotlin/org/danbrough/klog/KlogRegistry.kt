@@ -1,5 +1,7 @@
 package org.danbrough.klog
 
+import kotlin.native.concurrent.ThreadLocal
+
 
 @Suppress("LeakingThis", "MemberVisibilityCanBePrivate")
 abstract class KLogRegistry {
