@@ -9,6 +9,13 @@ function increment_version() {
 }
 
 function publish_mac(){
+  cd ~/workspace/klog || exit
+  KEYCHAIN=~/bin/mykeychain
+# Let  re-use ssh-agent and/or gpg-agent between logins
+  $KEYCHAIN $HOME/.ssh/id_rsa
+#/usr/bin/keychain --timeout 1440 $HOME/.ssh/id_rsa
+  source $HOME/.keychain/$HOSTNAME-sh
+
   git pull
   rm -rf build/m2
   ./gradlew  publishMacosArm64PublicationToM2Repository  publishMacosX64PublicationToM2Repository || exit 1
