@@ -9,6 +9,7 @@ function increment_version() {
 }
 
 function publish_mac(){
+  echo '############ publish_mac'
   cd ~/workspace/klog || exit
   KEYCHAIN=~/bin/mykeychain
 # Let  re-use ssh-agent and/or gpg-agent between logins
@@ -21,11 +22,12 @@ function publish_mac(){
   ./gradlew  \
     publishMacosArm64PublicationToM2Repository  \
     publishMacosX64PublicationToM2Repository || exit 1
-    
+
   rsync -avHSx ./build/m2/ h1:/srv/https/maven/
 }
 
 function publish_linux() {
+  echo '############ publish_linux'
   gitsave
   rm -rf build/m2
   ./gradlew publishAllPublicationsToM2Repository || exit 1
