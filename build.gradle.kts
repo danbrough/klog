@@ -9,11 +9,13 @@ import org.jetbrains.kotlin.konan.target.KonanTarget
 
 plugins {
   kotlin("multiplatform")
-  id("com.android.library")
+  // id("com.android.library")
   id("common")
-  id("org.jetbrains.dokka") version "1.4.0"
   `maven-publish`
   signing
+  id("org.jetbrains.dokka") version "1.6.21" 
+
+
 }
 
 buildscript {
@@ -45,10 +47,10 @@ tasks.create("testTask") {
 kotlin {
 
   jvm()
-
+/*
   android {
     publishLibraryVariants("release")
-  }
+  }*/
 
   macosArm64()
   macosX64()
@@ -57,9 +59,11 @@ kotlin {
   linuxArm64()
 
 
+/*
   js {
     nodejs()
   }
+*/
 
 /*  if (!ProjectProperties.IDE_ACTIVE) {
     linuxArm64()
@@ -134,13 +138,6 @@ kotlin {
       dependsOn(commonTest)
     }
 
-    val androidMain by getting {
-      dependsOn(jvmCommonMain)
-    }
-
-    val androidTest by getting {
-      dependsOn(jvmCommonTest)
-    }
 
     val jvmMain by getting {
       dependsOn(jvmCommonMain)
@@ -150,14 +147,24 @@ kotlin {
       dependsOn(jvmCommonTest)
     }
 
-    val androidAndroidTest by getting {
+/*
+      val androidMain by getting {
+      dependsOn(jvmCommonMain)
+    }
+
+    val androidTest by getting {
+      dependsOn(jvmCommonTest)
+    }
+
+
+  val androidAndroidTest by getting {
       dependsOn(jvmCommonTest)
 
       dependencies {
         implementation(AndroidX.test.runner)
         implementation(AndroidX.test.ext.junit.ktx)
       }
-    }
+    }*/
 
   }
 
@@ -198,6 +205,22 @@ object Meta {
   const val snapshot = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 }
 
+/*
+val dokkaOutputDir = "$buildDir/dokka"
+
+val dokkaHtml = tasks.getByName<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml") {
+  outputDirectory.set(file(dokkaOutputDir))
+}
+
+val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
+  dependsOn(dokkaHtml)
+  archiveClassifier.set("javadoc")
+  from(dokkaHtml.outputDirectory)
+}
+*/
+
+
+
 
 publishing {
   repositories {
@@ -229,6 +252,7 @@ publishing {
 
   publications.all {
     this as MavenPublication
+    println("CONFIGURING POM FOR $this $name")
 
     pom {
 
@@ -276,7 +300,7 @@ signing {
 }
 
 
-android {
+/*android {
   compileSdk = ProjectProperties.SDK_VERSION
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
   namespace = projectGroup
@@ -316,7 +340,7 @@ android {
     }
   }
 
-}
+}*/
 //version = BuildVersion.
 //group = ProjectProperties.groupID
 
