@@ -11,6 +11,7 @@ plugins {
   kotlin("multiplatform")
   id("com.android.library")
   id("common")
+  id("org.jetbrains.dokka") version "1.4.0"
   `maven-publish`
   signing
 }
@@ -49,11 +50,11 @@ kotlin {
     publishLibraryVariants("release")
   }
 
-    macosArm64()
-    macosX64()
+  macosArm64()
+  macosX64()
 
-    linuxX64()
-    linuxArm64()
+  linuxX64()
+  linuxArm64()
 
 
   js {
@@ -226,10 +227,15 @@ publishing {
   }
 
 
-  publications["kotlinMultiplatform"].apply {
+  publications.all {
     this as MavenPublication
 
     pom {
+
+      name.set("KLog")
+      description.set("Kotlin multiplatform logging implementation")
+      url.set("https://github.com/danbrough/klog/")
+
 
       licenses {
         license {
@@ -244,11 +250,17 @@ publishing {
         url.set("https://github.com/danbrough/klog/")
       }
 
+      issueManagement {
+        system.set("GitHub")
+        url.set("https://github.com/danbrough/klog/issues")
+      }
+
       developers {
         developer {
           id.set("danbrough")
           name.set("Dan Brough")
           email.set("dan@danbrough.org")
+          organizationUrl.set("https://danbrough.org")
         }
       }
     }
@@ -261,7 +273,6 @@ signing {
   publishing.publications.all {
     sign(this)
   }
-  // sign(publishing.publications["kotlinMultiplatform"])
 }
 
 
