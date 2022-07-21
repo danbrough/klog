@@ -1,3 +1,5 @@
+import BuildVersion.buildVersionName
+import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
@@ -5,13 +7,17 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   kotlin("multiplatform")
-  id("org.jetbrains.dokka")
   id("com.android.library")
+  id("common")
   `maven-publish`
+  signing
+  id("org.jetbrains.dokka")
 }
 
-group = "org.danbrough.klog"
-version = "0.0.1"
+
+version = buildVersionName
+group = projectGroup
+
 
 buildscript {
   repositories {
@@ -36,9 +42,7 @@ kotlin {
   linuxX64()
 
   sourceSets {
-    val commonMain by getting {
-
-    }
+    val commonMain by getting {}
 
     val commonTest by getting {
       dependencies {
@@ -139,31 +143,91 @@ val javadocJar by tasks.registering(Jar::class) {
   from(tasks.dokkaHtml)
 }
 
+object Meta {
+  const val desc = "KLog - Logging for Kotlin"
+  const val license = "Apache-2.0"
+  const val licenseUrl = "https://opensource.org/licenses/Apache-2.0"
+  const val githubRepo = "danbrough/klog"
+
+  /*const val release = "https://s01.oss.sonatype.org/service/local/"
+  const val snapshot = "https://s01.oss.sonatype.org/content/repositories/snapshots/"*/
+  const val release = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+  const val snapshot = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+}
+
+
 publishing {
 
   repositories {
     maven(project.buildDir.resolve("m2").toURI()) {
       name = "m2"
     }
+
+    maven {
+      name = "oss"
+
+      val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
+      val mavenUrl = if (isReleaseVersion) Meta.release else Meta.snapshot
+
+      setUrl(mavenUrl)
+
+      credentials {
+        username = project.property("ossrhUsername")!!.toString().trim()
+        password = project.property("ossrhPassword")!!.toString().trim()
+      }
+    }
   }
 
-  publications.forEach {
-    if (it !is MavenPublication) {
-      return@forEach
+  publications.all {
+    if (this !is MavenPublication) return@all
+
+    artifact(javadocJar)
+
+    pom {
+
+      name.set("KLog")
+      description.set("Kotlin multiplatform logging implementation")
+      url.set("https://github.com/danbrough/klog/")
+
+
+      licenses {
+        license {
+          name.set(Meta.license)
+          url.set(Meta.licenseUrl)
+        }
+      }
+
+      scm {
+        connection.set("scm:git:git@github.com:danbrough/klog.git")
+        developerConnection.set("scm:git:git@github.com:danbrough/klog.git")
+        url.set("https://github.com/danbrough/klog/")
+      }
+
+      issueManagement {
+        system.set("GitHub")
+        url.set("https://github.com/danbrough/klog/issues")
+      }
+
+      developers {
+        developer {
+          id.set("danbrough")
+          name.set("Dan Brough")
+          email.set("dan@danbrough.org")
+          organizationUrl.set("https://danbrough.org")
+        }
+      }
     }
 
-    // We need to add the javadocJar to every publication
-    // because otherwise maven is complaining.
-    // It is not sufficient to only have it in the "root" folder.
-    it.artifact(javadocJar)
   }
+
+
 }
 
 android {
-
-  compileSdk = 33
+  compileSdk = ProjectProperties.SDK_VERSION
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-  namespace = project.group.toString()
+  namespace = projectGroup
+
 
   defaultConfig {
     minSdk = 23
@@ -177,11 +241,10 @@ android {
 
   signingConfigs.register("release") {
     storeFile = File(System.getProperty("user.home"), ".android/keystore")
-    keyAlias = "keyAlias"
+    keyAlias = "klog"
     storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
     keyPassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
   }
-
 
   lint {
     abortOnError = false
