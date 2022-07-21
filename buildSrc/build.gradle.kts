@@ -12,6 +12,11 @@ repositories {
   google()
 }
 
+dependencies {
+  implementation(kotlin("gradle-plugin", "1.7.10"))
+  implementation("com.android.tools.build:gradle:7.2.1")
+}
+
 /*
 kotlinDslPluginOptions {
   jvmTarget.set(provider { java.targetCompatibility.toString() })

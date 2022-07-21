@@ -1,4 +1,4 @@
-import BuildVersion.buildVersionName
+import Common_gradle.BuildVersion.buildVersionName
 import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
@@ -44,9 +44,9 @@ kotlin {
 
   linuxX64()
 
-  macosX64()
+/*  macosX64()
   macosArm64()
-  mingwX64()
+  mingwX64()*/
 
 
   sourceSets {
@@ -227,9 +227,15 @@ publishing {
     }
 
   }
-
-
 }
+
+
+signing {
+  publishing.publications.all {
+    sign(this)
+  }
+}
+
 
 android {
   compileSdk = ProjectProperties.SDK_VERSION
