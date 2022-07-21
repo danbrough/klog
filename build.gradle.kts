@@ -34,6 +34,9 @@ repositories {
 kotlin {
 
   jvm()
+  js {
+    nodejs()
+  }
 
   android {
     publishLibraryVariants("release")
