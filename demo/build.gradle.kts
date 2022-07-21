@@ -16,8 +16,9 @@ buildscript {
 repositories {
   mavenCentral()
   google()
-  //maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
-  maven("https://h1.danbrough.org/maven")
+  maven("https://s01.oss.sonatype.org/content/groups/public/")
+ // maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
+  //maven("https://h1.danbrough.org/maven")
 }
 
 
@@ -32,9 +33,11 @@ kotlin {
     linuxArm32Hfp()
     linuxArm64()
 
+/*
     js {
       nodejs()
     }
+*/
 
   } else if (osName.startsWith("Mac")) {
     macosArm64()

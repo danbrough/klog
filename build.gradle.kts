@@ -12,8 +12,8 @@ plugins {
 }
 
 
-version = "0.0.1-alpha25"
-group = "org.danbrough.klog"
+version = "0.0.1-alpha26"
+group = "org.danbrough"
 
 
 buildscript {
