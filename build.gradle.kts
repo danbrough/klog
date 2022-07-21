@@ -1,5 +1,3 @@
-import Common_gradle.BuildVersion.buildVersionName
-import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
@@ -8,15 +6,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   kotlin("multiplatform")
   id("com.android.library")
-  id("common")
   `maven-publish`
   signing
   id("org.jetbrains.dokka")
 }
 
 
-version = buildVersionName
-group = projectGroup
+version = "0.0.1-alpha25"
+group = "org.danbrough.klog"
 
 
 buildscript {
@@ -236,11 +233,14 @@ signing {
   }
 }
 
+object ProjectProperties {
+  const val SDK_VERSION = 33
+}
 
 android {
   compileSdk = ProjectProperties.SDK_VERSION
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-  namespace = projectGroup
+  namespace = project.group.toString()
 
 
   defaultConfig {
