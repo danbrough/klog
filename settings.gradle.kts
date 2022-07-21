@@ -14,6 +14,6 @@ plugins {
 }
 
 
-rootProject.name = "klog"
+rootProject.name = "klog2"
 
 

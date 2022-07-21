@@ -1,22 +1,17 @@
-import Common_gradle.BuildVersion.buildVersionName
-import Common_gradle.BuildEnvironment.hostTarget
-import ProjectProperties.projectGroup
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.konan.target.KonanTarget
 
 plugins {
   kotlin("multiplatform")
-  id("com.android.library")
-  id("common")
-  `maven-publish`
-  signing
   id("org.jetbrains.dokka")
-
-
+  id("com.android.library")
+  `maven-publish`
 }
+
+group = "org.danbrough.klog"
+version = "0.0.1"
 
 buildscript {
   repositories {
@@ -28,28 +23,6 @@ buildscript {
 repositories {
   mavenCentral()
   google()
-
-  maven("https://h1.danbrough.org/maven")
-}
-
-
-//buildVersionTasks()
-
-version = buildVersionName
-group = projectGroup
-
-
-
-
-tasks.create("testTask") {
-  doLast {
-    println("OS.NAME: ${System.getProperty("os.name")}")
-    println("OS.ARCH: ${System.getProperty("os.arch")}")
-    KonanTarget.predefinedTargets.forEach {
-      println("TARGET: ${it.key}: ${it.value}")
-    }
-    println("HOST TARGET: $hostTarget")
-  }
 }
 
 kotlin {
@@ -60,81 +33,17 @@ kotlin {
     publishLibraryVariants("release")
   }
 
-  macosArm64()
-  macosX64()
-
   linuxX64()
-
-
-/*
-  js {
-    nodejs()
-  }
-*/
-
-/*  if (!ProjectProperties.IDE_ACTIVE) {
-    linuxArm64()
-    linuxArm32Hfp()
-
-    mingwX64()
-    //mingwX86()
-
-    androidNativeArm32()
-    androidNativeArm64()
-    androidNativeX64()
-    androidNativeX86()
-
-    //iosArm32()
-    iosArm64()
-    //iosSimulatorArm64()
-    iosX64()
-
-    macosArm64()
-    macosX64()
-
-    tvosArm64()
-    //tvosSimulatorArm64()
-    tvosX64()
-
-    //wasm()
-    //wasm32()
-
-    //watchosArm32()
-    //watchosArm64()
-    //watchosSimulatorArm64()
-    //watchosX64()
-    //watchosX86()
-
-
-  }*/
-
-
-
 
   sourceSets {
     val commonMain by getting {
-      dependencies {
-        //  runtimeOnly(kotlin("reflect"))
-        implementation(kotlin("stdlib"))
-        // https://mvnrepository.com/artifact/io.ktor/ktor-utils
-        //implementation(Ktor.utils)
 
-      }
     }
 
     val commonTest by getting {
       dependencies {
         implementation(kotlin("test"))
-        implementation(KotlinX.coroutines.core)
       }
-    }
-
-    val posixMain by creating {
-      dependsOn(commonMain)
-    }
-
-    val posixTest by creating {
-      dependsOn(commonTest)
     }
 
     val jvmCommonMain by creating {
@@ -145,22 +54,19 @@ kotlin {
       dependsOn(commonTest)
     }
 
-
     val jvmMain by getting {
       dependsOn(jvmCommonMain)
     }
 
-    val jvmTest by getting {
-      dependsOn(jvmCommonTest)
-    }
-
-
     val androidMain by getting {
       dependsOn(jvmCommonMain)
     }
+    //  val androidAndroidTestRelease by getting
 
     val androidTest by getting {
       dependsOn(jvmCommonTest)
+//      dependsOn(androidAndroidTestRelease)
+
     }
 
 
@@ -175,7 +81,7 @@ kotlin {
 
   }
 
-
+  val posixMain by sourceSets.creating {}
 
   targets.withType(KotlinNativeTarget::class).all {
 
@@ -193,142 +99,92 @@ kotlin {
       }
     }
 
-    compilations["test"].defaultSourceSet {
+/*TODO fix
+        compilations["test"].defaultSourceSet {
       dependsOn(sourceSets["posixTest"])
-    }
+    }*/
 
+  }
+
+}
+
+tasks.withType<AbstractTestTask>() {
+  testLogging {
+    events = setOf(
+      TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
+    )
+    exceptionFormat = TestExceptionFormat.FULL
+    showStandardStreams = true
+    showStackTraces = true
+  }
+  outputs.upToDateWhen {
+    false
   }
 }
 
-object Meta {
-  const val desc = "KLog - Logging for Kotlin"
-  const val license = "Apache-2.0"
-  const val licenseUrl = "https://opensource.org/licenses/Apache-2.0"
-  const val githubRepo = "danbrough/klog"
-
-  /*const val release = "https://s01.oss.sonatype.org/service/local/"
-  const val snapshot = "https://s01.oss.sonatype.org/content/repositories/snapshots/"*/
-  const val release = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-  const val snapshot = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+tasks.withType(KotlinCompile::class) {
+  kotlinOptions {
+    jvmTarget = "11"
+  }
 }
 
-/*
-val dokkaOutputDir = "$buildDir/dokka"
 
-val dokkaHtml = tasks.getByName<org.jetbrains.dokka.gradle.DokkaTask>("dokkaHtml") {
-  outputDirectory.set(file(dokkaOutputDir))
+tasks.dokkaHtml.configure {
+  outputDirectory.set(buildDir.resolve("dokka"))
 }
 
-val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
-  dependsOn(dokkaHtml)
+
+val javadocJar by tasks.registering(Jar::class) {
   archiveClassifier.set("javadoc")
-  from(dokkaHtml.outputDirectory)
+  from(tasks.dokkaHtml)
 }
-*/
-
-
-
 
 publishing {
-  repositories {
 
-    maven(
-      project.properties["MAVEN_REPO"]?.toString() ?: project.buildDir.resolve("m2").toURI()
-    ) {
+  repositories {
+    maven(project.buildDir.resolve("m2").toURI()) {
       name = "m2"
     }
+  }
 
-    maven {
-
-      name = "oss"
-
-
-      val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
-      val mavenUrl = if (isReleaseVersion) Meta.release else Meta.snapshot
-
-      setUrl(mavenUrl)
-
-      credentials {
-        username = project.property("ossrhUsername")!!.toString().trim()
-        password = project.property("ossrhPassword")!!.toString().trim()
-      }
+  publications.forEach {
+    if (it !is MavenPublication) {
+      return@forEach
     }
 
-  }
-
-
-  publications.all {
-    this as MavenPublication
-    println("CONFIGURING POM FOR $this $name")
-
-    pom {
-
-      name.set("KLog")
-      description.set("Kotlin multiplatform logging implementation")
-      url.set("https://github.com/danbrough/klog/")
-
-
-      licenses {
-        license {
-          name.set(Meta.license)
-          url.set(Meta.licenseUrl)
-        }
-      }
-
-      scm {
-        connection.set("scm:git:git@github.com:danbrough/klog.git")
-        developerConnection.set("scm:git:git@github.com:danbrough/klog.git")
-        url.set("https://github.com/danbrough/klog/")
-      }
-
-      issueManagement {
-        system.set("GitHub")
-        url.set("https://github.com/danbrough/klog/issues")
-      }
-
-      developers {
-        developer {
-          id.set("danbrough")
-          name.set("Dan Brough")
-          email.set("dan@danbrough.org")
-          organizationUrl.set("https://danbrough.org")
-        }
-      }
-    }
-
+    // We need to add the javadocJar to every publication
+    // because otherwise maven is complaining.
+    // It is not sufficient to only have it in the "root" folder.
+    it.artifact(javadocJar)
   }
 }
-
-
-signing {
-  publishing.publications.all {
-    sign(this)
-  }
-}
-
 
 android {
-  compileSdk = ProjectProperties.SDK_VERSION
+
+  compileSdk = 33
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-  namespace = projectGroup
+  namespace = project.group.toString()
 
   defaultConfig {
-    minSdk = ProjectProperties.MIN_SDK_VERSION
-    targetSdk = ProjectProperties.SDK_VERSION
+    minSdk = 23
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
   }
 
   compileOptions {
-    sourceCompatibility = ProjectProperties.JAVA_VERSION
-    targetCompatibility = ProjectProperties.JAVA_VERSION
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
   }
 
   signingConfigs.register("release") {
-    storeFile = file("/home/dan/.android/keystore")
-    keyAlias = "klog"
+    storeFile = File(System.getProperty("user.home"), ".android/keystore")
+    keyAlias = "keyAlias"
     storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
     keyPassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
+  }
+
+
+  lint {
+    abortOnError = false
   }
 
 
@@ -348,35 +204,3 @@ android {
   }
 
 }
-
-
-
-
-allprojects {
-
-  tasks.withType<AbstractTestTask>() {
-    testLogging {
-      events = setOf(
-        TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
-      )
-      exceptionFormat = TestExceptionFormat.FULL
-      showStandardStreams = true
-      showStackTraces = true
-    }
-    outputs.upToDateWhen {
-      false
-    }
-  }
-
-  tasks.withType(KotlinCompile::class) {
-    kotlinOptions {
-      jvmTarget = ProjectProperties.KOTLIN_JVM_VERSION
-    }
-  }
-
-}
-
-
-
-
-

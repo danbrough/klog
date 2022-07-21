@@ -20,7 +20,6 @@ val stackDepth: Int
 @Suppress("NOTHING_TO_INLINE")
 actual inline fun platformStatementContext(): StatementContext =
   Thread.currentThread().let {
-    println("GETTING STACK ELEMENT AT $stackDepth")
     val stackElement = it.stackTrace[stackDepth]
     StatementContext(
       it.name, it.name,
