@@ -16,9 +16,8 @@ buildscript {
 repositories {
   mavenCentral()
   google()
-  maven("https://s01.oss.sonatype.org/content/groups/public/")
- // maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
-  //maven("https://h1.danbrough.org/maven")
+  if (project.hasProperty("useStaging"))
+    maven("https://s01.oss.sonatype.org/content/groups/staging/")
 }
 
 
@@ -66,13 +65,13 @@ kotlin {
 }
 
 android {
-  compileSdk = 31
+  compileSdk = 32
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
   namespace = "org.danbrough.klog.demo"
 
   defaultConfig {
     minSdk = 23
-    targetSdk = 31
+    targetSdk = 32
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
   }

@@ -13,9 +13,11 @@ plugins {
   id("org.jetbrains.dokka")
 }
 
+ProjectProperties.init(project)
 
 version = "0.0.1-alpha27"
 group = "org.danbrough"
+
 
 
 buildscript {
@@ -42,6 +44,8 @@ kotlin {
   }
 
   linuxX64()
+  linuxArm32Hfp()
+  linuxArm64()
   mingwX64()
   macosX64()
   macosArm64()
@@ -98,8 +102,6 @@ kotlin {
 
   targets.withType(KotlinNativeTarget::class).all {
 
-    //println("NATIVE-TARGET: $name : apple:${this.konanTarget.family.isAppleFamily} linux:${this.konanTarget.family}")
-
     compilations["main"].apply {
 
       cinterops.create("klog") {
@@ -107,17 +109,10 @@ kotlin {
         defFile(project.file("src/posixMain/klog.def"))
       }
 
-      println("COMPILATION $this $name")
       defaultSourceSet {
         dependsOn(posixMain)
       }
     }
-
-/*TODO fix
-        compilations["test"].defaultSourceSet {
-      dependsOn(sourceSets["posixTest"])
-    }*/
-
   }
 
 }
