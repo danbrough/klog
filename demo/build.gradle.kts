@@ -16,8 +16,8 @@ buildscript {
 repositories {
   mavenCentral()
   google()
-  if (project.hasProperty("useStaging"))
-    maven("https://s01.oss.sonatype.org/content/groups/staging/")
+  //shouldn't need this
+  maven("https://s01.oss.sonatype.org/content/groups/staging/")
 }
 
 
