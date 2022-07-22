@@ -42,13 +42,14 @@ kotlin {
   }
 
   linuxX64()
-   macosX64()
-
-  macosArm64()
   mingwX64()
+  macosX64()
+  macosArm64()
+
+  val commonMain by sourceSets.getting {}
 
   sourceSets {
-    val commonMain by getting {}
+
 
     val commonTest by getting {
       dependencies {
@@ -91,7 +92,9 @@ kotlin {
 
   }
 
-  val posixMain by sourceSets.creating {}
+  val posixMain by sourceSets.creating {
+    dependsOn(commonMain)
+  }
 
   targets.withType(KotlinNativeTarget::class).all {
 
