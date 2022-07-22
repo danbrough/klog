@@ -2,8 +2,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   `kotlin-dsl`
- // kotlin("multiplatform") version "1.7.10"
-
 }
 
 repositories {
@@ -16,8 +14,8 @@ dependencies {
   implementation(kotlin("gradle-plugin", "1.7.10"))
   implementation("com.android.tools.build:gradle:7.2.1")
   implementation("org.jetbrains.dokka:dokka-gradle-plugin:1.7.10")
-
 }
+
 
 /*
 kotlinDslPluginOptions {

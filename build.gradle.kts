@@ -42,10 +42,10 @@ kotlin {
   }
 
   linuxX64()
-  macosX64()
+   macosX64()
 
-  //macosArm64()
-  //mingwX64()
+  macosArm64()
+  mingwX64()
 
   sourceSets {
     val commonMain by getting {}
@@ -104,8 +104,9 @@ kotlin {
         defFile(project.file("src/posixMain/klog.def"))
       }
 
+      println("COMPILATION $this $name")
       defaultSourceSet {
-        dependsOn(sourceSets["posixMain"])
+        dependsOn(posixMain)
       }
     }
 
