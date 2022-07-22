@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
@@ -12,7 +14,7 @@ plugins {
 }
 
 
-version = "0.0.1-alpha26"
+version = "0.0.1-alpha27"
 group = "org.danbrough"
 
 
@@ -40,11 +42,10 @@ kotlin {
   }
 
   linuxX64()
+  macosX64()
 
-/*  macosX64()
-  macosArm64()
-  mingwX64()*/
-
+  //macosArm64()
+  //mingwX64()
 
   sourceSets {
     val commonMain by getting {}
@@ -133,7 +134,7 @@ tasks.withType<AbstractTestTask>() {
 
 tasks.withType(KotlinCompile::class) {
   kotlinOptions {
-    jvmTarget = "11"
+    jvmTarget = ProjectProperties.KOTLIN_JVM_VERSION
   }
 }
 
@@ -142,24 +143,10 @@ tasks.dokkaHtml.configure {
   outputDirectory.set(buildDir.resolve("dokka"))
 }
 
-
 val javadocJar by tasks.registering(Jar::class) {
   archiveClassifier.set("javadoc")
   from(tasks.dokkaHtml)
 }
-
-object Meta {
-  const val desc = "KLog - Logging for Kotlin"
-  const val license = "Apache-2.0"
-  const val licenseUrl = "https://opensource.org/licenses/Apache-2.0"
-  const val githubRepo = "danbrough/klog"
-
-  /*const val release = "https://s01.oss.sonatype.org/service/local/"
-  const val snapshot = "https://s01.oss.sonatype.org/content/repositories/snapshots/"*/
-  const val release = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-  const val snapshot = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-}
-
 
 publishing {
 
@@ -168,11 +155,15 @@ publishing {
       name = "m2"
     }
 
+
     maven {
       name = "oss"
 
       val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
-      val mavenUrl = if (isReleaseVersion) Meta.release else Meta.snapshot
+      val mavenUrl = if (isReleaseVersion)
+        "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+      else
+        "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
       setUrl(mavenUrl)
 
@@ -186,9 +177,11 @@ publishing {
   publications.all {
     if (this !is MavenPublication) return@all
 
-    artifact(javadocJar)
+    if (!project.hasProperty("skipDokka"))
+      artifact(javadocJar)
 
     pom {
+
 
       name.set("KLog")
       description.set("Kotlin multiplatform logging implementation")
@@ -197,8 +190,8 @@ publishing {
 
       licenses {
         license {
-          name.set(Meta.license)
-          url.set(Meta.licenseUrl)
+          name.set("Apache-2.0")
+          url.set("https://opensource.org/licenses/Apache-2.0")
         }
       }
 
@@ -233,9 +226,7 @@ signing {
   }
 }
 
-object ProjectProperties {
-  const val SDK_VERSION = 33
-}
+
 
 android {
   compileSdk = ProjectProperties.SDK_VERSION
@@ -244,13 +235,13 @@ android {
 
 
   defaultConfig {
-    minSdk = 23
+    minSdk = ProjectProperties.MIN_SDK_VERSION
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = ProjectProperties.JAVA_VERSION
+    targetCompatibility = ProjectProperties.JAVA_VERSION
   }
 
   signingConfigs.register("release") {
