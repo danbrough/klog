@@ -3,8 +3,6 @@
 
 cd `dirname $0` && cd ..
 
-
-
 #arrIN=(${IN//;/ })
 
 function set_gradle_prop(){
@@ -29,4 +27,8 @@ while true; do
         * ) echo "Please answer yes or no.";;
     esac
 done
+
+git add .
+git commit -am "$VERSION_NAME"
+
 
