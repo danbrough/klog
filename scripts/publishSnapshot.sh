@@ -15,7 +15,9 @@ function get_gradle_prop(){
   cat gradle.properties  | sed -n -e '/'$1'=/p' | sed -e 's|'$1'=||g'
 }
 
-VERSION_NAME=$(./gradlew -q nextBuildVersionName)
+set_gradle_prop build.snapshot true
+
+VERSION_NAME=$(./gradlew -q buildVersionNameNext)
 
 echo Creating release: $VERSION_NAME
 
@@ -28,34 +30,3 @@ while true; do
     esac
 done
 
-if git tag | grep "$VERSION_NAME" > /dev/null; then
-  while true; do
-    read -p "Existing Tag $VERSION_NAME found. Shall I delete it?: " yn
-    case $yn in
-        [Yy]* ) break;;
-        [Nn]* ) exit;;
-        * ) echo "Please answer yes or no.";;
-    esac
-  done
-  echo removing existing tag "$VERSION_NAME"
-  git tag -d "$VERSION_NAME"
-  git push origin --delete "$VERSION_NAME"
-fi
-
-
-
-
-
-#sed -i README.md -e 's/## Latest version:.*/## Latest version: '$VERSION_NAME'/g'
-
-#./gradlew dokkaGfmMultiModule || exit 1
-
-./gradlew -q buildVersionIncrement
-git add .
-git commit -am "$VERSION_NAME"
-git tag "$VERSION_NAME" && git push && git push origin "$VERSION_NAME"
-
-#./gradlew publishToMavenLocal || exit 1
-./gradlew publishAllPublicationsToMavenRepository
-
-./scripts/syncmaven.sh

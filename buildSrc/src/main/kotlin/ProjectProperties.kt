@@ -15,6 +15,9 @@ object ProjectProperties {
   val IDE_ACTIVE = System.getProperty("idea.active", "false").toBoolean()
 
 
+  lateinit var M2_REPOSITORY: URI
+
+
   lateinit var localProperties: Properties
   var buildVersion: Int = 0
   lateinit var projectGroup: String
@@ -91,6 +94,9 @@ object ProjectProperties {
 
 
   fun init(project: Project) {
+
+    M2_REPOSITORY = project.rootProject.buildDir.resolve("m2").toURI()
+
     localProperties = project.rootProject.file("local.properties").let { localPropsFile ->
       Properties().also { props ->
         if (localPropsFile.exists()) FileReader(localPropsFile).use { props.load(it) }
@@ -129,7 +135,6 @@ object ProjectProperties {
 
     project.tasks.create("buildVersionIncrement") {
       doLast {
-        val currentVersion = buildVersion
         project.rootProject.file("gradle.properties").readLines().map {
           if (it.contains("build.version=")) "build.version=${buildVersion + 1}"
           else it
@@ -143,8 +148,6 @@ object ProjectProperties {
         println(buildVersionName(buildVersion + 1))
       }
     }
-
-
   }
 
 }

@@ -150,10 +150,9 @@ val javadocJar by tasks.registering(Jar::class) {
 publishing {
 
   repositories {
-    maven(project.buildDir.resolve("m2").toURI()) {
+    maven(ProjectProperties.M2_REPOSITORY) {
       name = "m2"
     }
-
 
     maven {
       name = "oss"
@@ -176,7 +175,7 @@ publishing {
   publications.all {
     if (this !is MavenPublication) return@all
 
-    if (!project.hasProperty("skipDokka"))
+    if (project.hasProperty("publishDocs"))
       artifact(javadocJar)
 
     pom {
@@ -218,10 +217,11 @@ publishing {
   }
 }
 
-
-signing {
-  publishing.publications.all {
-    sign(this)
+if (project.hasProperty("signPublications")) {
+  signing {
+    publishing.publications.all {
+      sign(this)
+    }
   }
 }
 

@@ -148,7 +148,10 @@ data class KLogImpl(
 
   @Suppress("NOTING_TO_INLINE")
   private inline fun log(
-    level: Level, msg: String?, err: Throwable?, noinline msgProvider: LogMessageFunction?
+    level: Level,
+    msg: String?,
+    err: Throwable?,
+    noinline msgProvider: LogMessageFunction?
   ) {
     val logWriter = writer
     if (logWriter == KLogWriters.noop) return
