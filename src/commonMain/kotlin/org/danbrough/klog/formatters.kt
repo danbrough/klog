@@ -25,6 +25,7 @@ object KMessageFormatters {
 
   val verbose: KMessageFormatter = { name, level, msg, exception, ctx ->
     buildString {
+      append("DUDE!:")
       append(level.toString().let { if (it.length < 5) " $it:" else "$it:" })
       append(name)
       append('\t')

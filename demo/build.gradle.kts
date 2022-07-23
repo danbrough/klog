@@ -16,7 +16,9 @@ buildscript {
 repositories {
   mavenCentral()
   google()
-  //shouldn't need this
+  //for the latest snapshot versions
+  maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+  //shouldn't need this, unless it hasn't reached maven central
   maven("https://s01.oss.sonatype.org/content/groups/staging/")
 }
 
