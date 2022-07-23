@@ -23,7 +23,7 @@ tasks.create("buildVersionName") {
 
 tasks.create("buildVersionNext") {
   doLast {
-    println("NEXT: " + project.buildVersionName(project.buildVersion + 1))
+    println(project.buildVersionName(project.buildVersion + 1))
   }
 }
 

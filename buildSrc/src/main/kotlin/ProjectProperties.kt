@@ -20,12 +20,13 @@ object ProjectProperties {
   lateinit var projectGroup: String
   var buildSnapshot = false
   private lateinit var buildVersionFormat: String
+  private var buildVersionOffset = 0
 
   val buildVersionName: String
     get() = buildVersionName()
 
   private fun buildVersionName(version: Int = buildVersion) =
-    buildVersionFormat.format(version)
+    buildVersionFormat.format(version - buildVersionOffset)
 
 
 /*
@@ -96,19 +97,10 @@ object ProjectProperties {
       }
     }
 
-    /*
-    project.group=org.danbrough
-
-build.version=26
-build.version.format=0.0.1-alpha%02d
-build.version.offset=0
-build.snapshot=false
-build.snapshot.format=0.0.1-beta01-SNAPSHOT
-     */
-
     projectGroup = getProjectProperty(project, "project.group", "org.danbrough")
     buildSnapshot = getProjectProperty(project, "build.snapshot", false)
     buildVersion = getProjectProperty(project, "build.version", 0)
+    buildVersionOffset = getProjectProperty(project, "build.version.offset", 0)
 
 
     buildVersionFormat = if (buildSnapshot)

@@ -15,8 +15,8 @@ plugins {
 
 ProjectProperties.init(project)
 
-version = "0.0.1-alpha27"
-group = "org.danbrough"
+version = ProjectProperties.buildVersionName
+group = ProjectProperties.projectGroup
 
 
 
