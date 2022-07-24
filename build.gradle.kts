@@ -232,6 +232,7 @@ if (project.hasProperty("signPublications")) {
 
 
 android {
+
   compileSdk = ProjectProperties.SDK_VERSION
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
   namespace = project.group.toString()
@@ -257,7 +258,6 @@ android {
   lint {
     abortOnError = false
   }
-
 
   buildTypes {
 
