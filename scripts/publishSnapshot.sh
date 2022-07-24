@@ -16,15 +16,6 @@ VERSION_NAME=$(./gradlew -q buildVersionNameNext)
 
 echo Creating release: $VERSION_NAME
 
-while true; do
-  read -p "Do you wish to proceed?: " yn
-  case $yn in
-  [Yy]*) break ;;
-  [Nn]*) exit ;;
-  *) echo "Please answer yes or no." ;;
-  esac
-done
-
 git add .
 git commit -am "$VERSION_NAME"
 

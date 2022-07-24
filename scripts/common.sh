@@ -8,10 +8,22 @@ get_gradle_prop(){
 }
 
 is_mac() {
-  if [ "$MACHTYPE" = "x86_64-apple-darwin21" ]; then
+  if [ "$OSTYPE" = "darwin21" ]; then
     return 0
   else
     return 1
   fi
+}
+
+
+message_prompt(){
+  while true; do
+    read -p "$1: " yn
+    case $yn in
+    [Yy]*) return 0 ;;
+    [Nn]*) return 1 ;;
+    *) echo "Please answer yes or no." ;;
+    esac
+  done
 }
 
