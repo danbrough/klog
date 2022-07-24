@@ -20,7 +20,7 @@ if ! message_prompt "Creating release $VERSION_NAME. Continue?"; then
   exit 0
 fi
 
-./gradlew -q buildVersionIncrement 
+./gradlew -q buildVersionIncrement
 
 git add .
 git commit -am "$VERSION_NAME"
