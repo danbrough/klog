@@ -1,14 +1,14 @@
 #!/bin/bash
 
+
+cd $(dirname $0) && cd ..
+source scripts/common.sh
+
 if is_mac; then
   ./gradlew -PpublishDocs -PsignPublications publishMacTargetsToOSSRepository
   exit 0
 fi
 
-cd $(dirname $0) && cd ..
-source scripts/common.sh
-
-#arrIN=(${IN//;/ })
 
 set_gradle_prop build.snapshot true
 
