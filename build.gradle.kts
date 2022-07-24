@@ -1,5 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
+import BuildEnvironment.platformName
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
@@ -49,6 +50,9 @@ kotlin {
   mingwX64()
   macosX64()
   macosArm64()
+  iosArm64()
+  tvosX64()
+  watchosArm64()
 
   val commonMain by sourceSets.getting {}
 
@@ -270,4 +274,14 @@ android {
     }
   }
 
+}
+
+
+tasks.create("publishMacTargetsToOSSRepository") {
+  doLast {
+    kotlin.targets.withType<KotlinNativeTarget>().filter { it.konanTarget.family.isAppleFamily }
+      .map { it.konanTarget.platformName }.forEach {
+        dependsOn("publish${it.capitalize()}PublicationToOssRepository")
+      }
+  }
 }

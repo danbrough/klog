@@ -2,16 +2,10 @@
 
 
 cd `dirname $0` && cd ..
+source scripts/common.sh
 
 #arrIN=(${IN//;/ })
 
-function set_gradle_prop(){
-  sed -i gradle.properties  -e 's|^'$1'=.*|'$1'='$2'|g'
-}
-
-function get_gradle_prop(){
-  cat gradle.properties  | sed -n -e '/'$1'=/p' | sed -e 's|'$1'=||g'
-}
 
 set_gradle_prop build.snapshot true
 
@@ -31,4 +25,8 @@ done
 git add .
 git commit -am "$VERSION_NAME"
 
-
+if is_mac; then
+  ./gradlew   -PpublishDocs -PsignPublications publishMacTargetsToOSSRepository
+else
+  ./gradlew publishAllPublicationsToOssRepository  -PpublishDocs -PsignPublications
+fi
