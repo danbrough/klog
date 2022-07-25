@@ -6,8 +6,11 @@ import org.danbrough.klog.klogName
 
 
 class A {
-  //We have to provide the fully qualified name for the JS platform
-  //otherwise could just use `klog()`
+  /**
+   *We have to provide a log name for the JS platform
+   * otherwise could just use `klog()`
+   */
+
   private val log = klog("a.A")
 
 
