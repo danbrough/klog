@@ -146,6 +146,10 @@ tasks.dokkaHtml.configure {
   outputDirectory.set(buildDir.resolve("dokka"))
 }
 
+tasks.dokkaJekyll.configure {
+  outputDirectory.set(buildDir.resolve("jekyll"))
+}
+
 val javadocJar by tasks.registering(Jar::class) {
   archiveClassifier.set("javadoc")
   from(tasks.dokkaHtml)
@@ -162,10 +166,9 @@ publishing {
       name = "oss"
 
       val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
-      val mavenUrl = if (isReleaseVersion)
-        "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-      else
-        "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+      val mavenUrl =
+        if (isReleaseVersion) "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+        else "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
       setUrl(mavenUrl)
 
@@ -179,8 +182,7 @@ publishing {
   publications.all {
     if (this !is MavenPublication) return@all
 
-    if (project.hasProperty("publishDocs"))
-      artifact(javadocJar)
+    if (project.hasProperty("publishDocs")) artifact(javadocJar)
 
     pom {
 
@@ -278,9 +280,8 @@ android {
 
 
 tasks.create("publishMacTargetsToOSSRepository") {
-    kotlin.targets.withType<KotlinNativeTarget>().filter { it.konanTarget.family.isAppleFamily }
-      .map { it.konanTarget.platformName }.forEach {
-        dependsOn("publish${it.capitalize()}PublicationToOssRepository")
-      }
-
+  kotlin.targets.withType<KotlinNativeTarget>().filter { it.konanTarget.family.isAppleFamily }
+    .map { it.konanTarget.platformName }.forEach {
+      dependsOn("publish${it.capitalize()}PublicationToOssRepository")
+    }
 }
