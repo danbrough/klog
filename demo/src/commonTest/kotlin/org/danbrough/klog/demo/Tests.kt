@@ -11,6 +11,7 @@ class Tests {
 
   @Test
   fun test1() {
+
     println("test1()")
     println("klogname: ${this::class.klogName()}")
     println("LOG: $log")
