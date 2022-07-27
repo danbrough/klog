@@ -14,9 +14,9 @@ actual inline fun platformStatementContext(): StatementContext =
 actual fun getTimeMillis(): Long = timeInMillisSinceEpoch().toLong()
 
 @ThreadLocal
-object PosixKLogRegistry : DefaultLogRegistry()
+object PosixKLogRegistry : DefaultLogFactory()
 
-actual fun createKLogRegistry(): KLogRegistry = PosixKLogRegistry
+actual fun createKLogRegistry(): KLogFactory = PosixKLogRegistry
 
 
 actual fun KClass<*>.klogName(): String = qualifiedName!!.removeSuffix(".Companion")

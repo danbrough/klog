@@ -1,6 +1,6 @@
 package org.danbrough.klog
 
-private object JvmLogRegistry : DefaultLogRegistry()
+private object JvmLogRegistry : DefaultLogFactory()
 
-actual fun createKLogRegistry(): KLogRegistry = JvmLogRegistry
+actual fun createKLogRegistry(): KLogFactory = JvmLogRegistry
 

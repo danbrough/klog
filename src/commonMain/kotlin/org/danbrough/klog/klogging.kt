@@ -10,7 +10,7 @@ enum class Level {
   TRACE, DEBUG, INFO, WARN, ERROR;
 }
 
-expect fun createKLogRegistry(): KLogRegistry
+expect fun createKLogRegistry(): KLogFactory
 
 //default global KLogRegistry instance
 val kLogRegistry = createKLogRegistry()
@@ -19,47 +19,21 @@ val kLogRegistry = createKLogRegistry()
 @return Simple class name on JS and the fully qualified elsewhere
  */
 expect fun KClass<*>.klogName(): String
+
 expect fun getTimeMillis(): Long
 
-@Suppress("NOTHING_TO_INLINE")
 inline fun <reified T : Any> T.klog(): KLog =
-  kLogRegistry.get(this::class.klogName(), null, null, null)
+  kLogRegistry[this::class.klogName()]
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun <reified T : Any> T.klog(
-  level: Level? = null,
-  noinline writer: KLogWriter? = null,
-  noinline messageFormatter: KMessageFormatter? = null,
-  noinline nameFormatter: KNameFormatter? = null,
-): KLog = kLogRegistry.get(this::class.klogName(), level, writer, messageFormatter, nameFormatter)
+inline fun <reified T : Any> T.klog(level: Level? = null): KLog =
+  kLogRegistry[this::class.klogName()]
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun <reified T : Any> T.klog(
-  config: KLog.() -> Unit
-): KLog = kLogRegistry.get(this::class.klogName(), null, null, null).also(config)
+inline fun <reified T : Any> T.klog(config: KLog.() -> Unit): KLog =
+  kLogRegistry[this::class.klogName()].also(config)
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun klog(
-  name: String,
-  level: Level? = null,
-  noinline writer: KLogWriter? = null,
-  noinline messageFormatter: KMessageFormatter? = null,
-  noinline nameFormatter: KNameFormatter? = null,
-): KLog = kLogRegistry.get(name, level, writer, messageFormatter, nameFormatter)
+inline fun klog(tag: String): KLog = kLogRegistry[tag]
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun klog(
-  name: String
-): KLog = kLogRegistry.get(name, null, null, null, null)
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun klog(
-  clazz: KClass<*>,
-  level: Level? = null,
-  noinline writer: KLogWriter? = null,
-  noinline messageFormatter: KMessageFormatter? = null,
-  noinline nameFormatter: KNameFormatter? = null,
-): KLog = kLogRegistry.get(clazz.klogName(), level, writer, messageFormatter, nameFormatter)
+inline fun klog(clazz: KClass<*>): KLog = kLogRegistry[clazz.klogName()]
 
 
 

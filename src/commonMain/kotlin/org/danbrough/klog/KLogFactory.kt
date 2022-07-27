@@ -1,31 +1,14 @@
 package org.danbrough.klog
 
-import kotlin.native.concurrent.ThreadLocal
-
 
 @Suppress("LeakingThis", "MemberVisibilityCanBePrivate")
-abstract class KLogRegistry {
+abstract class KLogFactory {
 
   companion object {
     const val ROOT_LOG_NAME = ""
   }
 
-  abstract operator fun get(name: String): KLog
-
-  @Suppress("NOTING_TO_INLINE")
-  inline fun get(
-    name: String,
-    level: Level? = null,
-    noinline writer: KLogWriter? = null,
-    noinline messageFormatter: KMessageFormatter? = null,
-    noinline nameFormatter: KNameFormatter? = null,
-
-    ): KLog = this[name].also {
-    if (level != null) it.level = level
-    if (messageFormatter != null) it.messageFormatter = messageFormatter
-    if (writer != null) it.writer = writer
-    if (nameFormatter != null) it.nameFormatter = nameFormatter
-  }
+  abstract operator fun get(tag: String): KLog
 
   abstract fun getLogs(): Set<KLog>
 
@@ -34,22 +17,23 @@ abstract class KLogRegistry {
 }
 
 
+//@Suppress("LeakingThis")
 @Suppress("LeakingThis")
-open class DefaultLogRegistry(
+open class DefaultLogFactory(
   level: Level = Level.WARN,
   formatter: KMessageFormatter = KMessageFormatters.simple,
   writer: KLogWriter = KLogWriters.noop
-) : KLogRegistry() {
+) : KLogFactory() {
 
   private var logs = mutableMapOf<String, KLogImpl>()
 
   init {
-    logs[ROOT_LOG_NAME] = KLogImpl(this, ROOT_LOG_NAME, level, writer, formatter)
+    logs[ROOT_LOG_NAME] = KLogImpl(this, ROOT_LOG_NAME, KLogConf(level,writer,formatter))
   }
 
-  override operator fun get(name: String): KLog =
-    logs[name] ?: getParent(name).copy(name = name).also {
-      logs[name] = it as KLogImpl
+  override operator fun get(tag: String): KLog =
+    logs[tag] ?: getParent(tag).copy(tag = tag).also {
+      logs[tag] = it as KLogImpl
     }
 
 

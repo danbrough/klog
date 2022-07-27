@@ -18,28 +18,17 @@ data class StatementContext(
 
 expect fun platformStatementContext(): StatementContext
 
-//for formatting the [KLog.name] field
-typealias KNameFormatter = (String) -> String
+//for formatting the [KLog.tag] field
+typealias KTagFormatter = (String) -> String
 
+data class KLogConf(
+  var level: Level,
+  var writer: KLogWriter,
+  var messageFormatter: KMessageFormatter
+)
 
 interface KLog {
-  val name: String
-  var level: Level
-  var writer: KLogWriter
-  var messageFormatter: KMessageFormatter
-  var nameFormatter: KNameFormatter?
-
-  val displayName: String
-    get() = nameFormatter?.invoke(name) ?: name
-
-  fun copy(
-    name: String = this.name,
-    level: Level = this.level,
-    writer: KLogWriter = this.writer,
-    messageFormatter: KMessageFormatter = this.messageFormatter,
-    nameFormatter: KNameFormatter? = this.nameFormatter
-  ): KLog
-
+  val tag: String
 
   fun trace(msg: String? = null, err: Throwable? = null) = trace(msg, err, null)
 
@@ -62,73 +51,46 @@ interface KLog {
   fun error(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
 
   val isTraceEnabled: Boolean
-    get() = level <= Level.TRACE
 
   val isDebugEnabled: Boolean
-    get() = level <= Level.DEBUG
 
   val isInfoEnabled: Boolean
-    get() = level <= Level.INFO
 
   val isWarnEnabled: Boolean
-    get() = level <= Level.WARN
 
   val isErrorEnabled: Boolean
-    get() = level <= Level.ERROR
 
   val isEnabled: Boolean
-    get() = isErrorEnabled && writer != KLogWriters.noop
 }
 
-@Suppress("MemberVisibilityCanBePrivate")
+@Suppress("MemberVisibilityCanBePrivate", "OVERRIDE_BY_INLINE")
 data class KLogImpl(
-  private val registry: KLogRegistry,
-  override val name: String,
-  private var _level: Level,
-  private var _writer: KLogWriter,
-  private var _messageFormatter: KMessageFormatter,
-  private var _nameFormatter: KNameFormatter? = null
+  private val registry: KLogFactory,
+  override val tag: String,
+  var conf: KLogConf
 ) : KLog {
 
-  override var level: Level
-    get() = _level
-    set(value) {
-      registry.applyToBranch(name) {
-        (this as KLogImpl)._level = value
-      }
-    }
+  private val displayName: String = tag
 
-  override var writer: KLogWriter
-    get() = _writer
-    set(value) {
-      registry.applyToBranch(name) {
-        (this as KLogImpl)._writer = value
-      }
-    }
+  override val isTraceEnabled: Boolean
+    inline get() = conf.level >= Level.TRACE
 
-  override var messageFormatter: KMessageFormatter
-    get() = _messageFormatter
-    set(value) {
-      registry.applyToBranch(name) {
-        (this as KLogImpl)._messageFormatter = value
-      }
-    }
+  override val isDebugEnabled: Boolean
+    inline get() = conf.level >= Level.DEBUG
 
-  override var nameFormatter: KNameFormatter?
-    get() = _nameFormatter
-    set(value) {
-      registry.applyToBranch(name) {
-        (this as KLogImpl)._nameFormatter = value
-      }
-    }
+  override val isInfoEnabled: Boolean
+    inline get() = conf.level >= Level.INFO
 
-  override fun copy(
-    name: String,
-    level: Level,
-    writer: KLogWriter,
-    messageFormatter: KMessageFormatter,
-    nameFormatter: KNameFormatter?
-  ): KLog = KLogImpl(registry, name, level, writer, messageFormatter, nameFormatter)
+  override val isWarnEnabled: Boolean
+    inline get() = conf.level >= Level.WARN
+
+  override val isErrorEnabled: Boolean
+    inline get() = conf.level >= Level.ERROR
+
+
+  override val isEnabled: Boolean
+    get() = isErrorEnabled
+
 
   override fun trace(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
     log(Level.TRACE, msg, err, msgProvider)
@@ -153,10 +115,10 @@ data class KLogImpl(
     err: Throwable?,
     noinline msgProvider: LogMessageFunction?
   ) {
-    val logWriter = writer
+    val logWriter = conf.writer
     if (logWriter == KLogWriters.noop) return
     if (msg == null && msgProvider == null) throw Error("Either provide a message or a message provider")
-    if (level < this.level) return
+    if (level < conf.level) return
 
 
     val message = "${msg ?: err?.message ?: ""} ${
@@ -170,7 +132,7 @@ data class KLogImpl(
     logWriter.invoke(
       displayName,
       level,
-      messageFormatter.invoke(name, level, message, err, ctx),
+      conf.messageFormatter(tag, level, message, err, ctx),
       err
     )
   }
