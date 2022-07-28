@@ -28,10 +28,17 @@ inline fun <reified T : Any> T.klog(): KLog =
 inline fun <reified T : Any> T.klog(level: Level? = null): KLog =
   kLogRegistry[this::class.klogName()]
 
-inline fun <reified T : Any> T.klog(config: KLog.() -> Unit): KLog =
-  kLogRegistry[this::class.klogName()].also(config)
+inline fun <reified T : Any> T.klog(
+  tag: String = KLog.ROOT_LOG_TAG,
+  config: KLog.Conf.() -> Unit
+): KLog =
+  kLogRegistry[this::class.klogName()].also {
+    it.conf.config()
+  }
 
-inline fun klog(tag: String): KLog = kLogRegistry[tag]
+inline fun klog(tag: String, config: KLog.Conf.() -> Unit = {}): KLog = kLogRegistry[tag].also {
+  it.conf.config()
+}
 
 inline fun klog(clazz: KClass<*>): KLog = kLogRegistry[clazz.klogName()]
 

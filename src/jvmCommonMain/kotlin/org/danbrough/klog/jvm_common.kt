@@ -4,7 +4,7 @@ import kotlin.reflect.KClass
 
 val stackDepth: Int
   get() =
-    (if (System.getProperty("java.vendor").toString().contains("Android")) 10 else 9)
+    (if (System.getProperty("java.vendor").toString().contains("Android")) 7 else 6)
 
 @Suppress("NOTHING_TO_INLINE")
 actual inline fun platformStatementContext(): StatementContext =

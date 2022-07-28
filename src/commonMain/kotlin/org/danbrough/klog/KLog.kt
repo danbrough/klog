@@ -21,99 +21,91 @@ expect fun platformStatementContext(): StatementContext
 //for formatting the [KLog.tag] field
 typealias KTagFormatter = (String) -> String
 
-data class KLogConf(
-  var level: Level,
-  var writer: KLogWriter,
-  var messageFormatter: KMessageFormatter
-)
 
-interface KLog {
-  val tag: String
+abstract class KLog(val tag: String) {
 
-  fun trace(msg: String? = null, err: Throwable? = null) = trace(msg, err, null)
+  data class Conf(
+    var level: Level,
+    var writer: KLogWriter,
+    var messageFormatter: KMessageFormatter
+  )
 
-  fun trace(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
 
-  fun debug(msg: String? = null, err: Throwable? = null) = debug(msg, err, null)
+  companion object {
+    const val ROOT_LOG_TAG = ""
+  }
 
-  fun debug(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
+  abstract val conf: Conf
 
-  fun info(msg: String? = null, err: Throwable? = null) = info(msg, err, null)
+  inline fun trace(
+    msg: String? = null,
+    err: Throwable? = null,
+    noinline msgProvider: LogMessageFunction? = null
+  ) = log(Level.TRACE, msg, err, msgProvider)
 
-  fun info(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
+  inline fun debug(
+    msg: String? = null,
+    err: Throwable? = null,
+    noinline msgProvider: LogMessageFunction? = null
+  ) = log(Level.DEBUG, msg, err, msgProvider)
 
-  fun warn(msg: String? = null, err: Throwable? = null) = warn(msg, err, null)
+  inline fun info(
+    msg: String? = null,
+    err: Throwable? = null,
+    noinline msgProvider: LogMessageFunction? = null
+  ) = log(Level.INFO, msg, err, msgProvider)
 
-  fun warn(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
+  inline fun warn(
+    msg: String? = null,
+    err: Throwable? = null,
+    noinline msgProvider: LogMessageFunction? = null
+  ) = log(Level.WARN, msg, err, msgProvider)
 
-  fun error(msg: String? = null, err: Throwable? = null) = error(msg, err, null)
-
-  fun error(msg: String? = null, err: Throwable? = null, msgProvider: LogMessageFunction? = null)
+  inline fun error(
+    msg: String? = null,
+    err: Throwable? = null,
+    noinline msgProvider: LogMessageFunction? = null
+  ) = log(Level.ERROR, msg, err, msgProvider)
 
   val isTraceEnabled: Boolean
+    inline get() = conf.level <= Level.TRACE
 
   val isDebugEnabled: Boolean
+    inline get() = conf.level <= Level.DEBUG
 
   val isInfoEnabled: Boolean
+    inline get() = conf.level <= Level.INFO
 
   val isWarnEnabled: Boolean
+    inline get() = conf.level <= Level.WARN
 
   val isErrorEnabled: Boolean
+    inline get() = conf.level <= Level.ERROR
 
   val isEnabled: Boolean
-}
-
-@Suppress("MemberVisibilityCanBePrivate", "OVERRIDE_BY_INLINE")
-data class KLogImpl(
-  private val registry: KLogFactory,
-  override val tag: String,
-  var conf: KLogConf
-) : KLog {
-
-  private val displayName: String = tag
-
-  override val isTraceEnabled: Boolean
-    inline get() = conf.level >= Level.TRACE
-
-  override val isDebugEnabled: Boolean
-    inline get() = conf.level >= Level.DEBUG
-
-  override val isInfoEnabled: Boolean
-    inline get() = conf.level >= Level.INFO
-
-  override val isWarnEnabled: Boolean
-    inline get() = conf.level >= Level.WARN
-
-  override val isErrorEnabled: Boolean
-    inline get() = conf.level >= Level.ERROR
+    get() = isErrorEnabled && conf.writer != KLogWriters.noop
 
 
-  override val isEnabled: Boolean
-    get() = isErrorEnabled
-
-
-  override fun trace(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
-    log(Level.TRACE, msg, err, msgProvider)
-
-  override fun debug(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
-    log(Level.DEBUG, msg, err, msgProvider)
-
-  override fun info(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
-    log(Level.INFO, msg, err, msgProvider)
-
-  override fun warn(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
-    log(Level.WARN, msg, err, msgProvider)
-
-  override fun error(msg: String?, err: Throwable?, msgProvider: LogMessageFunction?) =
-    log(Level.ERROR, msg, err, msgProvider)
-
-
-  @Suppress("NOTING_TO_INLINE")
-  private inline fun log(
+  abstract fun log(
     level: Level,
     msg: String?,
     err: Throwable?,
-    noinline msgProvider: LogMessageFunction?
+    msgProvider: LogMessageFunction?
+  )
+}
+
+@Suppress("MemberVisibilityCanBePrivate", "OVERRIDE_BY_INLINE")
+class KLogImpl(tag: String, override val conf: KLog.Conf) : KLog(tag) {
+
+  private val displayName: String = tag
+
+
+  @Suppress("NOTING_TO_INLINE")
+  override fun log(
+    level: Level,
+    msg: String?,
+    err: Throwable?,
+    msgProvider: LogMessageFunction?
   ) {
     val logWriter = conf.writer
     if (logWriter == KLogWriters.noop) return
@@ -129,7 +121,7 @@ data class KLogImpl(
       platformStatementContext()
     }
 
-    logWriter.invoke(
+    logWriter(
       displayName,
       level,
       conf.messageFormatter(tag, level, message, err, ctx),

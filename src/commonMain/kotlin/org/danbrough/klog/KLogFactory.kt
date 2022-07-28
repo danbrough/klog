@@ -1,18 +1,17 @@
 package org.danbrough.klog
 
+import org.danbrough.klog.KLog.Companion.ROOT_LOG_TAG
+
 
 @Suppress("LeakingThis", "MemberVisibilityCanBePrivate")
 abstract class KLogFactory {
 
-  companion object {
-    const val ROOT_LOG_NAME = ""
-  }
 
   abstract operator fun get(tag: String): KLog
 
   abstract fun getLogs(): Set<KLog>
 
-  abstract fun applyToBranch(name: String, toApply: KLog.() -> Unit)
+  abstract fun applyToBranch(tag: String, toApply: KLog.() -> Unit)
 
 }
 
@@ -28,25 +27,27 @@ open class DefaultLogFactory(
   private var logs = mutableMapOf<String, KLogImpl>()
 
   init {
-    logs[ROOT_LOG_NAME] = KLogImpl(this, ROOT_LOG_NAME, KLogConf(level,writer,formatter))
+    logs[ROOT_LOG_TAG] = KLogImpl(ROOT_LOG_TAG, KLog.Conf(level, writer, formatter))
   }
 
   override operator fun get(tag: String): KLog =
-    logs[tag] ?: getParent(tag).copy(tag = tag).also {
-      logs[tag] = it as KLogImpl
+    logs[tag] ?: KLogImpl(tag, getParent(tag).conf).also {
+      logs[tag] = it
     }
 
 
-  private fun getParent(name: String): KLogImpl =
-    name.substringBeforeLast('.', ROOT_LOG_NAME).let { parentName ->
-      logs[parentName] ?: getParent(parentName)
+  private fun getParent(tag: String): KLogImpl =
+    tag.substringBeforeLast('.', ROOT_LOG_TAG).let { parentTag ->
+      logs[parentTag] ?: getParent(parentTag)
     }
 
   override fun getLogs(): Set<KLog> = logs.values.toSet()
 
-  //invoke [toApply] on all logs with names starting with (and including) [name]
-  override fun applyToBranch(name: String, toApply: KLog.() -> Unit) = logs.forEach {
-    if (it.key == name || it.key.startsWith("$name.")) it.value.toApply()
+  /**
+   *invoke [toApply] on all logs with tags starting with (and including) [tag]
+   */
+  override fun applyToBranch(tag: String, toApply: KLog.() -> Unit) = logs.forEach {
+    if (it.key == tag || it.key.startsWith("$tag.")) it.value.toApply()
   }
 }
 

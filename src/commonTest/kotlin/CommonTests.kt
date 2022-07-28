@@ -1,24 +1,24 @@
 import org.danbrough.klog.*
 import kotlin.test.Test
 
+/**
+ * Created top level logger for package "a"
+ */
+private val aLog = klog("a") {
+  writer = KLogWriters.stdOut
+  messageFormatter = KMessageFormatters.colored(KMessageFormatters.verbose)
+  level = Level.TRACE
+}
+
 
 class CommonTests {
-  companion object {
-    /**
-     * Create a root level log
-     */
-    private val rootLog =
-      klog(name = "", Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
-  }
 
-  /**
-   * Inherits configuration from the root level log
-   */
+
   private val log = klog()
 
   @Test
   fun test1() {
-    log.info("test1()")
+    aLog.info("test1()")
     log.debug("klogname: ${this::class.klogName()}")
     log.trace {
       "A lazy trace message"
@@ -28,7 +28,8 @@ class CommonTests {
 
     a.A().test()
 
-    rootLog.level = Level.INFO
+    log.trace("setting aLog level to INFO")
+    aLog.conf.level = Level.INFO
 
     a.A().test()
   }
