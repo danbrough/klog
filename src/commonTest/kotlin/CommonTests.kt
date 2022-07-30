@@ -1,4 +1,4 @@
-import org.danbrough.klog.*
+import klog.*
 import kotlin.test.Test
 
 /**

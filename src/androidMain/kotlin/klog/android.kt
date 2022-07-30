@@ -1,4 +1,4 @@
-package org.danbrough.klog
+package klog
 
 import android.util.Log
 actual fun createKLogRegistry(): KLogFactory {

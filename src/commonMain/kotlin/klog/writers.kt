@@ -1,4 +1,4 @@
-package org.danbrough.klog
+package klog
 
 import kotlin.native.concurrent.ThreadLocal
 

@@ -1,4 +1,4 @@
-package org.danbrough.klog
+package klog
 
 data class StatementContext(
   val threadName: String,

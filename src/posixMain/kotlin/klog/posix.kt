@@ -1,7 +1,7 @@
-package org.danbrough.klog
+package klog
 
-import org.danbrough.klog.posix.threadID
-import org.danbrough.klog.posix.timeInMillisSinceEpoch
+import klog.posix.threadID
+import klog.posix.timeInMillisSinceEpoch
 import kotlin.native.concurrent.ThreadLocal
 import kotlin.reflect.KClass
 

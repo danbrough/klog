@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package org.danbrough.klog
+package klog
 
 import kotlin.reflect.KClass
 

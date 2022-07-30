@@ -109,7 +109,7 @@ kotlin {
     compilations["main"].apply {
 
       cinterops.create("klog") {
-        packageName("org.danbrough.klog.posix")
+        packageName("klog.posix")
         defFile(project.file("src/posixMain/klog.def"))
       }
 

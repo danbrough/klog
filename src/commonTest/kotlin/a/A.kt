@@ -1,8 +1,8 @@
 package a
 
 
-import org.danbrough.klog.klog
-import org.danbrough.klog.klogName
+import klog.klog
+import klog.klogName
 
 
 class A {
@@ -25,7 +25,7 @@ class A {
     log.trace("A.test(): testing ${this::class.klogName()} ")
     log.debug("more testing")
     log.info("finished testing")
-    log.warn("${this::class.klogName()}")
+    log.warn(this::class.klogName())
     log.error("error message")
   }
 }

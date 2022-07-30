@@ -1,6 +1,6 @@
-package org.danbrough.klog
+package klog
 
-import org.danbrough.klog.KLog.Companion.ROOT_LOG_TAG
+import klog.KLog.Companion.ROOT_LOG_TAG
 
 
 @Suppress("LeakingThis", "MemberVisibilityCanBePrivate")

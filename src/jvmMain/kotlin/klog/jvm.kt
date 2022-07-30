@@ -1,4 +1,4 @@
-package org.danbrough.klog
+package klog
 
 private object JvmLogRegistry : DefaultLogFactory()
 
