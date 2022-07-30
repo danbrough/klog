@@ -2,7 +2,7 @@ package org.danbrough.klog.demo
 
 import android.app.Activity
 import android.app.Application
-import org.danbrough.klog.*
+import klog.*
 
 class KLogDemoApp : Application() {
 

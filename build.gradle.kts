@@ -141,9 +141,20 @@ tasks.withType(KotlinCompile::class) {
   }
 }
 
+tasks.register<Delete>("deleteDocs") {
+  setDelete(file("docs/api"))
+}
+
+tasks.register<Copy>("copyDocs") {
+  dependsOn("deleteDocs")
+  from(buildDir.resolve("dokka"))
+  destinationDir = file("docs/api")
+}
+
 
 tasks.dokkaHtml.configure {
   outputDirectory.set(buildDir.resolve("dokka"))
+  finalizedBy("copyDocs")
 }
 
 tasks.dokkaJekyll.configure {

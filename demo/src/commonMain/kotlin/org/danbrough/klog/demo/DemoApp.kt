@@ -2,7 +2,7 @@ package org.danbrough.klog.demo
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import org.danbrough.klog.*
+import klog.*
 
 
 val log = klog(

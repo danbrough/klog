@@ -1,6 +1,6 @@
 package org.danbrough.klog.demo
 
-import org.danbrough.klog.*
+import klog.*
 import kotlin.test.Test
 
 class Tests {
