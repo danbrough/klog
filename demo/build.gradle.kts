@@ -25,9 +25,8 @@ repositories {
 
 kotlin {
   jvm()
-
-
   android()
+
   val osName = System.getProperty("os.name")
   if (osName == "Linux") {
     linuxX64()
@@ -49,10 +48,10 @@ kotlin {
 
 
   sourceSets {
-    commonMain {
+    val commonMain by getting {
       dependencies {
         implementation("org.danbrough:klog:_")
-        implementation(KotlinX.coroutines.core)
+
       }
     }
 
@@ -60,6 +59,10 @@ kotlin {
       dependencies {
         implementation(kotlin("test"))
       }
+    }
+
+    val linuxX64Main by getting {
+      dependsOn(commonMain)
     }
   }
 

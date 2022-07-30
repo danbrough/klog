@@ -1,17 +1,15 @@
 package org.danbrough.klog.demo
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
+
 import klog.*
 
 
-val log = klog(
-  "org.danbrough.klog.demo",
-  level = Level.TRACE,
-  messageFormatter = KMessageFormatters.verbose.colored,
-  writer = KLogWriters.stdOut
-).also {
-  it.messageFormatter = KMessageFormatters.verbose.colored
+private val log by lazy {
+  klog("org.danbrough.klog.demo") {
+    level = Level.TRACE
+    writer = KLogWriters.stdOut
+    messageFormatter = KMessageFormatters.verbose.colored
+  }
 }
 
 fun main() {
@@ -23,10 +21,6 @@ fun main() {
     "this is the message"
   }
   log.error("an error occurred", Error("Example error"))
-
-
-  runBlocking(Dispatchers.Default) {
-    log.trace("inside coroutine")
-  }
-  log.trace("finished")
 }
+
+

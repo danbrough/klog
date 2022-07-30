@@ -5,9 +5,11 @@ import kotlin.test.Test
 
 class Tests {
 
-
-  private val log = klog(Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
-
+  private val log = klog {
+    level = Level.TRACE
+    writer = KLogWriters.stdOut
+    messageFormatter = KMessageFormatters.verbose.colored
+  }
 
   @Test
   fun test1() {
