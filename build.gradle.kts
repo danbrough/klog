@@ -14,12 +14,12 @@ plugins {
   id("org.jetbrains.dokka")
 }
 
+
 ProjectProperties.init(project)
+
 
 version = ProjectProperties.buildVersionName
 group = ProjectProperties.projectGroup
-
-
 
 buildscript {
   repositories {
@@ -169,7 +169,7 @@ val javadocJar by tasks.registering(Jar::class) {
 publishing {
 
   repositories {
-    maven(ProjectProperties.M2_REPOSITORY) {
+    maven(ProjectProperties.LOCAL_M2) {
       name = "m2"
     }
 
@@ -296,3 +296,5 @@ tasks.create("publishMacTargetsToOSSRepository") {
       dependsOn("publish${it.capitalize()}PublicationToOssRepository")
     }
 }
+
+
