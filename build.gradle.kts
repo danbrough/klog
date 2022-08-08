@@ -13,6 +13,8 @@ plugins {
   signing
   id("io.codearte.nexus-staging")
   id("org.jetbrains.dokka")
+  id("io.github.gradle-nexus.publish-plugin")
+
 }
 
 
@@ -37,6 +39,7 @@ repositories {
 kotlin {
 
   jvm()
+
   js {
     nodejs()
   }
@@ -45,15 +48,6 @@ kotlin {
     publishLibraryVariants("release")
   }
 
-  linuxX64()
-  linuxArm32Hfp()
-  linuxArm64()
-  mingwX64()
-  macosX64()
-  macosArm64()
-  iosArm64()
-  tvosX64()
-  watchosArm64()
 
   val commonMain by sourceSets.getting {}
 
@@ -185,6 +179,9 @@ nexusStaging {
 
 
 
+
+
+
 publishing {
 
   repositories {
@@ -197,7 +194,9 @@ publishing {
 
       val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
       val mavenUrl =
-        if (isReleaseVersion) "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+        if (isReleaseVersion)
+          "https://oss.sonatype.org/service/local/staging/deployByRepositoryId/orgdanbrough-1030"
+          //"https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
         else "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
       setUrl(mavenUrl)
