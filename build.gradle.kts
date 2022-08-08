@@ -195,8 +195,8 @@ publishing {
       val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
       val mavenUrl =
         if (isReleaseVersion)
-          //"https://oss.sonatype.org/service/local/staging/deployByRepositoryId/orgdanbrough-1030"
-          "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+          "https://oss.sonatype.org/service/local/staging/deployByRepositoryId/orgdanbrough-1027"
+          //"https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
         else "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
       setUrl(mavenUrl)
