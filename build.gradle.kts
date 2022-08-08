@@ -11,6 +11,7 @@ plugins {
   id("com.android.library")
   `maven-publish`
   signing
+  id("io.codearte.nexus-staging")
   id("org.jetbrains.dokka")
 }
 
@@ -165,6 +166,24 @@ val javadocJar by tasks.registering(Jar::class) {
   archiveClassifier.set("javadoc")
   from(tasks.dokkaHtml)
 }
+
+
+nexusStaging {
+/*
+  serverUrl =
+    "https://s01.oss.sonatype.org/service/local/" //required only for projects registered in Sonatype after 2021-02-24
+  packageGroup = "org.mycompany.myproject" //optional if packageGroup == project.getGroup()
+
+
+  stagingProfileId =
+    "yourStagingProfileId" //when not defined will be got from server using "packageGroup"*/
+
+  packageGroup = ProjectProperties.projectGroup
+  serverUrl = "https://s01.oss.sonatype.org/service/local/"
+
+}
+
+
 
 publishing {
 
