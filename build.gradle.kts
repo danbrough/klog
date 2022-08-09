@@ -319,10 +319,10 @@ android {
 }
 
 
-tasks.create("publishMacTargetsToOSSRepository") {
+tasks.create("publishMacTargetsToSonatypeRepository") {
   kotlin.targets.withType<KotlinNativeTarget>().filter { it.konanTarget.family.isAppleFamily }
     .map { it.konanTarget.platformName }.forEach {
-      dependsOn("publish${it.capitalize()}PublicationToOssRepository")
+      dependsOn("publish${it.capitalize()}PublicationToSonatypeRepository)
     }
 }
 
