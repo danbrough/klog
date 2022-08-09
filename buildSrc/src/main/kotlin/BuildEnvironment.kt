@@ -1,6 +1,10 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinTargetPreset
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.konan.target.Architecture
+import org.jetbrains.kotlin.konan.target.Family
 import org.jetbrains.kotlin.konan.target.KonanTarget
 
 object BuildEnvironment {
@@ -10,6 +14,10 @@ object BuildEnvironment {
   val KonanTarget.platformNameCapitalized: String
     get() = name.split('_').joinToString("") { it.capitalize() }
 
+  val KonanTarget.presetName: String
+    get() = if (family == Family.ANDROID)
+      platformName.replace("android", "androidNative")
+    else platformName
 
   val supportedTargets: Set<KonanTarget> =
     setOf(
@@ -30,6 +38,22 @@ object BuildEnvironment {
       KonanTarget.ANDROID_X86,
       KonanTarget.ANDROID_X64,
     )
+
+  fun KotlinMultiplatformExtension.registerTarget(
+    konanTarget: KonanTarget, conf: KotlinNativeTarget.() -> Unit = {}
+  ): KotlinNativeTarget {
+    @Suppress("UNCHECKED_CAST")
+    val preset: KotlinTargetPreset<KotlinNativeTarget> =
+      presets.getByName(konanTarget.platformName) as KotlinTargetPreset<KotlinNativeTarget>
+    return targetFromPreset(preset, konanTarget.platformName, conf)
+  }
+
+  fun KotlinMultiplatformExtension.createNativeTargets() {
+    supportedTargets.forEach { konanTarget ->
+      targetFromPreset(presets.getByName(konanTarget.presetName), konanTarget.presetName)
+    }
+  }
+
 
   val hostTarget: KonanTarget
     get() {

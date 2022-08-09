@@ -1,10 +1,12 @@
 @file:Suppress("UnstableApiUsage")
 
+import BuildEnvironment.createNativeTargets
 import BuildEnvironment.platformName
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.konan.target.KonanTarget
 
 plugins {
   kotlin("multiplatform")
@@ -36,6 +38,17 @@ repositories {
   google()
 }
 
+tasks.register("dude") {
+  doLast {
+    KonanTarget.predefinedTargets.forEach {
+      println("KONAN TARGET: ${it.key}")
+    }
+    kotlin.presets.forEach {
+      println("PRESET: ${it.name}")
+    }
+  }
+}
+
 kotlin {
 
   jvm()
@@ -48,8 +61,9 @@ kotlin {
     publishLibraryVariants("release")
   }
 
+  createNativeTargets()
 
-  val commonMain by sourceSets.getting {}
+  val commonMain by sourceSets.getting
 
   sourceSets {
 
@@ -322,7 +336,7 @@ android {
 tasks.create("publishMacTargetsToSonatypeRepository") {
   kotlin.targets.withType<KotlinNativeTarget>().filter { it.konanTarget.family.isAppleFamily }
     .map { it.konanTarget.platformName }.forEach {
-      dependsOn("publish${it.capitalize()}PublicationToSonatypeRepository)
+      dependsOn("publish${it.capitalize()}PublicationToSonatypeRepository")
     }
 }
 
