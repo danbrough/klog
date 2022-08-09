@@ -11,7 +11,7 @@ plugins {
   id("com.android.library")
   `maven-publish`
   signing
-  id("io.codearte.nexus-staging")
+  //id("io.codearte.nexus-staging")
   id("org.jetbrains.dokka")
   id("io.github.gradle-nexus.publish-plugin")
 
@@ -161,24 +161,31 @@ val javadocJar by tasks.registering(Jar::class) {
   from(tasks.dokkaHtml)
 }
 
+//
+//nexusStaging {
+//  serverUrl =
+//    "https://s01.oss.sonatype.org/service/local/" //required only for projects registered in Sonatype after 2021-02-24
+//  packageGroup = "org.mycompany.myproject" //optional if packageGroup == project.getGroup()
+//
+//
+//  stagingProfileId =
+//    "yourStagingProfileId" //when not defined will be got from server using "packageGroup"
+//
+//
+//  packageGroup = ProjectProperties.projectGroup
+//  serverUrl = "https://s01.oss.sonatype.org/service/local/"
+//
+//}
 
-nexusStaging {
-/*
-  serverUrl =
-    "https://s01.oss.sonatype.org/service/local/" //required only for projects registered in Sonatype after 2021-02-24
-  packageGroup = "org.mycompany.myproject" //optional if packageGroup == project.getGroup()
 
-
-  stagingProfileId =
-    "yourStagingProfileId" //when not defined will be got from server using "packageGroup"*/
-
-  packageGroup = ProjectProperties.projectGroup
-  serverUrl = "https://s01.oss.sonatype.org/service/local/"
-
+nexusPublishing {
+  repositories {
+    sonatype {
+      nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+      snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+    }
+  }
 }
-
-
-
 
 
 
@@ -189,14 +196,14 @@ publishing {
       name = "m2"
     }
 
-    maven {
+/*    maven {
       name = "oss"
 
       val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
       val mavenUrl =
         if (isReleaseVersion)
           "https://oss.sonatype.org/service/local/staging/deployByRepositoryId/orgdanbrough-1027"
-          //"https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+        //"https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
         else "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
       setUrl(mavenUrl)
@@ -205,7 +212,7 @@ publishing {
         username = project.property("ossrhUsername")!!.toString().trim()
         password = project.property("ossrhPassword")!!.toString().trim()
       }
-    }
+    }*/
   }
 
   publications.all {
@@ -252,15 +259,19 @@ publishing {
   }
 }
 
-if (project.hasProperty("signPublications")) {
+/*if (project.hasProperty("signPublications")) {
   signing {
     publishing.publications.all {
       sign(this)
     }
   }
+}*/
+
+signing {
+  publishing.publications.all {
+    sign(this)
+  }
 }
-
-
 
 android {
 
