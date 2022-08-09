@@ -5,7 +5,7 @@ cd $(dirname $0) && cd ..
 source scripts/common.sh
 
 if is_mac; then
-  ./gradlew -PpublishDocs -PsignPublications publishMacTargetsToOSSRepository
+  ./gradlew -PpublishDocs publishMacTargetsToSonatypeRepository
   exit 0
 fi
 
@@ -31,5 +31,4 @@ git push origin "$VERSION_NAME"
 
 
 
-./gradlew -PpublishDocs -PsignPublications publishAllPublicationsToOssRepository
-
+./gradlew -PpublishDocs publishAllPublicationsToSonatypeRepository
