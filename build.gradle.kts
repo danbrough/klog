@@ -1,10 +1,12 @@
 @file:Suppress("UnstableApiUsage")
 
+import BuildEnvironment.createNativeTargets
 import BuildEnvironment.platformName
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.konan.target.KonanTarget
 
 plugins {
   kotlin("multiplatform")
@@ -12,14 +14,15 @@ plugins {
   `maven-publish`
   signing
   id("org.jetbrains.dokka")
+  id("io.github.gradle-nexus.publish-plugin")
 }
+
 
 ProjectProperties.init(project)
 
+
 version = ProjectProperties.buildVersionName
 group = ProjectProperties.projectGroup
-
-
 
 buildscript {
   repositories {
@@ -33,9 +36,11 @@ repositories {
   google()
 }
 
+
 kotlin {
 
   jvm()
+
   js {
     nodejs()
   }
@@ -44,17 +49,13 @@ kotlin {
     publishLibraryVariants("release")
   }
 
-  linuxX64()
-  linuxArm32Hfp()
-  linuxArm64()
-  mingwX64()
-  macosX64()
-  macosArm64()
-  iosArm64()
-  tvosX64()
-  watchosArm64()
+  createNativeTargets()
 
-  val commonMain by sourceSets.getting {}
+  val commonMain by sourceSets.getting {
+    dependencies {
+    //  implementation("com.github.Simplx-dev:kotlin-format:1.2")
+    }
+  }
 
   sourceSets {
 
@@ -85,7 +86,6 @@ kotlin {
     val androidTest by getting {
       dependsOn(jvmCommonTest)
 //      dependsOn(androidAndroidTestRelease)
-
     }
 
 
@@ -109,7 +109,7 @@ kotlin {
     compilations["main"].apply {
 
       cinterops.create("klog") {
-        packageName("org.danbrough.klog.posix")
+        packageName("klog.posix")
         defFile(project.file("src/posixMain/klog.def"))
       }
 
@@ -141,9 +141,24 @@ tasks.withType(KotlinCompile::class) {
   }
 }
 
+tasks.register<Delete>("deleteDocs") {
+  setDelete(file("docs/api"))
+}
+
+tasks.register<Copy>("copyDocs") {
+  dependsOn("deleteDocs")
+  from(buildDir.resolve("dokka"))
+  destinationDir = file("docs/api")
+}
+
 
 tasks.dokkaHtml.configure {
   outputDirectory.set(buildDir.resolve("dokka"))
+  finalizedBy("copyDocs")
+}
+
+tasks.dokkaJekyll.configure {
+  outputDirectory.set(buildDir.resolve("jekyll"))
 }
 
 val javadocJar by tasks.registering(Jar::class) {
@@ -151,36 +166,47 @@ val javadocJar by tasks.registering(Jar::class) {
   from(tasks.dokkaHtml)
 }
 
+//
+//nexusStaging {
+//  serverUrl =
+//    "https://s01.oss.sonatype.org/service/local/" //required only for projects registered in Sonatype after 2021-02-24
+//  packageGroup = "org.mycompany.myproject" //optional if packageGroup == project.getGroup()
+//
+//
+//  stagingProfileId =
+//    "yourStagingProfileId" //when not defined will be got from server using "packageGroup"
+//
+//
+//  packageGroup = ProjectProperties.projectGroup
+//  serverUrl = "https://s01.oss.sonatype.org/service/local/"
+//
+//}
+
+
+nexusPublishing {
+  repositories {
+    sonatype {
+      nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+      snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+    }
+
+  }
+}
+
+
+
 publishing {
 
   repositories {
-    maven(ProjectProperties.M2_REPOSITORY) {
+    maven(ProjectProperties.LOCAL_M2) {
       name = "m2"
-    }
-
-    maven {
-      name = "oss"
-
-      val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
-      val mavenUrl = if (isReleaseVersion)
-        "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-      else
-        "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-
-      setUrl(mavenUrl)
-
-      credentials {
-        username = project.property("ossrhUsername")!!.toString().trim()
-        password = project.property("ossrhPassword")!!.toString().trim()
-      }
     }
   }
 
   publications.all {
     if (this !is MavenPublication) return@all
 
-    if (project.hasProperty("publishDocs"))
-      artifact(javadocJar)
+    if (project.hasProperty("publishDocs")) artifact(javadocJar)
 
     pom {
 
@@ -221,15 +247,10 @@ publishing {
   }
 }
 
-if (project.hasProperty("signPublications")) {
-  signing {
-    publishing.publications.all {
-      sign(this)
-    }
-  }
+
+signing {
+  sign(publishing.publications)
 }
-
-
 
 android {
 
@@ -277,10 +298,21 @@ android {
 }
 
 
-tasks.create("publishMacTargetsToOSSRepository") {
-    kotlin.targets.withType<KotlinNativeTarget>().filter { it.konanTarget.family.isAppleFamily }
-      .map { it.konanTarget.platformName }.forEach {
-        dependsOn("publish${it.capitalize()}PublicationToOssRepository")
-      }
+tasks.create("publishMacTargetsToSonatypeRepository") {
+  kotlin.targets.withType<KotlinNativeTarget>().filter { it.konanTarget.family.isAppleFamily }
+    .map { it.konanTarget.platformName }.forEach {
+      dependsOn("publish${it.capitalize()}PublicationToSonatypeRepository")
+    }
+}
 
+
+tasks.register("listPresets") {
+  doLast {
+    KonanTarget.predefinedTargets.forEach {
+      println("KONAN TARGET: ${it.key}")
+    }
+    kotlin.presets.forEach {
+      println("PRESET: ${it.name}")
+    }
+  }
 }

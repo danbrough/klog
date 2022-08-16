@@ -7,7 +7,7 @@ A logging framework for kotlin multi-platform.
 ```gradle 
 
 dependencies {
-  implementation("org.danbrough:klog:0.0.1-alpha28")
+  implementation("org.danbrough:klog:0.0.1-beta04")
 }
 ```
 
@@ -23,7 +23,7 @@ or
 ```kotlin
 package a
 
-import org.danbrough.klog.*
+import klog.*
 import kotlin.test.Test
 
 

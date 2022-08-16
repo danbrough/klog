@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-cd $(dirname $0) && cd ..
+cd $(dirname "$0") && cd ..
 source scripts/common.sh
 
 if is_mac; then

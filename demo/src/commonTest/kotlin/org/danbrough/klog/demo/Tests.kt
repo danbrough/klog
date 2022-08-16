@@ -1,16 +1,20 @@
 package org.danbrough.klog.demo
 
-import org.danbrough.klog.*
+import klog.*
 import kotlin.test.Test
+import    kotlinx.coroutines.runBlocking
 
 class Tests {
 
-
-  private val log = klog(Level.TRACE, KLogWriters.stdOut, KMessageFormatters.verbose.colored)
-
+  private val log = klog {
+    level = Level.TRACE
+    writer = KLogWriters.stdOut
+    messageFormatter = KMessageFormatters.verbose.colored
+  }
 
   @Test
   fun test1() {
+
     println("test1()")
     println("klogname: ${this::class.klogName()}")
     println("LOG: $log")
@@ -22,9 +26,9 @@ class Tests {
     }
 
 
-/*    runBlocking(Dispatchers.Default) {
-      log.info("inside coroutine")
-    }*/
+    runBlocking {
+      log.info("message inside coroutine")
+    }
   }
 
 
