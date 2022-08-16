@@ -2,6 +2,7 @@ package org.danbrough.klog.demo
 
 import klog.*
 import kotlin.test.Test
+import    kotlinx.coroutines.runBlocking
 
 class Tests {
 
@@ -25,9 +26,9 @@ class Tests {
     }
 
 
-/*    runBlocking(Dispatchers.Default) {
-      log.info("inside coroutine")
-    }*/
+    runBlocking {
+      log.info("message inside coroutine")
+    }
   }
 
 

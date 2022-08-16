@@ -19,6 +19,7 @@ echo Creating release: $VERSION_NAME
 if ! message_prompt "Creating release $VERSION_NAME. Continue?"; then
   exit 0
 fi
+sed -i README.md  -e 's|klog:.*"|klog:'$VERSION_NAME'"|g'
 
 ./gradlew -q buildVersionIncrement
 

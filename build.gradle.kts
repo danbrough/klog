@@ -13,10 +13,8 @@ plugins {
   id("com.android.library")
   `maven-publish`
   signing
-  //id("io.codearte.nexus-staging")
   id("org.jetbrains.dokka")
   id("io.github.gradle-nexus.publish-plugin")
-
 }
 
 
@@ -38,16 +36,6 @@ repositories {
   google()
 }
 
-tasks.register("dude") {
-  doLast {
-    KonanTarget.predefinedTargets.forEach {
-      println("KONAN TARGET: ${it.key}")
-    }
-    kotlin.presets.forEach {
-      println("PRESET: ${it.name}")
-    }
-  }
-}
 
 kotlin {
 
@@ -197,7 +185,6 @@ nexusPublishing {
     sonatype {
       nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
       snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
-      stagingProfileId.set("98edb69227dc82")
     }
 
   }
@@ -275,18 +262,12 @@ publishing {
   }
 }
 
-/*if (project.hasProperty("signPublications")) {
-  signing {
-    publishing.publications.all {
-      sign(this)
-    }
-  }
-}*/
 
 signing {
-  publishing.publications.all {
+  sign(publishing.publications)
+  /*publishing.publications.all {
     sign(this)
-  }
+  }*/
 }
 
 android {
@@ -343,3 +324,13 @@ tasks.create("publishMacTargetsToSonatypeRepository") {
 }
 
 
+tasks.register("listPresets") {
+  doLast {
+    KonanTarget.predefinedTargets.forEach {
+      println("KONAN TARGET: ${it.key}")
+    }
+    kotlin.presets.forEach {
+      println("PRESET: ${it.name}")
+    }
+  }
+}

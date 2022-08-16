@@ -26,19 +26,13 @@ repositories {
 kotlin {
   jvm()
   android()
+  js {
+    nodejs()
+  }
 
   val osName = System.getProperty("os.name")
   if (osName == "Linux") {
     linuxX64()
-    linuxArm32Hfp()
-    linuxArm64()
-
-/*
-    js {
-      nodejs()
-    }
-*/
-
   } else if (osName.startsWith("Mac")) {
     macosArm64()
     macosX64()
@@ -51,7 +45,7 @@ kotlin {
     val commonMain by getting {
       dependencies {
         implementation("org.danbrough:klog:_")
-
+        implementation("org.danbrough.kotlinx:kotlinx-coroutines-core:_")
       }
     }
 

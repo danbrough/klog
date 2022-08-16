@@ -21,6 +21,8 @@ fun main() {
     "this is the message"
   }
   log.error("an error occurred", Error("Example error"))
+
+
 }
 
 
