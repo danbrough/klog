@@ -18,16 +18,18 @@ data class StatementContext(
 
 expect fun platformStatementContext(): StatementContext
 
-//for formatting the [KLog.tag] field
-typealias KTagFormatter = (String) -> String
-
 
 abstract class KLog(val tag: String) {
+
+  abstract val displayTag: String
 
   data class Conf(
     var level: Level,
     var writer: KLogWriter,
-    var messageFormatter: KMessageFormatter
+    var messageFormatter: KMessageFormatter,
+    val displayTagLength: Int = 12,
+    //set to null to disable display tag formatting
+    val displayTagFormatter: KDisplayTagFormatter? = DefaultDisplayTagFormatter
   )
 
 
@@ -97,8 +99,8 @@ abstract class KLog(val tag: String) {
 @Suppress("MemberVisibilityCanBePrivate", "OVERRIDE_BY_INLINE")
 class KLogImpl(tag: String, override val conf: KLog.Conf) : KLog(tag) {
 
-  private val displayName: String = tag
-
+  override val displayTag: String =
+    conf.displayTagFormatter?.invoke(tag, conf.displayTagLength) ?: tag
 
   @Suppress("NOTING_TO_INLINE")
   override fun log(
@@ -122,7 +124,7 @@ class KLogImpl(tag: String, override val conf: KLog.Conf) : KLog(tag) {
     }
 
     logWriter(
-      displayName,
+      displayTag,
       level,
       conf.messageFormatter(tag, level, message, err, ctx),
       err

@@ -51,7 +51,11 @@ kotlin {
 
   createNativeTargets()
 
-  val commonMain by sourceSets.getting
+  val commonMain by sourceSets.getting {
+    dependencies {
+    //  implementation("com.github.Simplx-dev:kotlin-format:1.2")
+    }
+  }
 
   sourceSets {
 
@@ -82,7 +86,6 @@ kotlin {
     val androidTest by getting {
       dependsOn(jvmCommonTest)
 //      dependsOn(androidAndroidTestRelease)
-
     }
 
 
@@ -198,24 +201,6 @@ publishing {
     maven(ProjectProperties.LOCAL_M2) {
       name = "m2"
     }
-
-/*    maven {
-      name = "oss"
-
-      val isReleaseVersion = !version.toString().endsWith("-SNAPSHOT")
-      val mavenUrl =
-        if (isReleaseVersion)
-          "https://oss.sonatype.org/service/local/staging/deployByRepositoryId/orgdanbrough-1027"
-        //"https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-        else "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-
-      setUrl(mavenUrl)
-
-      credentials {
-        username = project.property("ossrhUsername")!!.toString().trim()
-        password = project.property("ossrhPassword")!!.toString().trim()
-      }
-    }*/
   }
 
   publications.all {
@@ -265,9 +250,6 @@ publishing {
 
 signing {
   sign(publishing.publications)
-  /*publishing.publications.all {
-    sign(this)
-  }*/
 }
 
 android {

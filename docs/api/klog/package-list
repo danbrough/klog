@@ -1,6 +1,7 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:klog////PointingToDeclaration/klog/klog/index.html
+$dokka.location:klog//DefaultDisplayTagFormatter/#/PointingToDeclaration/klog/klog/-default-display-tag-formatter.html
 $dokka.location:klog//androidLog/klog.KLogWriters#/PointingToDeclaration/klog/klog/android-log.html
 $dokka.location:klog//color/klog.Level#/PointingToDeclaration/klog/klog/color.html
 $dokka.location:klog//colored/kotlin.Function5[kotlin.String,klog.Level,kotlin.String,kotlin.Throwable?,klog.StatementContext,kotlin.String]#/PointingToDeclaration/klog/klog/colored.html
@@ -23,7 +24,9 @@ $dokka.location:klog/DefaultLogFactory/getLogs/#/PointingToDeclaration/klog/klo
 $dokka.location:klog/KLog.Companion///PointingToDeclaration/klog/klog/-k-log/-companion/index.html
 $dokka.location:klog/KLog.Companion/ROOT_LOG_TAG/#/PointingToDeclaration/klog/klog/-k-log/-companion/-r-o-o-t_-l-o-g_-t-a-g.html
 $dokka.location:klog/KLog.Conf///PointingToDeclaration/klog/klog/-k-log/-conf/index.html
-$dokka.location:klog/KLog.Conf/Conf/#klog.Level#kotlin.Function4[kotlin.String,klog.Level,kotlin.String,kotlin.Throwable?,kotlin.Unit]#kotlin.Function5[kotlin.String,klog.Level,kotlin.String,kotlin.Throwable?,klog.StatementContext,kotlin.String]/PointingToDeclaration/klog/klog/-k-log/-conf/-conf.html
+$dokka.location:klog/KLog.Conf/Conf/#klog.Level#kotlin.Function4[kotlin.String,klog.Level,kotlin.String,kotlin.Throwable?,kotlin.Unit]#kotlin.Function5[kotlin.String,klog.Level,kotlin.String,kotlin.Throwable?,klog.StatementContext,kotlin.String]#kotlin.Int#kotlin.Function2[kotlin.String,kotlin.Int,kotlin.String]?/PointingToDeclaration/klog/klog/-k-log/-conf/-conf.html
+$dokka.location:klog/KLog.Conf/displayTagFormatter/#/PointingToDeclaration/klog/klog/-k-log/-conf/display-tag-formatter.html
+$dokka.location:klog/KLog.Conf/displayTagLength/#/PointingToDeclaration/klog/klog/-k-log/-conf/display-tag-length.html
 $dokka.location:klog/KLog.Conf/level/#/PointingToDeclaration/klog/klog/-k-log/-conf/level.html
 $dokka.location:klog/KLog.Conf/messageFormatter/#/PointingToDeclaration/klog/klog/-k-log/-conf/message-formatter.html
 $dokka.location:klog/KLog.Conf/writer/#/PointingToDeclaration/klog/klog/-k-log/-conf/writer.html
@@ -31,6 +34,7 @@ $dokka.location:klog/KLog///PointingToDeclaration/klog/klog/-k-log/index.html
 $dokka.location:klog/KLog/KLog/#kotlin.String/PointingToDeclaration/klog/klog/-k-log/-k-log.html
 $dokka.location:klog/KLog/conf/#/PointingToDeclaration/klog/klog/-k-log/conf.html
 $dokka.location:klog/KLog/debug/#kotlin.String?#kotlin.Throwable?#kotlin.Function0[kotlin.String]?/PointingToDeclaration/klog/klog/-k-log/debug.html
+$dokka.location:klog/KLog/displayTag/#/PointingToDeclaration/klog/klog/-k-log/display-tag.html
 $dokka.location:klog/KLog/error/#kotlin.String?#kotlin.Throwable?#kotlin.Function0[kotlin.String]?/PointingToDeclaration/klog/klog/-k-log/error.html
 $dokka.location:klog/KLog/info/#kotlin.String?#kotlin.Throwable?#kotlin.Function0[kotlin.String]?/PointingToDeclaration/klog/klog/-k-log/info.html
 $dokka.location:klog/KLog/isDebugEnabled/#/PointingToDeclaration/klog/klog/-k-log/is-debug-enabled.html
@@ -51,6 +55,7 @@ $dokka.location:klog/KLogFactory/getLogs/#/PointingToDeclaration/klog/klog/-k-l
 $dokka.location:klog/KLogImpl///PointingToDeclaration/klog/klog/-k-log-impl/index.html
 $dokka.location:klog/KLogImpl/KLogImpl/#kotlin.String#klog.KLog.Conf/PointingToDeclaration/klog/klog/-k-log-impl/-k-log-impl.html
 $dokka.location:klog/KLogImpl/conf/#/PointingToDeclaration/klog/klog/-k-log-impl/conf.html
+$dokka.location:klog/KLogImpl/displayTag/#/PointingToDeclaration/klog/klog/-k-log-impl/display-tag.html
 $dokka.location:klog/KLogImpl/log/#klog.Level#kotlin.String?#kotlin.Throwable?#kotlin.Function0[kotlin.String]?/PointingToDeclaration/klog/klog/-k-log-impl/log.html
 $dokka.location:klog/KLogWriters///PointingToDeclaration/klog/klog/-k-log-writers/index.html
 $dokka.location:klog/KLogWriters/noop/#/PointingToDeclaration/klog/klog/-k-log-writers/noop.html
