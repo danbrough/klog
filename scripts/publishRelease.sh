@@ -22,6 +22,7 @@ fi
 sed -i README.md  -e 's|klog:.*"|klog:'$VERSION_NAME'"|g'
 
 ./gradlew -q buildVersionIncrement
+./gradlew -PpublishDocs publishAllPublicationsToSonatypeRepository
 
 git add .
 git commit -am "$VERSION_NAME"
@@ -32,4 +33,3 @@ git push origin "$VERSION_NAME"
 
 
 
-./gradlew -PpublishDocs publishAllPublicationsToSonatypeRepository
