@@ -53,7 +53,7 @@ kotlin {
 
   val commonMain by sourceSets.getting {
     dependencies {
-    //  implementation("com.github.Simplx-dev:kotlin-format:1.2")
+      //  implementation("com.github.Simplx-dev:kotlin-format:_")
     }
   }
 
@@ -189,7 +189,6 @@ nexusPublishing {
       nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
       snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
     }
-
   }
 }
 
@@ -309,7 +308,7 @@ tasks.create("publishMacTargetsToSonatypeRepository") {
 tasks.register("listPresets") {
   doLast {
     KonanTarget.predefinedTargets.forEach {
-      println("KONAN TARGET: ${it.key}")
+      println("KONAN TARGET: ${it.key} family: ${it.value.family}")
     }
     kotlin.presets.forEach {
       println("PRESET: ${it.name}")
