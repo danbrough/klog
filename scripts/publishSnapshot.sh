@@ -5,6 +5,7 @@ cd $(dirname "$0") && cd ..
 source scripts/common.sh
 
 if is_mac; then
+  git reset --hard && git pull
   ./gradlew -PpublishDocs -PsignPublications publishMacTargetsToOSSRepository
   exit 0
 fi
@@ -20,5 +21,5 @@ git add .
 git commit -am "$VERSION_NAME"
 git push
 
-./gradlew -PpublishDocs -PsignPublications publishAllPublicationsToOssRepository
+./gradlew -PpublishDocs publishAllPublicationsToSonatypeRepository
 

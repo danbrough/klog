@@ -20,7 +20,6 @@ plugins {
 
 ProjectProperties.init(project)
 
-
 version = ProjectProperties.buildVersionName
 group = ProjectProperties.projectGroup
 
@@ -53,7 +52,7 @@ kotlin {
 
   val commonMain by sourceSets.getting {
     dependencies {
-    //  implementation("com.github.Simplx-dev:kotlin-format:1.2")
+      //  implementation("com.github.Simplx-dev:kotlin-format:_")
     }
   }
 
@@ -166,22 +165,6 @@ val javadocJar by tasks.registering(Jar::class) {
   from(tasks.dokkaHtml)
 }
 
-//
-//nexusStaging {
-//  serverUrl =
-//    "https://s01.oss.sonatype.org/service/local/" //required only for projects registered in Sonatype after 2021-02-24
-//  packageGroup = "org.mycompany.myproject" //optional if packageGroup == project.getGroup()
-//
-//
-//  stagingProfileId =
-//    "yourStagingProfileId" //when not defined will be got from server using "packageGroup"
-//
-//
-//  packageGroup = ProjectProperties.projectGroup
-//  serverUrl = "https://s01.oss.sonatype.org/service/local/"
-//
-//}
-
 
 nexusPublishing {
   repositories {
@@ -189,7 +172,6 @@ nexusPublishing {
       nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
       snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
     }
-
   }
 }
 
@@ -309,7 +291,7 @@ tasks.create("publishMacTargetsToSonatypeRepository") {
 tasks.register("listPresets") {
   doLast {
     KonanTarget.predefinedTargets.forEach {
-      println("KONAN TARGET: ${it.key}")
+      println("KONAN TARGET: ${it.key} family: ${it.value.family}")
     }
     kotlin.presets.forEach {
       println("PRESET: ${it.name}")

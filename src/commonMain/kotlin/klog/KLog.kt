@@ -32,7 +32,6 @@ abstract class KLog(val tag: String) {
     val displayTagFormatter: KDisplayTagFormatter? = DefaultDisplayTagFormatter
   )
 
-
   companion object {
     const val ROOT_LOG_TAG = ""
   }
@@ -41,32 +40,57 @@ abstract class KLog(val tag: String) {
 
   inline fun trace(
     msg: String? = null,
+    err: Throwable? = null
+  ) = log(Level.TRACE, msg, err, null)
+
+  inline fun trace(
+    msg: String? = null,
     err: Throwable? = null,
-    noinline msgProvider: LogMessageFunction? = null
+    noinline msgProvider: LogMessageFunction
   ) = log(Level.TRACE, msg, err, msgProvider)
 
   inline fun debug(
     msg: String? = null,
+    err: Throwable? = null
+  ) = log(Level.DEBUG, msg, err, null)
+
+  inline fun debug(
+    msg: String? = null,
     err: Throwable? = null,
-    noinline msgProvider: LogMessageFunction? = null
+    noinline msgProvider: LogMessageFunction
   ) = log(Level.DEBUG, msg, err, msgProvider)
 
   inline fun info(
     msg: String? = null,
+    err: Throwable? = null
+  ) = log(Level.INFO, msg, err, null)
+
+  inline fun info(
+    msg: String? = null,
     err: Throwable? = null,
-    noinline msgProvider: LogMessageFunction? = null
+    noinline msgProvider: LogMessageFunction
   ) = log(Level.INFO, msg, err, msgProvider)
 
   inline fun warn(
     msg: String? = null,
+    err: Throwable? = null
+  ) = log(Level.WARN, msg, err, null)
+
+  inline fun warn(
+    msg: String? = null,
     err: Throwable? = null,
-    noinline msgProvider: LogMessageFunction? = null
+    noinline msgProvider: LogMessageFunction
   ) = log(Level.WARN, msg, err, msgProvider)
 
   inline fun error(
     msg: String? = null,
+    err: Throwable? = null
+  ) = log(Level.ERROR, msg, err, null)
+
+  inline fun error(
+    msg: String? = null,
     err: Throwable? = null,
-    noinline msgProvider: LogMessageFunction? = null
+    noinline msgProvider: LogMessageFunction
   ) = log(Level.ERROR, msg, err, msgProvider)
 
   val isTraceEnabled: Boolean
@@ -130,7 +154,6 @@ class KLogImpl(tag: String, override val conf: KLog.Conf) : KLog(tag) {
       err
     )
   }
-
 
 }
 

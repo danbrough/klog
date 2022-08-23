@@ -7,7 +7,7 @@ A logging framework for kotlin multi-platform.
 ```gradle 
 
 dependencies {
-  implementation("org.danbrough:klog:0.0.1-beta04")
+  implementation("org.danbrough:klog:0.0.1-beta06")
 }
 ```
 
