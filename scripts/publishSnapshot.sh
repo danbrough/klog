@@ -20,5 +20,5 @@ git add .
 git commit -am "$VERSION_NAME"
 git push
 
-./gradlew -PpublishDocs -PsignPublications publishAllPublicationsToOssRepository
+./gradlew -PpublishDocs publishAllPublicationsToSonatypeRepository
 
