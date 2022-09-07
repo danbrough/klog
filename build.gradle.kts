@@ -99,9 +99,15 @@ kotlin {
 
   }
 
+
   val posixMain by sourceSets.creating {
     dependsOn(commonMain)
   }
+
+  val androidNativeMain by sourceSets.creating {
+    dependsOn(posixMain)
+  }
+
 
   targets.withType(KotlinNativeTarget::class).all {
 
@@ -109,11 +115,14 @@ kotlin {
 
       cinterops.create("klog") {
         packageName("klog.posix")
-        defFile(project.file("src/posixMain/klog.def"))
+        defFile(project.file("src/klog.def"))
       }
 
       defaultSourceSet {
-        dependsOn(posixMain)
+        if (konanTarget.family == org.jetbrains.kotlin.konan.target.Family.ANDROID)
+          dependsOn(androidNativeMain)
+        else
+          dependsOn(posixMain)
       }
     }
   }

@@ -20,3 +20,4 @@ actual fun createKLogRegistry(): KLogFactory = PosixKLogRegistry
 
 
 actual fun KClass<*>.klogName(): String = qualifiedName!!.removeSuffix(".Companion")
+
