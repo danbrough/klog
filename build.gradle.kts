@@ -14,7 +14,6 @@ plugins {
   `maven-publish`
   signing
   id("org.jetbrains.dokka")
-  id("io.github.gradle-nexus.publish-plugin")
 }
 
 
@@ -86,7 +85,6 @@ kotlin {
       dependsOn(jvmCommonTest)
 //      dependsOn(androidAndroidTestRelease)
     }
-
 
     val androidAndroidTest by getting {
       dependsOn(jvmCommonTest)
@@ -173,18 +171,6 @@ val javadocJar by tasks.registering(Jar::class) {
   archiveClassifier.set("javadoc")
   from(tasks.dokkaHtml)
 }
-
-
-nexusPublishing {
-  repositories {
-    sonatype {
-      nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-      snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
-    }
-  }
-}
-
-
 
 publishing {
 
