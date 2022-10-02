@@ -178,6 +178,21 @@ publishing {
     maven(ProjectProperties.LOCAL_M2) {
       name = "m2"
     }
+
+    maven(
+      "https://s01.oss.sonatype.org/service/local/staging/deployByRepositoryId/${
+        System.getenv("SONATYPE_REPO_ID") ?: throw Error(
+          "SONATYPE_REPO_ID not set"
+        )
+      }"
+    ) {
+      name = "SonaType"
+      credentials {
+        username = System.getenv("SONATYPE_USER")
+        password = System.getenv("SONATYPE_PASSWORD")
+      }
+    }
+
   }
 
   publications.all {
