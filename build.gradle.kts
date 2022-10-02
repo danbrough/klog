@@ -198,7 +198,7 @@ publishing {
   publications.all {
     if (this !is MavenPublication) return@all
 
-    if (project.hasProperty("publishDocs")) artifact(javadocJar)
+    artifact(javadocJar)
 
     pom {
 
