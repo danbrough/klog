@@ -75,6 +75,8 @@ $dokka.location:klog/Level.INFO///PointingToDeclaration/{"org.jetbrains.dokka.li
 $dokka.location:klog/Level.TRACE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}klog/klog/-level/-t-r-a-c-e/index.html
 $dokka.location:klog/Level.WARN///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}klog/klog/-level/-w-a-r-n/index.html
 $dokka.location:klog/Level///PointingToDeclaration/klog/klog/-level/index.html
+$dokka.location:klog/Level/valueOf/#kotlin.String/PointingToDeclaration/klog/klog/-level/value-of.html
+$dokka.location:klog/Level/values/#/PointingToDeclaration/klog/klog/-level/values.html
 $dokka.location:klog/PosixKLogRegistry///PointingToDeclaration/klog/klog/-posix-k-log-registry/index.html
 $dokka.location:klog/StatementContext.LineContext///PointingToDeclaration/klog/klog/-statement-context/-line-context/index.html
 $dokka.location:klog/StatementContext.LineContext/LineContext/#kotlin.Int#kotlin.String?#kotlin.String?#kotlin.String?/PointingToDeclaration/klog/klog/-statement-context/-line-context/-line-context.html
