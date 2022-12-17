@@ -7,7 +7,7 @@ source scripts/common.sh
 
 if is_mac; then
   git reset --hard && git pull
-  ./gradlew -PpublishDocs publishMacTargetsToSonatypeRepository
+  ./gradlew -PpublishDocs `cat mac_targets.txt` 
   exit 0
 fi
 
