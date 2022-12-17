@@ -1,6 +1,6 @@
 
 set_gradle_prop(){
-  sed -i gradle.properties  -e 's|^'$1'=.*|'$1'='$2'|g'
+  cat gradle.properties  | sed -e 's|^'$1'=.*|'$1'='$2'|g'
 }
 
 get_gradle_prop(){
