@@ -8,7 +8,7 @@ get_gradle_prop(){
 }
 
 is_mac() {
-  if [[ $OSTYPE == "darwin"* ]; then
+  if [[ $OSTYPE == "darwin"* ]]; then
     return 0
   else
     return 1
