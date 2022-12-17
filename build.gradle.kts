@@ -127,6 +127,30 @@ kotlin {
 
 }
 
+
+
+val javaLangVersion = 11
+
+subprojects {
+
+
+  afterEvaluate {
+
+    extensions.findByType(JavaPluginExtension::class.java)?.apply {
+      toolchain.languageVersion.set(JavaLanguageVersion.of(javaLangVersion))
+    }
+
+
+    extensions.findByType(org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension::class.java)
+      ?.apply {
+        jvmToolchain {
+          languageVersion.set(JavaLanguageVersion.of(javaLangVersion))
+        }
+      }
+  }
+}
+
+
 tasks.withType<AbstractTestTask>() {
   testLogging {
     events = setOf(
@@ -181,9 +205,7 @@ publishing {
 
     maven(
       "https://s01.oss.sonatype.org/service/local/staging/deployByRepositoryId/${
-        System.getenv("SONATYPE_REPO_ID") ?: throw Error(
-          "SONATYPE_REPO_ID not set"
-        )
+        System.getenv("SONATYPE_REPO_ID") ?: "Sonatype_repo_id_not_set"
       }"
     ) {
       name = "SonaType"
