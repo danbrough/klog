@@ -81,19 +81,23 @@ kotlin {
     }
     //  val androidAndroidTestRelease by getting
 
-    val androidTest by getting {
+
+/*
+   val androidTest by getting {
       dependsOn(jvmCommonTest)
 //      dependsOn(androidAndroidTestRelease)
     }
+*/
 
-    val androidAndroidTest by getting {
+
+/*    val androidAndroidTest by getting {
       dependsOn(jvmCommonTest)
 
       dependencies {
         implementation(AndroidX.test.runner)
         implementation(AndroidX.test.ext.junit.ktx)
       }
-    }
+    }*/
 
   }
 
@@ -129,12 +133,11 @@ kotlin {
 
 
 
-val javaLangVersion = 11
 
 subprojects {
 
 
-  afterEvaluate {
+  /*afterEvaluate {
 
     extensions.findByType(JavaPluginExtension::class.java)?.apply {
       toolchain.languageVersion.set(JavaLanguageVersion.of(javaLangVersion))
@@ -147,7 +150,7 @@ subprojects {
           languageVersion.set(JavaLanguageVersion.of(javaLangVersion))
         }
       }
-  }
+  }*/
 }
 
 
