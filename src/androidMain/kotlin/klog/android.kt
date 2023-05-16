@@ -1,7 +1,10 @@
 package klog
 
 import android.util.Log
-actual fun createKLogRegistry(): KLogFactory {
+
+
+
+actual fun createKLogFactory(): KLogFactory {
 
   runCatching {
     Log.v(

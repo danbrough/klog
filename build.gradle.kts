@@ -44,7 +44,7 @@ kotlin {
   }
 
   android {
-    publishLibraryVariants("release")
+   // publishLibraryVariants("release")
   }
 
   createNativeTargets()
@@ -76,28 +76,32 @@ kotlin {
       dependsOn(jvmCommonMain)
     }
 
+    val jvmTest by getting {
+      dependsOn(jvmCommonTest)
+    }
+
     val androidMain by getting {
       dependsOn(jvmCommonMain)
     }
     //  val androidAndroidTestRelease by getting
 
 
-/*
-   val androidTest by getting {
-      dependsOn(jvmCommonTest)
-//      dependsOn(androidAndroidTestRelease)
-    }
-*/
+    /*
+       val androidTest by getting {
+          dependsOn(jvmCommonTest)
+    //      dependsOn(androidAndroidTestRelease)
+        }
+    */
 
 
-/*    val androidAndroidTest by getting {
-      dependsOn(jvmCommonTest)
+    /*    val androidAndroidTest by getting {
+          dependsOn(jvmCommonTest)
 
-      dependencies {
-        implementation(AndroidX.test.runner)
-        implementation(AndroidX.test.ext.junit.ktx)
-      }
-    }*/
+          dependencies {
+            implementation(AndroidX.test.runner)
+            implementation(AndroidX.test.ext.junit.ktx)
+          }
+        }*/
 
   }
 
@@ -202,8 +206,8 @@ val javadocJar by tasks.registering(Jar::class) {
 publishing {
 
   repositories {
-    maven(ProjectProperties.LOCAL_M2) {
-      name = "m2"
+    maven("/usr/local/kotlinxtras/build/xtras/maven") {
+      name = "Xtras"
     }
 
     maven(
@@ -222,6 +226,8 @@ publishing {
 
   publications.all {
     if (this !is MavenPublication) return@all
+
+
 
     artifact(javadocJar)
 
@@ -264,10 +270,10 @@ publishing {
   }
 }
 
-
-signing {
-  sign(publishing.publications)
-}
+if (properties.get("signPublications") == "1")
+  signing {
+    sign(publishing.publications)
+  }
 
 android {
 

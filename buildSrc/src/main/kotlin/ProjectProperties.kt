@@ -18,9 +18,7 @@ object ProjectProperties {
   const val KOTLIN_JVM_VERSION = "11"
   
   val IDE_ACTIVE = System.getProperty("idea.active", "false").toBoolean()
-  
-  lateinit var LOCAL_M2: URI
-  
+
   
   private val snapshotVersionFormat: String by createProperty(
     "build.snapshot.format", "0.0.1-SHAPSHOT"
@@ -97,7 +95,7 @@ object ProjectProperties {
   
   fun init(project: Project) {
     
-    LOCAL_M2 = project.buildDir.resolve("m2").toURI()
+
     localProperties.clear()
     
     project.rootProject.file("local.properties").also { localPropsFile ->

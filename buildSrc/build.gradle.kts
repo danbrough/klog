@@ -25,15 +25,15 @@ kotlin {
 
 
 
-/*
+
 val props = Properties().apply {
   file("../versions.properties").inputStream().use { load(it) }
 }
-*/
 
 
-//val androidVersion: String = props.getProperty("plugin.android")
-val androidVersion: String = "8.0.1"
+
+val androidVersion: String = props.getProperty("plugin.android")
+
 
 dependencies {
   implementation(kotlin("gradle-plugin"))

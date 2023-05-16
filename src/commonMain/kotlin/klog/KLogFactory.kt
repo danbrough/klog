@@ -24,19 +24,19 @@ open class DefaultLogFactory(
   writer: KLogWriter = KLogWriters.noop
 ) : KLogFactory() {
 
-  private var logs = mutableMapOf<String, KLogImpl>()
+  private var logs = mutableMapOf<String, KLog>()
 
   init {
-    logs[ROOT_LOG_TAG] = KLogImpl(ROOT_LOG_TAG, KLog.Conf(level, writer, formatter))
+    logs[ROOT_LOG_TAG] = KLog(ROOT_LOG_TAG, KLog.Conf(level, writer, formatter))
   }
 
   override operator fun get(tag: String): KLog =
-    logs[tag] ?: KLogImpl(tag, getParent(tag).conf).also {
+    logs[tag] ?: KLog(tag, getParent(tag).conf).also {
       logs[tag] = it
     }
 
 
-  private fun getParent(tag: String): KLogImpl =
+  private fun getParent(tag: String): KLog =
     tag.substringBeforeLast('.', ROOT_LOG_TAG).let { parentTag ->
       logs[parentTag] ?: getParent(parentTag)
     }

@@ -18,10 +18,9 @@ data class StatementContext(
 
 expect fun platformStatementContext(): StatementContext
 
+class KLog(private val tag: String, val conf: Conf) {
 
-abstract class KLog(val tag: String) {
-
-  abstract val displayTag: String
+  private var displayTag: String? = null
 
   data class Conf(
     var level: Level,
@@ -35,8 +34,6 @@ abstract class KLog(val tag: String) {
   companion object {
     const val ROOT_LOG_TAG = ""
   }
-
-  abstract val conf: Conf
 
   inline fun trace(
     msg: String? = null,
@@ -112,22 +109,8 @@ abstract class KLog(val tag: String) {
     get() = isErrorEnabled && conf.writer != KLogWriters.noop
 
 
-  abstract fun log(
-    level: Level,
-    msg: String?,
-    err: Throwable?,
-    msgProvider: LogMessageFunction?
-  )
-}
-
-@Suppress("MemberVisibilityCanBePrivate", "OVERRIDE_BY_INLINE")
-class KLogImpl(tag: String, override val conf: KLog.Conf) : KLog(tag) {
-
-  override val displayTag: String =
-    conf.displayTagFormatter?.invoke(tag, conf.displayTagLength) ?: tag
-
-  @Suppress("NOTING_TO_INLINE")
-  override fun log(
+  //@Suppress("NOTING_TO_INLINE")
+  fun log(
     level: Level,
     msg: String?,
     err: Throwable?,
@@ -138,7 +121,6 @@ class KLogImpl(tag: String, override val conf: KLog.Conf) : KLog(tag) {
     if (msg == null && msgProvider == null) throw Error("Either provide a message or a message provider")
     if (level < conf.level) return
 
-
     val message = "${msg ?: err?.message ?: ""} ${
       msgProvider?.invoke() ?: ""
     }".trim()
@@ -147,15 +129,18 @@ class KLogImpl(tag: String, override val conf: KLog.Conf) : KLog(tag) {
       platformStatementContext()
     }
 
+    val formattedTag =
+      displayTag ?: (conf.displayTagFormatter?.invoke(tag, conf.displayTagLength) ?: tag).also {
+        displayTag = it
+      }
+
     logWriter(
-      displayTag,
+      formattedTag,
       level,
       conf.messageFormatter(tag, level, message, err, ctx),
       err
     )
   }
-
 }
-
 
 

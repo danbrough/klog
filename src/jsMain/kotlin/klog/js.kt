@@ -7,7 +7,7 @@ actual fun platformStatementContext(): StatementContext =
   StatementContext("js", "")
 
 
-actual fun createKLogRegistry(): KLogFactory = object : DefaultLogFactory() {
+actual fun createKLogFactory(): KLogFactory = object : DefaultLogFactory() {
 
 }
 
