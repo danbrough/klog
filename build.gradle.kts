@@ -1,26 +1,24 @@
 @file:Suppress("UnstableApiUsage")
 
-import BuildEnvironment.createNativeTargets
-import BuildEnvironment.platformName
+
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.konan.target.KonanTarget
+import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
-  kotlin("multiplatform")
   id("com.android.library")
+  kotlin("multiplatform")
   `maven-publish`
   signing
   id("org.jetbrains.dokka")
 }
 
 
-ProjectProperties.init(project)
+version = "0.0.2-beta03"
+group = "org.danbrough"
 
-version = ProjectProperties.buildVersionName
-group = ProjectProperties.projectGroup
+
 
 buildscript {
   repositories {
@@ -39,15 +37,32 @@ kotlin {
 
   jvm()
 
-  js {
-    nodejs()
-  }
-
   android {
-   // publishLibraryVariants("release")
+    publishLibraryVariants("debug", "release")
   }
 
-  createNativeTargets()
+  if (HostManager.hostIsMac) {
+    macosArm64()
+    macosX64()
+    iosArm64()
+    iosX64()
+    watchosArm64()
+    watchosX64()
+  } else {
+
+    linuxX64()
+    linuxArm64()
+    linuxArm32Hfp()
+    mingwX64()
+    androidNativeArm32()
+    androidNativeArm64()
+    androidNativeX64()
+    androidNativeX86()
+
+    js {
+      nodejs()
+    }
+  }
 
   val commonMain by sourceSets.getting {
     dependencies {
@@ -82,7 +97,21 @@ kotlin {
 
     val androidMain by getting {
       dependsOn(jvmCommonMain)
+
+
     }
+
+    val androidInstrumentedTest by getting {
+      dependsOn(jvmCommonTest)
+
+      dependencies {
+        implementation(AndroidX.test.runner)
+        implementation(AndroidX.test.ext.junit)
+        implementation(AndroidX.test.ext.junit.ktx)
+
+      }
+    }
+
     //  val androidAndroidTestRelease by getting
 
 
@@ -137,28 +166,7 @@ kotlin {
 
 
 
-
-subprojects {
-
-
-  /*afterEvaluate {
-
-    extensions.findByType(JavaPluginExtension::class.java)?.apply {
-      toolchain.languageVersion.set(JavaLanguageVersion.of(javaLangVersion))
-    }
-
-
-    extensions.findByType(org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension::class.java)
-      ?.apply {
-        jvmToolchain {
-          languageVersion.set(JavaLanguageVersion.of(javaLangVersion))
-        }
-      }
-  }*/
-}
-
-
-tasks.withType<AbstractTestTask>() {
+tasks.withType<AbstractTestTask> {
   testLogging {
     events = setOf(
       TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
@@ -172,11 +180,7 @@ tasks.withType<AbstractTestTask>() {
   }
 }
 
-tasks.withType(KotlinCompile::class) {
-  kotlinOptions {
-    jvmTarget = ProjectProperties.KOTLIN_JVM_VERSION
-  }
-}
+
 
 tasks.register<Delete>("deleteDocs") {
   setDelete(file("docs/api"))
@@ -228,8 +232,12 @@ publishing {
     if (this !is MavenPublication) return@all
 
 
+    if (project.properties["publishDocs"] == "1")
+      artifact(javadocJar)
 
-    artifact(javadocJar)
+    if (properties["signPublications"] == "1")
+      signing.sign(this)
+
 
     pom {
 
@@ -270,26 +278,31 @@ publishing {
   }
 }
 
+/*
 if (properties.get("signPublications") == "1")
   signing {
     sign(publishing.publications)
   }
+*/
+
+
 
 android {
 
-  compileSdk = ProjectProperties.SDK_VERSION
+  compileSdk = 33
   sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
   namespace = project.group.toString()
 
 
   defaultConfig {
-    minSdk = ProjectProperties.MIN_SDK_VERSION
+    minSdk = 24
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
   }
 
   compileOptions {
-    sourceCompatibility = ProjectProperties.JAVA_VERSION
-    targetCompatibility = ProjectProperties.JAVA_VERSION
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
   }
 
   signingConfigs.register("release") {
@@ -300,7 +313,7 @@ android {
   }
 
   lint {
-    abortOnError = false
+    // abortOnError = false
   }
 
   buildTypes {
@@ -308,6 +321,7 @@ android {
     getByName("debug") {
       //debuggable(true)
     }
+
 
     getByName("release") {
       isMinifyEnabled = true
@@ -320,22 +334,13 @@ android {
 
 }
 
+afterEvaluate {
 
-tasks.create("publishMacTargets") {
-  kotlin.targets.withType<KotlinNativeTarget>().filter { it.konanTarget.family.isAppleFamily }
-    .map { it.konanTarget.platformName }.forEach {
-      dependsOn("publish${it.capitalize()}PublicationToSonaTypeRepository")
-    }
-}
+  val signingTasks = tasks.withType(Sign::class.java).map { it.name }
 
-
-tasks.register("listPresets") {
-  doLast {
-    KonanTarget.predefinedTargets.forEach {
-      println("KONAN TARGET: ${it.key} family: ${it.value.family}")
-    }
-    kotlin.presets.forEach {
-      println("PRESET: ${it.name}")
-    }
+  tasks.withType(PublishToMavenRepository::class.java).all {
+    this.mustRunAfter(signingTasks)
   }
+
+
 }
