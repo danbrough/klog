@@ -26,7 +26,7 @@ class KLog(private val tag: String, val conf: Conf) {
     var level: Level,
     var writer: KLogWriter,
     var messageFormatter: KMessageFormatter,
-    val displayTagLength: Int = 12,
+    var displayTagLength: Int = 12,
     //set to null to disable display tag formatting
     val displayTagFormatter: KDisplayTagFormatter? = DefaultDisplayTagFormatter
   )

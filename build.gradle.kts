@@ -15,7 +15,7 @@ plugins {
 }
 
 
-version = "0.0.2-beta03"
+version = "0.0.2-beta07"
 group = "org.danbrough"
 
 
@@ -37,7 +37,7 @@ kotlin {
 
   jvm()
 
-  android {
+  androidTarget {
     publishLibraryVariants("debug", "release")
   }
 
@@ -164,7 +164,11 @@ kotlin {
 
 }
 
-
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
+}
 
 tasks.withType<AbstractTestTask> {
   testLogging {
@@ -295,15 +299,22 @@ android {
 
 
   defaultConfig {
-    minSdk = 24
+    minSdk = 21
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
   }
 
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
   }
+
+
+  /*
+    kotlinOptions {
+      jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+  */
 
   signingConfigs.register("release") {
     storeFile = File(System.getProperty("user.home"), ".android/keystore")
@@ -324,7 +335,7 @@ android {
 
 
     getByName("release") {
-      isMinifyEnabled = true
+      isMinifyEnabled = false
       proguardFiles(
         getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
       )

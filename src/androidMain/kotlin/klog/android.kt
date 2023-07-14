@@ -3,7 +3,6 @@ package klog
 import android.util.Log
 
 
-
 actual fun createKLogFactory(): KLogFactory {
 
   runCatching {
@@ -12,9 +11,13 @@ actual fun createKLogFactory(): KLogFactory {
       "Initialising stdout log with android log"
     )
     KLogWriters.stdOut = KLogWriters.androidLog
+
   }
 
-  return object : DefaultLogFactory(writer = KLogWriters.androidLog) {}
+  return object : DefaultLogFactory(
+    formatter = { _, _, msg, _, _ -> "ANDROIDLOG<<$msg>>" },
+    writer = KLogWriters.androidLog
+  ) {}
 }
 
 
