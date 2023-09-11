@@ -4,7 +4,6 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
   id("com.android.library")
@@ -15,7 +14,7 @@ plugins {
 }
 
 
-version = "0.0.2-beta05"
+version = "0.0.2-beta06"
 group = "org.danbrough"
 
 
@@ -43,15 +42,12 @@ kotlin {
     publishLibraryVariants("debug", "release")
   }
 
-  if (HostManager.hostIsMac) {
     macosArm64()
     macosX64()
     iosArm64()
     iosX64()
     watchosArm64()
     watchosX64()
-  }
-  if (HostManager.hostIsLinux) {
 
     linuxX64()
     linuxArm64()
@@ -65,7 +61,6 @@ kotlin {
     js {
       nodejs()
     }
-  }
 
   val commonMain by sourceSets.getting {
     dependencies {
