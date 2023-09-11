@@ -43,7 +43,7 @@ kotlin {
     publishLibraryVariants("debug", "release")
   }
 
-  if (HostManager.hostIsMac || HostManager.hostIsLinux) {
+  if (HostManager.hostIsMac) {
     macosArm64()
     macosX64()
     iosArm64()
