@@ -37,19 +37,20 @@ kotlin {
 
   jvm()
 
-  androidTarget {
-    publishLibraryVariants("debug", "release")
-  }
 
-  if (HostManager.hostIsMac) {
+
+  if (HostManager.hostIsMac || HostManager.hostIsLinux) {
     macosArm64()
     macosX64()
     iosArm64()
     iosX64()
     watchosArm64()
     watchosX64()
-  } else {
-
+  }
+  if (HostManager.hostIsLinux) {
+    androidTarget {
+      publishLibraryVariants("debug", "release")
+    }
     linuxX64()
     linuxArm64()
     linuxArm32Hfp()

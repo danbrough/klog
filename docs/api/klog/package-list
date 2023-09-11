@@ -21,6 +21,7 @@ $dokka.location:klog/DefaultLogFactory/DefaultLogFactory/#klog.Level#kotlin.Func
 $dokka.location:klog/DefaultLogFactory/applyToBranch/#kotlin.String#kotlin.Function1[klog.KLog,kotlin.Unit]/PointingToDeclaration/klog/klog/-default-log-factory/apply-to-branch.html
 $dokka.location:klog/DefaultLogFactory/get/#kotlin.String/PointingToDeclaration/klog/klog/-default-log-factory/get.html
 $dokka.location:klog/DefaultLogFactory/getLogs/#/PointingToDeclaration/klog/klog/-default-log-factory/get-logs.html
+$dokka.location:klog/KDisplayTagFormatter///PointingToDeclaration/klog/klog/-k-display-tag-formatter/index.html
 $dokka.location:klog/KLog.Companion///PointingToDeclaration/klog/klog/-k-log/-companion/index.html
 $dokka.location:klog/KLog.Companion/ROOT_LOG_TAG/#/PointingToDeclaration/klog/klog/-k-log/-companion/-r-o-o-t_-l-o-g_-t-a-g.html
 $dokka.location:klog/KLog.Conf///PointingToDeclaration/klog/klog/-k-log/-conf/index.html
@@ -55,9 +56,11 @@ $dokka.location:klog/KLogFactory/KLogFactory/#/PointingToDeclaration/klog/klog/
 $dokka.location:klog/KLogFactory/applyToBranch/#kotlin.String#kotlin.Function1[klog.KLog,kotlin.Unit]/PointingToDeclaration/klog/klog/-k-log-factory/apply-to-branch.html
 $dokka.location:klog/KLogFactory/get/#kotlin.String/PointingToDeclaration/klog/klog/-k-log-factory/get.html
 $dokka.location:klog/KLogFactory/getLogs/#/PointingToDeclaration/klog/klog/-k-log-factory/get-logs.html
+$dokka.location:klog/KLogWriter///PointingToDeclaration/klog/klog/-k-log-writer/index.html
 $dokka.location:klog/KLogWriters///PointingToDeclaration/klog/klog/-k-log-writers/index.html
 $dokka.location:klog/KLogWriters/noop/#/PointingToDeclaration/klog/klog/-k-log-writers/noop.html
 $dokka.location:klog/KLogWriters/stdOut/#/PointingToDeclaration/klog/klog/-k-log-writers/std-out.html
+$dokka.location:klog/KMessageFormatter///PointingToDeclaration/klog/klog/-k-message-formatter/index.html
 $dokka.location:klog/KMessageFormatters///PointingToDeclaration/klog/klog/-k-message-formatters/index.html
 $dokka.location:klog/KMessageFormatters/colored/#kotlin.Function5[kotlin.String,klog.Level,kotlin.String,kotlin.Throwable?,klog.StatementContext,kotlin.String]/PointingToDeclaration/klog/klog/-k-message-formatters/colored.html
 $dokka.location:klog/KMessageFormatters/simple/#/PointingToDeclaration/klog/klog/-k-message-formatters/simple.html
@@ -68,8 +71,10 @@ $dokka.location:klog/Level.INFO///PointingToDeclaration/{"org.jetbrains.dokka.li
 $dokka.location:klog/Level.TRACE///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}klog/klog/-level/-t-r-a-c-e/index.html
 $dokka.location:klog/Level.WARN///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}klog/klog/-level/-w-a-r-n/index.html
 $dokka.location:klog/Level///PointingToDeclaration/klog/klog/-level/index.html
+$dokka.location:klog/Level/entries/#/PointingToDeclaration/klog/klog/-level/entries.html
 $dokka.location:klog/Level/valueOf/#kotlin.String/PointingToDeclaration/klog/klog/-level/value-of.html
 $dokka.location:klog/Level/values/#/PointingToDeclaration/klog/klog/-level/values.html
+$dokka.location:klog/LogMessageFunction///PointingToDeclaration/klog/klog/-log-message-function/index.html
 $dokka.location:klog/PosixKLogRegistry///PointingToDeclaration/klog/klog/-posix-k-log-registry/index.html
 $dokka.location:klog/StatementContext.LineContext///PointingToDeclaration/klog/klog/-statement-context/-line-context/index.html
 $dokka.location:klog/StatementContext.LineContext/LineContext/#kotlin.Int#kotlin.String?#kotlin.String?#kotlin.String?/PointingToDeclaration/klog/klog/-statement-context/-line-context/-line-context.html
