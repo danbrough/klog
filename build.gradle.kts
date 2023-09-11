@@ -15,7 +15,7 @@ plugins {
 }
 
 
-version = "0.0.2-beta04"
+version = "0.0.2-beta05"
 group = "org.danbrough"
 
 

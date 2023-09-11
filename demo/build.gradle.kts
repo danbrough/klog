@@ -44,7 +44,7 @@ kotlin {
   sourceSets {
     val commonMain by getting {
       dependencies {
-        implementation("org.danbrough:klog:_")
+        implementation(libs.org.danbrough.klog)
         implementation("org.danbrough.kotlinx:kotlinx-coroutines-core:_")
       }
     }
