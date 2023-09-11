@@ -39,6 +39,9 @@ kotlin {
   jvm()
 
 
+  androidTarget {
+    publishLibraryVariants("debug", "release")
+  }
 
   if (HostManager.hostIsMac || HostManager.hostIsLinux) {
     macosArm64()
@@ -49,9 +52,7 @@ kotlin {
     watchosX64()
   }
   if (HostManager.hostIsLinux) {
-    androidTarget {
-      publishLibraryVariants("debug", "release")
-    }
+
     linuxX64()
     linuxArm64()
     linuxArm32Hfp()
