@@ -14,7 +14,7 @@ plugins {
 }
 
 
-version = "0.0.2-beta06"
+version = "0.0.2-beta07"
 group = "org.danbrough"
 
 
@@ -212,7 +212,7 @@ val javadocJar by tasks.registering(Jar::class) {
 publishing {
 
   repositories {
-    maven("/usr/local/kotlinxtras/build/xtras/maven") {
+    maven("/home/dan/workspace/xtras/xtras/maven") {
       name = "Xtras"
     }
 
