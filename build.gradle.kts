@@ -1,4 +1,5 @@
-import Google.android
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
@@ -11,17 +12,16 @@ repositories {
 
 kotlin {
   applyDefaultHierarchyTemplate()
+  jvm()
 
   androidTarget()
-  linuxX64()
+  /*linuxX64()
   macosArm64()
   macosX64()
   mingwX64()
-  jvm()
 
 
   if (System.getProperty("idea.active") == null) {
-
     iosX64()
     iosArm64()
     watchosArm64()
@@ -30,19 +30,58 @@ kotlin {
     androidNativeX64()
     androidNativeArm64()
   }
-
+*/
   sourceSets {
+
     commonTest {
       dependencies {
         implementation(kotlin("test"))
       }
     }
+
+    val commonMain by getting
+
+    val jvmAndroidMain by creating {
+      dependsOn(commonMain)
+    }
+
+    val androidMain by getting {
+      dependsOn(jvmAndroidMain)
+    }
+
+    val jvmMain by getting {
+      dependsOn(jvmAndroidMain)
+    }
+
+    all {
+      println("SOURCESET: $name")
+    }
   }
+
+
+
+  tasks.withType<AbstractTestTask> {
+    testLogging {
+      events = setOf(
+        TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
+      )
+      exceptionFormat = TestExceptionFormat.FULL
+      showStandardStreams = true
+      showStackTraces = true
+    }
+
+    outputs.upToDateWhen {
+      false
+    }
+  }
+
+
 }
 
 
 android {
-  compileSdk= 34
+  compileSdk = 34
 
-  namespace = "thang"
+  namespace = project.group.toString()
 }
+

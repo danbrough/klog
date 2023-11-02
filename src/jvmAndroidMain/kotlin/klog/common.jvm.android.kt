@@ -1,6 +1,7 @@
 package klog
 
 
+
 actual inline fun <reified T : Any> T.klog(noinline config: (KLogContext.() -> Unit)?): KLog {
   val tag = toKLogTag(this::class.toString())
   return object : KLog{
@@ -9,3 +10,4 @@ actual inline fun <reified T : Any> T.klog(noinline config: (KLogContext.() -> U
     }
   }
 }
+
