@@ -1,5 +1,8 @@
+import Google.android
+
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
+  alias(libs.plugins.com.android.library)
 }
 
 repositories {
@@ -9,6 +12,7 @@ repositories {
 kotlin {
   applyDefaultHierarchyTemplate()
 
+  androidTarget()
   linuxX64()
   macosArm64()
   macosX64()
@@ -17,7 +21,7 @@ kotlin {
 
 
   if (System.getProperty("idea.active") == null) {
-    androidTarget()
+
     iosX64()
     iosArm64()
     watchosArm64()
@@ -34,4 +38,11 @@ kotlin {
       }
     }
   }
+}
+
+
+android {
+  compileSdk= 34
+
+  namespace = "thang"
 }

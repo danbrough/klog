@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE", "KotlinRedundantDiagnosticSuppress")
+
 package klog
 
 enum class Level {
@@ -19,4 +21,3 @@ inline fun KLog.error(msg:String, err:Throwable? = null) = log(Level.ERROR,msg,e
 
 expect inline   fun <reified T:Any> T.klog(noinline config:(KLogContext.()->Unit)? = null): KLog
 
-expect fun klog(tag:String,config:(KLogContext.()->Unit)? = null): KLog
