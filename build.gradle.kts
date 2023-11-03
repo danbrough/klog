@@ -13,8 +13,9 @@ repositories {
 kotlin {
   applyDefaultHierarchyTemplate()
   jvm()
-
   androidTarget()
+  linuxX64()
+  
   /*linuxX64()
   macosArm64()
   macosX64()
@@ -53,9 +54,6 @@ kotlin {
       dependsOn(jvmAndroidMain)
     }
 
-    all {
-      println("SOURCESET: $name")
-    }
   }
 
 

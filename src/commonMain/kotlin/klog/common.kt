@@ -6,15 +6,12 @@ enum class Level {
   TRACE, DEBUG, INFO, WARN, ERROR;
 }
 
-data class KLogContext(val level: Level,val colored:Boolean)
+const val ROOT_TAG = ""
 
-interface KLog {
-  val log: (Level, String, Throwable?) -> Unit
-}
 
-val rootContext = KLogContext(Level.TRACE,true)
+val registry = KLogContextRegistry()
 
-fun toKLogTag(name:String):String = name
+fun toKLogTag(name: String): String = name
 
 inline fun KLog.trace(msg: String, err: Throwable? = null) = log(Level.TRACE, msg, err)
 inline fun KLog.debug(msg: String, err: Throwable? = null) = log(Level.DEBUG, msg, err)
@@ -22,6 +19,15 @@ inline fun KLog.info(msg: String, err: Throwable? = null) = log(Level.INFO, msg,
 inline fun KLog.warn(msg: String, err: Throwable? = null) = log(Level.WARN, msg, err)
 inline fun KLog.error(msg: String, err: Throwable? = null) = log(Level.ERROR, msg, err)
 
-expect inline fun <reified T : Any> T.klog(noinline config: (KLogContext.() -> Unit)? = null): KLog
+//expect inline fun <reified T : Any> T.klog(noinline config: (KLogContext.() -> Unit)? = null): KLog
+
+
+fun <T : Any> T.klog(config: ConfigureContext = {context}): KLog {
+
+  println("CREATING KLOG FOR ${this::class.qualifiedName}")
+  return klog(toKLogTag(this::class.qualifiedName ?: ROOT_TAG), config)
+}
+
+fun klog(tag: String, config: ConfigureContext = {context}): KLog =DefaultLog( registry.getContext(tag,config))
 
 
