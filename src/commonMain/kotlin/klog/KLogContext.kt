@@ -1,16 +1,21 @@
 package klog
 
-data class KLogContext(val tag:String,val level: Level,val colored:Boolean){
-  internal val config:ContextConfig
-    get() = ContextConfig(tag,level,colored)
-}
-data class ContextConfig (
+data class KLogContext(val tag:String,val level: Level,val colored:Boolean)
+
+data class KLogContextConfig (
   var tag:String = ROOT_TAG,
   var level: Level = Level.TRACE,
-  var colored:Boolean = true,){
+  var colored:Boolean = true)
 
-  internal val context:KLogContext
-    get() = KLogContext(tag,level,colored)
-}
+typealias ConfigureContext = KLogContextConfig.()->Unit
 
-typealias ConfigureContext = ContextConfig.()->Unit
+internal val KLogContext.config: KLogContextConfig
+  get() = KLogContextConfig(tag,level,colored)
+
+internal val KLogContextConfig.context:KLogContext
+  get() = KLogContext(tag,level,colored)
+
+
+
+
+

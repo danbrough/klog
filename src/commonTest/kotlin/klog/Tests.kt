@@ -5,12 +5,10 @@ import kotlin.test.Test
 class Tests {
 
   private val rootLog = klog(ROOT_TAG) {
-    level = Level.TRACE
     colored = false
   }
 
   private val testLog = klog {
-    level = Level.DEBUG
   }
 
 

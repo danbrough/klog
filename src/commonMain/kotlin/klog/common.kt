@@ -8,7 +8,6 @@ enum class Level {
 
 const val ROOT_TAG = ""
 
-
 val registry = KLogContextRegistry()
 
 fun toKLogTag(name: String): String = name
