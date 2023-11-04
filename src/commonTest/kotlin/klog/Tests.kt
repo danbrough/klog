@@ -26,4 +26,9 @@ class Tests {
     testLog.info("rootLog.context = ${rootLog.context}")
   }
 
+  @Test
+  fun testGetEnv(){
+    testLog.info("testGetEnv()")
+    testLog.debug("HOME=${getenv("HOME")}")
+  }
 }

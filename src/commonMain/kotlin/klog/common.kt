@@ -19,8 +19,6 @@ inline fun KLog.info(msg: String, err: Throwable? = null) = log(Level.INFO, msg,
 inline fun KLog.warn(msg: String, err: Throwable? = null) = log(Level.WARN, msg, err)
 inline fun KLog.error(msg: String, err: Throwable? = null) = log(Level.ERROR, msg, err)
 
-//expect inline fun <reified T : Any> T.klog(noinline config: (KLogContext.() -> Unit)? = null): KLog
-
 
 fun <T : Any> T.klog(config: ConfigureContext = {context}): KLog {
 
@@ -30,4 +28,5 @@ fun <T : Any> T.klog(config: ConfigureContext = {context}): KLog {
 
 fun klog(tag: String, config: ConfigureContext = {context}): KLog =DefaultLog( registry.getContext(tag,config))
 
+internal expect fun getenv(name:String):String?
 
