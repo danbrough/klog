@@ -8,7 +8,7 @@ enum class Level {
 
 const val ROOT_TAG = ""
 
-val registry = KLogContextRegistry()
+val registry = ContextRegistry()
 
 fun toKLogTag(name: String): String = name
 
@@ -19,13 +19,11 @@ inline fun KLog.warn(msg: String, err: Throwable? = null) = log(Level.WARN, msg,
 inline fun KLog.error(msg: String, err: Throwable? = null) = log(Level.ERROR, msg, err)
 
 
-fun <T : Any> T.klog(config: ConfigureContext = {context}): KLog {
+fun <T : Any> T.klog(config: ConfigureContext = { context }) =
+  klog(toKLogTag(this::class.qualifiedName ?: ROOT_TAG), config)
 
-  println("CREATING KLOG FOR ${this::class.qualifiedName}")
-  return klog(toKLogTag(this::class.qualifiedName ?: ROOT_TAG), config)
-}
+fun klog(tag: String, config: ConfigureContext = { context }): KLog =
+  DefaultLog(registry.getContext(tag, config))
 
-fun klog(tag: String, config: ConfigureContext = {context}): KLog =DefaultLog( registry.getContext(tag,config))
-
-internal expect fun getenv(name:String):String?
+internal expect fun getenv(name: String): String?
 
