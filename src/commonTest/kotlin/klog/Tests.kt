@@ -29,4 +29,22 @@ class Tests {
     testLog.info("testGetEnv()")
     testLog.debug("HOME=${getenv("HOME")}")
   }
+
+  @Test
+  fun testRegistry(){
+    testLog.info("testRegistry()")
+    val registry = LogCtxRegistry(DefaultCtxImpl(ROOT_TAG,Level.TRACE))
+
+    var ctx = registry.get("dude"){
+      level = Level.DEBUG
+    }
+    testLog.trace("dude: $ctx")
+    ctx = registry.get("dude.1")
+    testLog.trace("dude.1: $ctx")
+  }
+
+  @Test
+  fun test2(){
+    testLog.info("test2()")
+  }
 }
