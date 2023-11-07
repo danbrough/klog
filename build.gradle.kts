@@ -212,7 +212,7 @@ val javadocJar by tasks.registering(Jar::class) {
 publishing {
 
   repositories {
-    maven("/home/dan/workspace/xtras/xtras/maven") {
+    maven("/home/dan/workspace/xtras2/xtras/maven") {
       name = "Xtras"
     }
 
