@@ -4,12 +4,8 @@ import kotlin.test.Test
 
 class Tests {
 
-  private val rootLog = klog(ROOT_TAG) {
-    colored = false
-  }
-
-  private val testLog = klog {
-  }
+  private val rootLog = klog(ROOT_TAG)
+  private val testLog = klog()
 
 
   @Test
@@ -25,26 +21,26 @@ class Tests {
   }
 
   @Test
-  fun testGetEnv(){
+  fun testGetEnv() {
     testLog.info("testGetEnv()")
     testLog.debug("HOME=${getenv("HOME")}")
   }
 
   @Test
-  fun testRegistry(){
+  fun testRegistry() {
     testLog.info("testRegistry()")
-    val registry = LogCtxRegistry(DefaultCtxImpl(ROOT_TAG,Level.TRACE))
-
-    var ctx = registry.get("dude"){
+    var ctx = klog("dude") {
       level = Level.DEBUG
     }
     testLog.trace("dude: $ctx")
-    ctx = registry.get("dude.1")
+    ctx = klog("dude.1") {
+      level = Level.INFO
+    }
     testLog.trace("dude.1: $ctx")
   }
 
   @Test
-  fun test2(){
+  fun test2() {
     testLog.info("test2()")
   }
 }

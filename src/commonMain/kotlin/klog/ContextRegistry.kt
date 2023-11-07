@@ -1,27 +1,18 @@
 package klog
 
+class ContextRegistry(rootContext: Context) {
 
-class ContextRegistry {
+  private val registry = mutableMapOf(ROOT_TAG to rootContext)
 
-  private val registryMap = mutableMapOf<String, LogContext>()
+  private fun findContext(name: String): Context =
+    registry[name] ?: findContext(name.substringBeforeLast('.', ROOT_TAG))
 
-
-  private fun findContext(name: String): LogContext {
-
-    registryMap[name]?.also { return it }
-
-    if (name == ROOT_TAG) return LogContext(ROOT_TAG, Level.TRACE, false).also {
-      registryMap[ROOT_TAG] = it
-    }
-
-    return findContext(name.substringBeforeLast('.', ROOT_TAG))
-  }
-
-  fun getContext(name: String, config: ConfigureContext = { context }): LogContext =
-    findContext(name.lowercase()).config.let {
+  fun get(name: String, configure: MutableContext.() -> Unit = {}): Context =
+    findContext(name).toMutableContext().apply(configure).let {
       it.tag = name
-      it.config()
-      it.context
+      registry[name] = it
+      it
     }
 
 }
+
