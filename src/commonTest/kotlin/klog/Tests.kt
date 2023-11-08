@@ -4,7 +4,9 @@ import kotlin.test.Test
 
 class Tests {
 
-  private val rootLog = klog(ROOT_TAG)
+  private val rootLog = klog(ROOT_TAG) {
+
+  }
   private val testLog = klog()
 
 
@@ -16,8 +18,8 @@ class Tests {
     testLog.debug("test1() debug")
     testLog.trace("test1() trace")
 
-    testLog.info("testLog.context = ${testLog.context}")
-    testLog.info("rootLog.context = ${rootLog.context}")
+    testLog.info("testLog.context = ${testLog.config}")
+    testLog.info("rootLog.context = ${rootLog.config}")
   }
 
   @Test
@@ -27,7 +29,7 @@ class Tests {
   }
 
   @Test
-  fun testRegistry() {
+  fun test2() {
     testLog.info("testRegistry()")
     var ctx = klog("dude") {
       level = Level.DEBUG
@@ -39,8 +41,5 @@ class Tests {
     testLog.trace("dude.1: $ctx")
   }
 
-  @Test
-  fun test2() {
-    testLog.info("test2()")
-  }
+
 }
