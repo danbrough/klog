@@ -10,7 +10,7 @@ class Tests {
   }
 
   private val testLog = klog {
-    level = Level.TRACE
+    level = Level.DEBUG
     outputs {
       stdout {
 

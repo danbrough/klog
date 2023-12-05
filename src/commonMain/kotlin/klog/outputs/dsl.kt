@@ -5,10 +5,8 @@ import klog.Node
 import klog.ParentNode
 import klog.ParentNodeBuilder
 
-data class Outputs(override val children: List<Node>) : ParentNode("outputs") {
-  override fun buildUpon(): ParentNodeBuilder<*> {
-    TODO("Not yet implemented")
-  }
+data class Outputs(override val children: List<Node>) : ParentNode() {
+  override fun buildUpon(): ParentNodeBuilder<*> = OutputsNodeBuilder()
 }
 
 class OutputsNodeBuilder : ParentNodeBuilder<Outputs>() {
@@ -16,7 +14,8 @@ class OutputsNodeBuilder : ParentNodeBuilder<Outputs>() {
 }
 
 
-fun LogConfigBuilder.outputs(block: OutputsNodeBuilder.() -> Unit): Outputs =
-  OutputsNodeBuilder().apply(block).build()
+fun LogConfigBuilder.outputs(block: OutputsNodeBuilder.() -> Unit) {
+  children.add(OutputsNodeBuilder().apply(block))
+}
 
 

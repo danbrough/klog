@@ -15,8 +15,7 @@ val Level.color: Int
   }
 
 
-data class Formatting(val colored: Boolean = false) :
-  Node("formatting") {
+data class Formatting(val colored: Boolean = false) : Node() {
 
   override fun buildUpon() = FormattingBuilder(colored)
 }
@@ -26,8 +25,9 @@ class FormattingBuilder(var colored: Boolean = false) : NodeBuilder<Formatting> 
   override fun build() = Formatting(colored)
 }
 
-fun OutputsNodeBuilder.formatting(block: FormattingBuilder.() -> Unit): Formatting =
-  FormattingBuilder().apply(block).build()
+fun OutputsNodeBuilder.formatting(block: FormattingBuilder.() -> Unit) {
+  children.add(FormattingBuilder().apply(block))
+}
 
 
 /*

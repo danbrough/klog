@@ -6,20 +6,18 @@ package klog
 annotation class LogConfigDSL
 
 @LogConfigDSL
-abstract class Node(val name: String) {
+abstract class Node {
   abstract fun buildUpon(): NodeBuilder<*>
 }
 
-abstract class ParentNode(name: String) : Node(name) {
-  abstract val children: List<Node>
+abstract class ParentNode : Node() {
+  open val children: List<Node> = emptyList()
   abstract override fun buildUpon(): ParentNodeBuilder<*>
 }
 
 data class LogConfig(
-  val tag: String,
-  val level: Level,
-  override val children: List<Node>
-) : ParentNode("logConfig") {
+  val tag: String, val level: Level, override val children: List<Node>
+) : ParentNode() {
 
   override fun buildUpon() = LogConfigBuilder(tag).also { builder ->
     builder.tag = tag
@@ -34,9 +32,8 @@ interface NodeBuilder<T : Node> {
   fun build(): T
 }
 
-abstract class ParentNodeBuilder<T : ParentNode> : NodeBuilder<T> {
-  val children = mutableListOf<NodeBuilder<*>>()
-}
+abstract class ParentNodeBuilder<T : ParentNode>(open val children: MutableList<NodeBuilder<*>> = mutableListOf()) :
+  NodeBuilder<T>
 
 class LogConfigBuilder(var tag: String = ROOT_TAG) : ParentNodeBuilder<LogConfig>() {
   var level: Level = Level.TRACE
