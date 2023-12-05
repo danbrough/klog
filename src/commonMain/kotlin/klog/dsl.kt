@@ -7,17 +7,19 @@ annotation class LogConfigDSL
 
 @LogConfigDSL
 abstract class Node(val name: String) {
-  abstract val children: List<Node>
-
   abstract fun buildUpon(): NodeBuilder<*>
 }
 
+abstract class ParentNode(name: String) : Node(name) {
+  abstract val children: List<Node>
+  abstract override fun buildUpon(): ParentNodeBuilder<*>
+}
 
 data class LogConfig(
   val tag: String,
   val level: Level,
   override val children: List<Node>
-) : Node("logConfig") {
+) : ParentNode("logConfig") {
 
   override fun buildUpon() = LogConfigBuilder(tag).also { builder ->
     builder.tag = tag
@@ -28,15 +30,16 @@ data class LogConfig(
 
 
 @LogConfigDSL
-abstract class NodeBuilder<T : Node> {
-  val children = mutableListOf<NodeBuilder<*>>()
-
-  abstract fun build(): T
+interface NodeBuilder<T : Node> {
+  fun build(): T
 }
 
-class LogConfigBuilder(var tag: String = ROOT_TAG) : NodeBuilder<LogConfig>() {
-  var level: Level = Level.TRACE
+abstract class ParentNodeBuilder<T : ParentNode> : NodeBuilder<T> {
+  val children = mutableListOf<NodeBuilder<*>>()
+}
 
+class LogConfigBuilder(var tag: String = ROOT_TAG) : ParentNodeBuilder<LogConfig>() {
+  var level: Level = Level.TRACE
 
   override fun build(): LogConfig = LogConfig(tag, level, children.map { it.build() })
 

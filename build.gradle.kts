@@ -4,6 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.com.android.library)
+  idea
 }
 
 repositories {
@@ -15,7 +16,7 @@ kotlin {
   jvm()
   androidTarget()
   linuxX64()
-  
+
   /*linuxX64()
   macosArm64()
   macosX64()

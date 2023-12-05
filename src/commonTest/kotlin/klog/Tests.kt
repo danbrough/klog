@@ -1,13 +1,22 @@
 package klog
 
+import klog.outputs.outputs
+import klog.outputs.stdout
 import kotlin.test.Test
 
 class Tests {
-
   private val rootLog = klog(ROOT_TAG) {
-
+    level = Level.TRACE
   }
-  private val testLog = klog()
+
+  private val testLog = klog {
+    level = Level.TRACE
+    outputs {
+      stdout {
+
+      }
+    }
+  }
 
 
   @Test

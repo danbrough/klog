@@ -3,6 +3,7 @@ package klog.formatting
 import klog.Level
 import klog.Node
 import klog.NodeBuilder
+import klog.outputs.OutputsNodeBuilder
 
 val Level.color: Int
   get() = when (this) {
@@ -14,16 +15,21 @@ val Level.color: Int
   }
 
 
-data class Formatting(val colored: Boolean = false) : Node("formatting") {
-  override val children = emptyList<Node>()
+data class Formatting(val colored: Boolean = false) :
+  Node("formatting") {
 
   override fun buildUpon() = FormattingBuilder(colored)
 }
 
 
-class FormattingBuilder(var colored: Boolean = false) : NodeBuilder<Formatting>() {
+class FormattingBuilder(var colored: Boolean = false) : NodeBuilder<Formatting> {
   override fun build() = Formatting(colored)
 }
+
+fun OutputsNodeBuilder.formatting(block: FormattingBuilder.() -> Unit): Formatting =
+  FormattingBuilder().apply(block).build()
+
+
 /*
 data class FormattingOptions(
   var colored: Boolean = false,
