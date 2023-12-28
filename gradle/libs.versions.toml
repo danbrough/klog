@@ -3,13 +3,10 @@
 [plugins]
 
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-
 com-android-library = { id = "com.android.library", version.ref = "agp" }
-com-google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [versions]
 
-ksp = "1.9.0-1.0.12"
 
 agp = "8.2.0"
 ##⬆= "8.3.0-alpha01"
@@ -28,12 +25,14 @@ agp = "8.2.0"
 ##⬆= "8.3.0-alpha14"
 ##⬆= "8.3.0-alpha15"
 ##⬆= "8.3.0-alpha16"
+##⬆= "8.3.0-alpha17"
+##⬆= "8.3.0-alpha18"
+##⬆= "8.3.0-beta01"
 
-#kotlin = "1.9.21"
-kotlin = "2.0.0-Beta1"
+kotlin = "1.9.22"
+##  ⬆ = "2.0.0-Beta1"
+##  ⬆ = "2.0.0-Beta2"
 
 [libraries]
 
-kotlin-scripting-compiler-embeddable = { group = "org.jetbrains.kotlin", name = "kotlin-scripting-compiler-embeddable", version.ref = "kotlin" }
 
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test" }

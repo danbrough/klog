@@ -6,21 +6,21 @@ package klog
 annotation class LogConfigDSL
 
 @LogConfigDSL
-abstract class Node {
-  abstract fun buildUpon(): NodeBuilder<*>
+interface Node {
+  fun buildUpon(): NodeBuilder<*>
 }
 
-abstract class ParentNode : Node() {
-  open val children: List<Node> = emptyList()
-  abstract override fun buildUpon(): ParentNodeBuilder<*>
+interface ParentNode : Node {
+  val children: List<Node>
+  override fun buildUpon(): ParentNodeBuilder<*>
 }
 
 data class LogConfig(
-  val tag: String, val level: Level, override val children: List<Node>
-) : ParentNode() {
+  val path: String, val name: String, val level: Level, override val children: List<Node>
+) : ParentNode {
 
-  override fun buildUpon() = LogConfigBuilder(tag).also { builder ->
-    builder.tag = tag
+  override fun buildUpon() = LogConfigBuilder(path).also { builder ->
+    builder.name = name
     builder.level = level
     builder.children.addAll(children.map { it.buildUpon() }.toMutableList())
   }
@@ -32,13 +32,16 @@ interface NodeBuilder<T : Node> {
   fun build(): T
 }
 
-abstract class ParentNodeBuilder<T : ParentNode>(open val children: MutableList<NodeBuilder<*>> = mutableListOf()) :
+abstract class ParentNodeBuilder<T : ParentNode>(open val children: MutableList<NodeBuilder<*>>) :
   NodeBuilder<T>
 
-class LogConfigBuilder(var tag: String = ROOT_TAG) : ParentNodeBuilder<LogConfig>() {
-  var level: Level = Level.TRACE
 
-  override fun build(): LogConfig = LogConfig(tag, level, children.map { it.build() })
+class LogConfigBuilder(val path: String = ROOT_PATH) :
+  ParentNodeBuilder<LogConfig>(mutableListOf()) {
+  var level: Level = Level.TRACE
+  var name: String = path
+
+  override fun build(): LogConfig = LogConfig(path, name, level, children.map { it.build() })
 
 }
 

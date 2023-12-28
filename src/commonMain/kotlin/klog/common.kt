@@ -6,7 +6,7 @@ enum class Level {
   TRACE, DEBUG, INFO, WARN, ERROR;
 }
 
-const val ROOT_TAG = ""
+const val ROOT_PATH = ""
 
 
 inline fun KLog.trace(msg: String, err: Throwable? = null) = log(Level.TRACE, msg, err)
@@ -15,11 +15,13 @@ inline fun KLog.info(msg: String, err: Throwable? = null) = log(Level.INFO, msg,
 inline fun KLog.warn(msg: String, err: Throwable? = null) = log(Level.WARN, msg, err)
 inline fun KLog.error(msg: String, err: Throwable? = null) = log(Level.ERROR, msg, err)
 
+@LogConfigDSL
 inline fun <reified T : Any> T.klog(noinline block: LogConfigBuilder.() -> Unit = {}): KLog =
-  klog(T::class.qualifiedName ?: ROOT_TAG, block)
+  klog(T::class.qualifiedName ?: ROOT_PATH, block)
 
-inline fun klog(tag: String, noinline block: LogConfigBuilder.() -> Unit = {}): KLog =
-  KLogImpl(contextRegistry.getLogConfig(tag, block))
+@LogConfigDSL
+inline fun klog(path: String, noinline block: LogConfigBuilder.() -> Unit = {}): KLog =
+  KLogImpl(contextRegistry.getLogConfig(path, block))
 
 
 var contextRegistry: Registry = Registry {

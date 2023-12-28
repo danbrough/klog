@@ -4,23 +4,25 @@ import klog.outputs.outputs
 import klog.outputs.stdout
 import kotlin.test.Test
 
-class Tests {
-  private val rootLog = klog(ROOT_TAG) {
-    level = Level.TRACE
-  }
-
-  private val testLog = klog {
-    level = Level.DEBUG
-    outputs {
-      stdout {
-
-      }
+private val rootLog = klog(ROOT_PATH) {
+  level = Level.TRACE
+  name = "KLogTests"
+  outputs {
+    stdout {
     }
   }
+}
 
+private val testLog = klog("klog.Tests") {
+  level = Level.DEBUG
+  name = "TestLog"
+}
+
+class Tests {
 
   @Test
   fun test1() {
+    rootLog.info("this is from the root log")
     testLog.error("test1() error")
     testLog.warn("test1() warn")
     testLog.info("test1() info")
