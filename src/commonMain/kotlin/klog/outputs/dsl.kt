@@ -1,14 +1,16 @@
 package klog.outputs
 
-import klog.LogConfigBuilder
-import klog.LogConfigDSL
+import klog.KLogDSL
+import klog.KLoggerBuilder
 import klog.Node
 import klog.NodeBuilder
 import klog.ParentNode
 import klog.ParentNodeBuilder
 
 data class Outputs(override val children: List<Node>) : ParentNode {
-  override fun buildUpon(): ParentNodeBuilder<*> = OutputsNodeBuilder()
+  //    builder.children.addAll(children.map { it.buildUpon() }.toMutableList())
+  override fun buildUpon(): ParentNodeBuilder<*> =
+    OutputsNodeBuilder(children.map { it.buildUpon() }.toMutableList())
 }
 
 class OutputsNodeBuilder(children: MutableList<NodeBuilder<*>> = mutableListOf()) :
@@ -17,8 +19,8 @@ class OutputsNodeBuilder(children: MutableList<NodeBuilder<*>> = mutableListOf()
 }
 
 
-@LogConfigDSL
-fun LogConfigBuilder.outputs(block: OutputsNodeBuilder.() -> Unit) {
+@KLogDSL
+fun KLoggerBuilder.outputs(block: OutputsNodeBuilder.() -> Unit) {
   children.add(OutputsNodeBuilder().apply(block))
 }
 

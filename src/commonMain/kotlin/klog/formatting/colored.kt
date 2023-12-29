@@ -1,10 +1,6 @@
 package klog.formatting
 
 import klog.Level
-import klog.LogConfigDSL
-import klog.Node
-import klog.NodeBuilder
-import klog.outputs.OutputsNodeBuilder
 
 val Level.color: Int
   get() = when (this) {
@@ -14,22 +10,6 @@ val Level.color: Int
     Level.WARN -> 33
     else -> 31
   }
-
-
-data class Formatting(val colored: Boolean = false) : Node {
-
-  override fun buildUpon() = FormattingBuilder(colored)
-}
-
-
-class FormattingBuilder(var colored: Boolean = false) : NodeBuilder<Formatting> {
-  override fun build() = Formatting(colored)
-}
-
-@LogConfigDSL
-fun OutputsNodeBuilder.formatting(block: FormattingBuilder.() -> Unit) {
-  children.add(FormattingBuilder().apply(block))
-}
 
 
 /*

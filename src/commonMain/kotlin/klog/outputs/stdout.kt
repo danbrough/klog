@@ -1,6 +1,6 @@
 package klog.outputs
 
-import klog.LogConfigDSL
+import klog.KLogDSL
 import klog.Node
 import klog.NodeBuilder
 import klog.ParentNode
@@ -16,7 +16,7 @@ class StdoutNodeBuilder(children: MutableList<NodeBuilder<*>> = mutableListOf())
 }
 
 
-@LogConfigDSL
+@KLogDSL
 fun OutputsNodeBuilder.stdout(block: StdoutNodeBuilder.() -> Unit) {
   children.add(StdoutNodeBuilder().apply(block))
 }

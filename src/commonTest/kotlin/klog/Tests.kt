@@ -29,8 +29,8 @@ class Tests {
     testLog.debug("test1() debug")
     testLog.trace("test1() trace")
 
-    testLog.info("testLog.context = ${testLog.config}")
-    testLog.info("rootLog.context = ${rootLog.config}")
+    testLog.info("testLog.context = ${testLog.logger}")
+    testLog.info("rootLog.context = ${rootLog.logger}")
   }
 
   @Test
