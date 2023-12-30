@@ -4,6 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.com.android.library)
+  //alias(libs.plugins.kotlin.serialization)
   idea
 }
 
@@ -41,7 +42,11 @@ kotlin {
       }
     }
 
-    val commonMain by getting
+    val commonMain by getting {
+      dependencies {
+        //implementation(libs.kotlinx.serialization.json)
+      }
+    }
 
     val jvmAndroidMain by creating {
       dependsOn(commonMain)

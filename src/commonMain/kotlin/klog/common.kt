@@ -15,16 +15,16 @@ inline fun KLog.info(msg: String, err: Throwable? = null) = log(Level.INFO, msg,
 inline fun KLog.warn(msg: String, err: Throwable? = null) = log(Level.WARN, msg, err)
 inline fun KLog.error(msg: String, err: Throwable? = null) = log(Level.ERROR, msg, err)
 
-@KLogDSL
+
 inline fun <reified T : Any> T.klog(noinline block: KLoggerBuilder.() -> Unit = {}): KLog =
   klog(T::class.qualifiedName ?: ROOT_PATH, block)
 
 @KLogDSL
 inline fun klog(path: String, noinline block: KLoggerBuilder.() -> Unit = {}): KLog =
-  KLogImpl(contextRegistry.getLogConfig(path, block))
+  registry.getLogger(path, block)
 
 
-var contextRegistry: Registry = Registry {
+var registry: Registry = Registry {
   level = Level.TRACE
 }
 

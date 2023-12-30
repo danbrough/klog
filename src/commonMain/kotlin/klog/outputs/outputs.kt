@@ -7,8 +7,8 @@ import klog.NodeBuilder
 import klog.ParentNode
 import klog.ParentNodeBuilder
 
+
 data class Outputs(override val children: List<Node>) : ParentNode {
-  //    builder.children.addAll(children.map { it.buildUpon() }.toMutableList())
   override fun buildUpon(): ParentNodeBuilder<*> =
     OutputsNodeBuilder(children.map { it.buildUpon() }.toMutableList())
 }

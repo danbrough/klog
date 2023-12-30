@@ -3,6 +3,8 @@
 [plugins]
 
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
 com-android-library = { id = "com.android.library", version.ref = "agp" }
 
 [versions]
@@ -30,7 +32,8 @@ agp = "8.2.0"
 ##⬆= "8.4.0-alpha01"
 
 kotlin = "2.0.0-Beta2"
+serialization = "1.6.2"
 
 [libraries]
 
-
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }

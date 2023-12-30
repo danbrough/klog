@@ -9,6 +9,7 @@ private val rootLog = klog(ROOT_PATH) {
   name = "KLogTests"
   outputs {
     stdout {
+      colored = true
     }
   }
 }
@@ -29,8 +30,8 @@ class Tests {
     testLog.debug("test1() debug")
     testLog.trace("test1() trace")
 
-    testLog.info("testLog.context = ${testLog.logger}")
-    testLog.info("rootLog.context = ${rootLog.logger}")
+    testLog.info("testLog.context = $testLog")
+    testLog.info("rootLog.context = $rootLog")
   }
 
   @Test
@@ -38,6 +39,7 @@ class Tests {
     testLog.info("testGetEnv()")
     testLog.debug("HOME=${getenv("HOME")}")
   }
+
 
   @Test
   fun test2() {
@@ -50,6 +52,8 @@ class Tests {
       level = Level.INFO
     }
     testLog.trace("dude.1: $ctx")
+
+
   }
 
 

@@ -1,5 +1,10 @@
 package klog
 
+
+interface KLog {
+  fun log(level: Level, message: String, error: Throwable?)
+}
+
 data class KLogger(
   val path: String, val name: String, val level: Level, override val children: List<Node>
 ) : ParentNode {
@@ -8,6 +13,11 @@ data class KLogger(
     builder.name = name
     builder.level = level
     builder.children.addAll(children.map { it.buildUpon() }.toMutableList())
+  }
+
+  override fun log(level: Level, message: String, error: Throwable?) {
+    if (level <= this.level) return
+    super.log(level, message, error)
   }
 }
 
@@ -21,5 +31,4 @@ class KLoggerBuilder(private val path: String = ROOT_PATH) :
 }
 
 @KLogDSL
-fun logConfig(block: KLoggerBuilder.() -> Unit): KLogger =
-  KLoggerBuilder().apply(block).build()
+fun klogger(block: KLoggerBuilder.() -> Unit): KLogger = KLoggerBuilder().apply(block).build()
