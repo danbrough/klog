@@ -5,6 +5,10 @@ package klog
 @DslMarker
 annotation class KLogDSL
 
+interface KLog {
+  fun log(level: Level, message: String, error: Throwable?)
+}
+
 interface Node : KLog {
   fun buildUpon(): NodeBuilder<*>
 }
@@ -17,8 +21,6 @@ interface ParentNode : Node {
   override fun log(level: Level, message: String, error: Throwable?) = children.forEach {
     it.log(level, message, error)
   }
-
-
 }
 
 
@@ -28,7 +30,7 @@ interface NodeBuilder<T : Node> {
 }
 
 
-abstract class ParentNodeBuilder<T : ParentNode>(open val children: MutableList<NodeBuilder<*>>) :
+abstract class ParentNodeBuilder<T : ParentNode>(open val children: MutableList<NodeBuilder<*>> = mutableListOf()) :
   NodeBuilder<T>
 
 

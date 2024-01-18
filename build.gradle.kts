@@ -5,7 +5,9 @@ plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.com.android.library)
   //alias(libs.plugins.kotlin.serialization)
-  idea
+  //id("org.danbrough.xtras") version "0.0.1-beta01"
+  `maven-publish`
+  //idea
 }
 
 repositories {
@@ -89,3 +91,11 @@ android {
   namespace = project.group.toString()
 }
 
+publishing {
+  repositories {
+    maven(file("/home/dan/workspace/xtras2/xtras/maven/")) {
+      name = "Maven"
+    }
+
+  }
+}

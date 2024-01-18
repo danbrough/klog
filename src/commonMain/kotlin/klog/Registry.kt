@@ -2,7 +2,7 @@ package klog
 
 class Registry(root: KLoggerBuilder.() -> Unit) {
 
-  private val registry = mutableMapOf(ROOT_PATH to klogger(root))
+  private val registry = mutableMapOf(ROOT_PATH to KLoggerBuilder().apply(root).build())
 
   private fun findConfig(path: String): KLogger =
     registry[path] ?: findConfig(path.substringBeforeLast('.', ROOT_PATH))

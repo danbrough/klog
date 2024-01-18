@@ -1,5 +1,7 @@
 package klog
 
+import klog.formatting.colored
+import klog.formatting.simpleFormatter
 import klog.outputs.outputs
 import klog.outputs.stdout
 import kotlin.test.Test
@@ -7,9 +9,10 @@ import kotlin.test.Test
 private val rootLog = klog(ROOT_PATH) {
   level = Level.TRACE
   name = "KLogTests"
+
   outputs {
     stdout {
-      colored = true
+      formatter = simpleFormatter.colored
     }
   }
 }
@@ -23,7 +26,12 @@ class Tests {
 
   @Test
   fun test1() {
-    rootLog.info("this is from the root log")
+    rootLog.trace("trace: this is from the root log")
+    rootLog.debug("debug: this is from the root log")
+    rootLog.info("info: this is from the root log")
+    rootLog.warn("warn: this is from the root log")
+    rootLog.error("error: this is from the root log")
+
     testLog.error("test1() error")
     testLog.warn("test1() warn")
     testLog.info("test1() info")

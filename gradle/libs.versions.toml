@@ -9,7 +9,7 @@ com-android-library = { id = "com.android.library", version.ref = "agp" }
 
 [versions]
 
-agp = "8.2.0"
+agp = "8.2.1"
 ##⬆= "8.3.0-alpha01"
 ##⬆= "8.3.0-alpha02"
 ##⬆= "8.3.0-alpha03"
@@ -29,7 +29,11 @@ agp = "8.2.0"
 ##⬆= "8.3.0-alpha17"
 ##⬆= "8.3.0-alpha18"
 ##⬆= "8.3.0-beta01"
+##⬆= "8.3.0-beta02"
 ##⬆= "8.4.0-alpha01"
+##⬆= "8.4.0-alpha02"
+##⬆= "8.4.0-alpha03"
+##⬆= "8.4.0-alpha04"
 
 kotlin = "2.0.0-Beta2"
 serialization = "1.6.2"
