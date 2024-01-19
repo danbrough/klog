@@ -1,14 +1,18 @@
+import org.danbrough.xtras.sonatype.sonatypePublishing
+import org.danbrough.xtras.xtrasPublishing
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.com.android.library)
-  //alias(libs.plugins.kotlin.serialization)
-  //id("org.danbrough.xtras") version "0.0.1-beta01"
+  alias(libs.plugins.xtras)
   `maven-publish`
   //idea
 }
+
+group = "org.danbrough.klog"
+version = libs.versions.klog.get()
 
 repositories {
   mavenCentral()
@@ -91,11 +95,5 @@ android {
   namespace = project.group.toString()
 }
 
-publishing {
-  repositories {
-    maven(file("/home/dan/workspace/xtras2/xtras/maven/")) {
-      name = "Maven"
-    }
-
-  }
-}
+xtrasPublishing()
+sonatypePublishing()

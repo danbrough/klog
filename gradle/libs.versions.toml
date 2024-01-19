@@ -4,11 +4,13 @@
 
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+xtras = { id = "org.danbrough.xtras", version.ref = "xtras" }
 
 com-android-library = { id = "com.android.library", version.ref = "agp" }
 
 [versions]
-
+klog = "0.0.2-beta08"
+xtras = "0.0.1-beta01"
 agp = "8.2.1"
 ##⬆= "8.3.0-alpha01"
 ##⬆= "8.3.0-alpha02"
@@ -35,7 +37,7 @@ agp = "8.2.1"
 ##⬆= "8.4.0-alpha03"
 ##⬆= "8.4.0-alpha04"
 
-kotlin = "2.0.0-Beta2"
+kotlin = "2.0.0-Beta3"
 serialization = "1.6.2"
 
 [libraries]

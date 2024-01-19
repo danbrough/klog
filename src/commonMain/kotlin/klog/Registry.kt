@@ -7,13 +7,16 @@ class Registry(root: KLoggerBuilder.() -> Unit) {
   private fun findConfig(path: String): KLogger =
     registry[path] ?: findConfig(path.substringBeforeLast('.', ROOT_PATH))
 
-  fun getLogger(path: String, block: KLoggerBuilder.() -> Unit): KLogger =
-    findConfig(path).buildUpon().run {
+  fun getLogger(path: String, block: KLoggerBuilder.() -> Unit): KLogger {
+    println("GETTING LOGGER FOR $path")
+    return findConfig(path).buildUpon().run {
+      this.path = path
       block()
       build().also {
         registry[path] = it
       }
     }
+  }
 
 
 }

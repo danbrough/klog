@@ -8,8 +8,12 @@ fun interface Formatter {
 
 data class Message(val logLevel: Level, var level: String, var message: String, var error: String?)
 
-val simpleFormatter =
-  Formatter { level, message, error -> Message(level, level.name, message, error?.message) }
+val simpleFormatter = object : Formatter {
+  override fun format(level: Level, message: String, error: Throwable?) =
+    Message(level, level.name, message, error?.message)
+
+  override fun toString() = "SimpleFormatter"
+}
 
 
 val Formatter.colored: Formatter

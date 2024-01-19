@@ -12,18 +12,22 @@ import klog.formatting.Formatter
 import klog.formatting.simpleFormatter
 
 data class Stdout(val formatter: Formatter, override val children: List<Node>) : ParentNode {
-  override fun buildUpon() = StdoutNodeBuilder(children.map { it.buildUpon() }.toMutableList())
+  override fun buildUpon() =
+    StdoutNodeBuilder(formatter, children.map { it.buildUpon() }.toMutableList())
 
   override fun log(level: Level, message: String, error: Throwable?) {
     val msg = formatter.format(level, message, error)
-    println("${msg.level}: ${msg.message} ${msg.error ?: ""}")
+    println("${
+      level.toString().let { if (it.length < 5) "${msg.level} " else msg.level }
+    }:\t${msg.message} ${msg.error ?: ""}")
   }
 }
 
-class StdoutNodeBuilder(children: MutableList<NodeBuilder<*>> = mutableListOf()) :
-  ParentNodeBuilder<Stdout>(children) {
+class StdoutNodeBuilder(
+  var formatter: Formatter = simpleFormatter,
+  children: MutableList<NodeBuilder<*>> = mutableListOf()
+) : ParentNodeBuilder<Stdout>(children) {
 
-  var formatter: Formatter = simpleFormatter
 
   override fun build(): Stdout = Stdout(formatter, children.map { it.build() })
 }

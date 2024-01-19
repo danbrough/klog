@@ -5,7 +5,8 @@ data class KLogger(
   val path: String, val name: String, val level: Level, override val children: List<Node>
 ) : ParentNode {
 
-  override fun buildUpon() = KLoggerBuilder(path).also { builder ->
+  override fun buildUpon() = KLoggerBuilder().also { builder ->
+    builder.path = ROOT_PATH
     builder.name = name
     builder.level = level
     builder.children.addAll(children.map { it.buildUpon() }.toMutableList())
@@ -18,8 +19,9 @@ data class KLogger(
 }
 
 
-class KLoggerBuilder(private val path: String = ROOT_PATH) :
+class KLoggerBuilder :
   ParentNodeBuilder<KLogger>() {
+  var path: String = ROOT_PATH
   var level: Level = Level.TRACE
   var name: String = path
 
