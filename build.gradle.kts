@@ -26,14 +26,15 @@ kotlin {
   androidTarget {
     publishLibraryVariants("release")
   }
+  js {
+    nodejs()
+  }
 
   linuxX64()
   linuxArm64()
   linuxX64()
   mingwX64()
-  js {
-    nodejs()
-  }
+
 
   /*linuxX64()
   macosArm64()
