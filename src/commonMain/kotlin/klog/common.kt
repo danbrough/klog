@@ -17,7 +17,9 @@ inline fun KLog.error(msg: String, err: Throwable? = null) = log(Level.ERROR, ms
 
 
 inline fun <reified T : Any> T.klog(noinline block: KLoggerBuilder.() -> Unit = {}): KLog =
-  klog(T::class.qualifiedName ?: ROOT_PATH, block)
+  klog(getClassName(this) ?: ROOT_PATH, block)
+
+expect fun getClassName(o: Any): String?
 
 @KLogDSL
 inline fun klog(path: String, noinline block: KLoggerBuilder.() -> Unit = {}): KLog =
@@ -29,4 +31,6 @@ var registry: Registry = Registry {
 }
 
 internal expect fun getenv(name: String): String?
+
+
 

@@ -10,7 +10,12 @@ data class Message(val logLevel: Level, var level: String, var message: String, 
 
 val simpleFormatter = object : Formatter {
   override fun format(level: Level, message: String, error: Throwable?) =
-    Message(level, level.name, message, error?.message)
+    Message(
+      level,
+      level.name,
+      message,
+      if (error != null) "${error.message} ${error.stackTraceToString()}" else ""
+    )
 
   override fun toString() = "SimpleFormatter"
 }

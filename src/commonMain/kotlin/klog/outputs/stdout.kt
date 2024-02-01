@@ -15,10 +15,10 @@ data class Stdout(val formatter: Formatter, override val children: List<Node>) :
   override fun buildUpon() =
     StdoutNodeBuilder(formatter, children.map { it.buildUpon() }.toMutableList())
 
-  override fun log(level: Level, message: String, error: Throwable?) {
+  override fun log(path: String, level: Level, message: String, error: Throwable?) {
     val msg = formatter.format(level, message, error)
-    println("${
-      level.toString().let { if (it.length < 5) "${msg.level} " else msg.level }
+    println("$path: ${
+      level.toString().let { if (it.length < 5) " ${msg.level}" else msg.level }
     }:\t${msg.message} ${msg.error ?: ""}")
   }
 }

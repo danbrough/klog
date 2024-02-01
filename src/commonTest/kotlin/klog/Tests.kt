@@ -76,8 +76,21 @@ class Tests {
       level = Level.INFO
     }
     testLog.trace("dude.1: $ctx")
+  }
 
+  @Test
+  fun test3() {
+    testLog.info("test3()")
+    val err = Exception("Test Error")
 
+    testLog.error(err.message!!, err)
+  }
+
+  @Test
+  fun test4() {
+    testLog.info("test4()")
+
+    testLog.debug("stacktrace: ${getStackTrace()}")
   }
 
 

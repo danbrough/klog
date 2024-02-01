@@ -3,7 +3,7 @@ package klog
 
 data class KLogger(
   val path: String, val name: String, val level: Level, override val children: List<Node>
-) : ParentNode {
+) : ParentNode, KLog {
 
   override fun buildUpon() = KLoggerBuilder().also { builder ->
     builder.path = ROOT_PATH
@@ -12,10 +12,14 @@ data class KLogger(
     builder.children.addAll(children.map { it.buildUpon() }.toMutableList())
   }
 
-  override fun log(level: Level, message: String, error: Throwable?) {
+  override fun log(path: String, level: Level, message: String, error: Throwable?) {
     if (level < this.level) return
-    super.log(level, message, error)
+    super.log(path, level, message, error)
   }
+
+  override fun log(level: Level, message: String, error: Throwable?) =
+    log(path, level, message, error)
+
 }
 
 

@@ -8,3 +8,4 @@ import kotlinx.cinterop.toKString
 internal actual fun getenv(name: String) = platform.posix.getenv(name)?.toKString()
 
 
+actual fun getClassName(o: Any): String? = o::class.qualifiedName
