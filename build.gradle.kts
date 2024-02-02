@@ -2,6 +2,7 @@ import org.danbrough.xtras.sonatype.sonatypePublishing
 import org.danbrough.xtras.xtrasPublishing
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
@@ -30,28 +31,17 @@ kotlin {
     nodejs()
   }
 
-  linuxX64()
-  linuxArm64()
-  linuxX64()
-  mingwX64()
-
-
-  /*linuxX64()
-  macosArm64()
-  macosX64()
-  mingwX64()
-
-
-  if (System.getProperty("idea.active") == null) {
-    iosX64()
-    iosArm64()
-    watchosArm64()
-    watchosX64()
-    androidNativeX86()
-    androidNativeX64()
-    androidNativeArm64()
+  if (HostManager.hostIsLinux) {
+    linuxX64()
+    linuxArm64()
+    linuxX64()
+    mingwX64()
+  } else if (HostManager.hostIsMac) {
+    macosArm64()
+    macosX64()
   }
-*/
+
+
   sourceSets {
 
     commonTest {
