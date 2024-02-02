@@ -29,14 +29,16 @@ kotlin {
     nodejs()
   }
 
+  androidTarget {
+    publishLibraryVariants("release")
+  }
+
   if (HostManager.hostIsLinux) {
     linuxX64()
     linuxArm64()
     linuxX64()
     mingwX64()
-    androidTarget {
-      publishLibraryVariants("release")
-    }
+
   } else if (HostManager.hostIsMac) {
     macosArm64()
     macosX64()
