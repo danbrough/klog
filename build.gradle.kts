@@ -24,9 +24,7 @@ repositories {
 kotlin {
   applyDefaultHierarchyTemplate()
   jvm()
-  androidTarget {
-    publishLibraryVariants("release")
-  }
+
   js {
     nodejs()
   }
@@ -36,6 +34,9 @@ kotlin {
     linuxArm64()
     linuxX64()
     mingwX64()
+    androidTarget {
+      publishLibraryVariants("release")
+    }
   } else if (HostManager.hostIsMac) {
     macosArm64()
     macosX64()
