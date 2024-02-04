@@ -75,7 +75,7 @@ kotlin {
       dependencies {
         implementation(libs.androidx.runner)
         //implementation("androidx.annotation:annotation-experimental:1.1.0")
-        implementation("androidx.annotation:annotation:1.7.1")/*
+        implementation(libs.androidx.annotation)/*
             androidTestImplementation "androidx.test:runner:$androidXTestVersion"
     androidTestImplementation "androidx.test:rules:$androidXTestVersion"
 
