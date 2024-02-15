@@ -1,5 +1,3 @@
-import org.danbrough.xtras.sonatype.sonatypePublishing
-import org.danbrough.xtras.xtrasPublishing
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.konan.target.HostManager
@@ -74,12 +72,7 @@ kotlin {
     val androidInstrumentedTest by getting {
       dependencies {
         implementation(libs.androidx.runner)
-        //implementation("androidx.annotation:annotation-experimental:1.1.0")
-        implementation(libs.androidx.annotation)/*
-            androidTestImplementation "androidx.test:runner:$androidXTestVersion"
-    androidTestImplementation "androidx.test:rules:$androidXTestVersion"
-
-         */
+        implementation(libs.androidx.annotation)
       }
     }
 
@@ -88,8 +81,6 @@ kotlin {
     }
 
   }
-
-
 }
 
 
@@ -120,12 +111,9 @@ android {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
   }
-
 }
 
 
 
 
-xtrasPublishing()
 
-sonatypePublishing {}
