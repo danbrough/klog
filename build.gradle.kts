@@ -10,7 +10,7 @@ plugins {
   //idea
 }
 
-group = "org.danbrough.klog"
+group = "org.danbrough"
 version = libs.versions.klog.get()
 
 repositories {
@@ -18,16 +18,13 @@ repositories {
   google()
 }
 
-java {
-  withSourcesJar()
-  withJavadocJar()
-}
+
 
 kotlin {
   applyDefaultHierarchyTemplate()
 
   jvm {
-    withSourcesJar(publish = true)
+
   }
 
   js {

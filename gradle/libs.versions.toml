@@ -54,7 +54,7 @@ agp = "8.2.2"
 ##⬆= "8.4.0-alpha08"
 ##⬆= "8.4.0-alpha09"
 
-kotlin = "2.0.0-Beta4"
+kotlin = "1.9.22"
 serialization = "1.6.2"
 
 [libraries]
