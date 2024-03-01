@@ -9,7 +9,6 @@ plugins {
   alias(libs.plugins.com.android.library)
   alias(libs.plugins.xtras)
   `maven-publish`
-  //idea
 }
 
 group = "org.danbrough"
