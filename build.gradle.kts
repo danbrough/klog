@@ -11,6 +11,7 @@ plugins {
   `maven-publish`
 }
 
+
 group = "org.danbrough"
 version = libs.versions.klog.get()
 
