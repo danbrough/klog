@@ -6,23 +6,21 @@ import klog.outputs.outputs
 import klog.outputs.stdout
 import kotlin.test.Test
 
+private val rootLog = klog {
+  level = Level.TRACE
+  name = "KLogTests"
+
+  outputs {
+    stdout {
+      formatter = simpleFormatter.colored
+    }
+  }
+}
 
 class Tests {
 
   companion object {
 
-    private val rootLog = klog(ROOT_PATH) {
-      level = Level.TRACE
-      name = "KLogTests"
-
-      outputs {
-        stdout {
-          formatter = simpleFormatter.colored
-        }
-      }
-
-
-    }
 
     private val testLog = klog("klog.Tests") {
       level = Level.DEBUG
@@ -38,6 +36,9 @@ class Tests {
 
   @Test
   fun test1() {
+
+    rootLog as KLogger
+    rootLog.warn("test1(): rootLog.name=${rootLog.name} rootLog.path=${rootLog.path}")
 
     rootLog.trace("trace: this is from the root log")
     rootLog.debug("debug: this is from the root log")

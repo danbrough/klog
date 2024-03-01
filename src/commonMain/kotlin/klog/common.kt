@@ -22,7 +22,7 @@ inline fun <reified T : Any> T.klog(noinline block: KLoggerBuilder.() -> Unit = 
 expect fun getClassName(o: Any): String?
 
 @KLogDSL
-inline fun klog(path: String, noinline block: KLoggerBuilder.() -> Unit = {}): KLog =
+inline fun klog(path: String = ROOT_PATH, noinline block: KLoggerBuilder.() -> Unit = {}): KLog =
   registry.getLogger(path, block)
 
 

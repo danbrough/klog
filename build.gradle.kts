@@ -1,5 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinAndroidTarget
+import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
@@ -19,12 +21,15 @@ repositories {
 }
 
 
+val javaVersion = JavaVersion.VERSION_1_8
 
 kotlin {
   applyDefaultHierarchyTemplate()
 
   jvm {
-
+    compilations.all {
+      kotlinOptions.jvmTarget = javaVersion.toString()
+    }
   }
 
   js {
@@ -32,7 +37,12 @@ kotlin {
   }
 
   androidTarget {
+    val t: KotlinJvmTarget
+    val s: KotlinAndroidTarget
     publishLibraryVariants("release")
+    compilations.all {
+      kotlinOptions.jvmTarget = javaVersion.toString()
+    }
   }
 
   if (HostManager.hostIsLinux) {
@@ -56,12 +66,14 @@ kotlin {
     commonTest {
       dependencies {
         implementation(kotlin("test"))
+
       }
     }
 
     val commonMain by getting {
       dependencies {
         //implementation(libs.kotlinx.serialization.json)
+        implementation(kotlin("stdlib"))
       }
     }
 
@@ -88,6 +100,7 @@ kotlin {
 }
 
 
+
 tasks.withType<AbstractTestTask> {
   testLogging {
     events = setOf(
@@ -112,8 +125,8 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
   }
 }
 
