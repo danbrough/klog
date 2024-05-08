@@ -28,9 +28,8 @@ repositories {
 kotlin {
 	applyDefaultHierarchyTemplate()
 
-	mingwX64()
-
 	if (HostManager.hostIsLinux) {
+		mingwX64()
 		linuxX64()
 		linuxArm64()
 		androidNativeX64()

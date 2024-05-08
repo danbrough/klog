@@ -2,6 +2,8 @@
 
 cd "$(dirname "$0")" && cd ..
 
+rm -rf ./build/m2 2> /dev/null
+
 ./gradlew publishAllPublicationsToLocal || exit 1
 
 
