@@ -1,21 +1,20 @@
 pluginManagement {
+	repositories {
+		maven("https://maven.danbrough.org")
 
-  repositories {
-    maven("https://s01.oss.sonatype.org/content/groups/staging/")
-    gradlePluginPortal()
-    mavenCentral()
-    google()
-  }
+		mavenCentral()
+		google()
+		gradlePluginPortal()
+	}
 }
-
 
 
 plugins {
-  id("de.fayard.refreshVersions") version "0.60.2"
+	id("de.fayard.refreshVersions") version "0.60.5"
 }
-
 
 rootProject.name = "klog"
 
+includeBuild("support")
 
-
+//include(":api")
