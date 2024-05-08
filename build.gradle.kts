@@ -40,6 +40,8 @@ kotlin {
 	if (HostManager.hostIsMac) {
 		macosArm64()
 		macosX64()
+		iosArm64()
+		iosX64()
 	}
 
 	jvm {
