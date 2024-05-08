@@ -2,32 +2,35 @@ package klog
 
 import android.util.Log
 
+class AndroidLogger(override val name: String) : KLogger {
 
-actual fun createKLogFactory(): KLogFactory {
+	override var log: KLoggerMethod? = { level, t, message ->
+		val androidLevel = when (level) {
+			KLogger.Level.TRACE -> Log.VERBOSE
+			KLogger.Level.DEBUG -> Log.DEBUG
+			KLogger.Level.INFO -> Log.INFO
+			KLogger.Level.WARN -> Log.WARN
+			KLogger.Level.ERROR -> Log.ERROR
+		}
 
-  runCatching {
-    Log.v(
-      KLogFactory::class.qualifiedName,
-      "Initialising stdout log with android log"
-    )
-    KLogWriters.stdOut = KLogWriters.androidLog
-
-  }
-
-  return object : DefaultLogFactory(
-    formatter = { _, _, msg, _, _ -> "ANDROIDLOG<<$msg>>" },
-    writer = KLogWriters.androidLog
-  ) {}
+		if (Log.isLoggable(name, androidLevel)) {
+			when (androidLevel) {
+				Log.VERBOSE -> Log.v(name, message(), t)
+				Log.DEBUG -> Log.d(name, message(), t)
+				Log.INFO -> Log.i(name, message(), t)
+				Log.WARN -> Log.w(name, message(), t)
+				Log.ERROR -> Log.e(name, message(), t)
+			}
+		}
+	}
 }
 
+object AndroidLogging : KLogFactory() {
+	override fun logger(logName: String): KLogger = AndroidLogger(logName)
+}
 
-val KLogWriters.androidLog: KLogWriter
-  get() = { name, level, msg, err ->
-    when (level) {
-      Level.TRACE -> Log.v(name, msg, err)
-      Level.DEBUG -> Log.d(name, msg, err)
-      Level.INFO -> Log.i(name, msg, err)
-      Level.WARN -> Log.w(name, msg, err)
-      Level.ERROR -> Log.e(name, msg, err)
-    }
-  }
+fun kloggingAndroid() {
+	klogging = AndroidLogging
+}
+
+actual fun kloggingDefault(): KLogFactory = AndroidLogging
