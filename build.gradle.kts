@@ -28,13 +28,13 @@ repositories {
 kotlin {
 	applyDefaultHierarchyTemplate()
 
-	if (HostManager.hostIsLinux) {
+//	if (HostManager.hostIsLinux) {
 		mingwX64()
 		linuxX64()
 		linuxArm64()
 		androidNativeX64()
 		androidNativeArm64()
-	}
+//	}
 
 	if (HostManager.hostIsMac) {
 		macosArm64()
