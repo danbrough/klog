@@ -8,7 +8,7 @@ object ANSIConstants {
   const val ESC_START = "\u001b["
   const val ESC_END = "m"
   const val BOLD = "1;"
-  const val RESET = "${ESC_START}0${ESC_END};"
+  const val RESET = "${ESC_START}0${ESC_END}"
   const val BLACK_FG = "30"
   const val RED_FG = "31"
   const val GREEN_FG = "32"
