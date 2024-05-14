@@ -26,6 +26,7 @@ agp = "8.4.0"
 ##⬆= "8.5.0-alpha07"
 ##⬆= "8.5.0-alpha08"
 ##⬆= "8.5.0-beta01"
+##⬆= "8.6.0-alpha01"
 
 xtras-core = "0.0.1-alpha01"
 kotlin = "2.0.0-RC3"
