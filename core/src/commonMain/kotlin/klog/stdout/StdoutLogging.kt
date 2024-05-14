@@ -16,7 +16,7 @@ var colorString: (level: Logger.Level, s: String) -> String =
   { level, s -> if (coloredOutput) level.colored(s) else s }
 
 val defaultMessageFormatter: StdoutMessageFormatter = { level, name, message ->
-  colorString(level, "$level:$name: ${message()}==")
+  colorString(level, "$level:$name: ${message()}")
 }
 
 object StdoutLogging : KLogFactory() {

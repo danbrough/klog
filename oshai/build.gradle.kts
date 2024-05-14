@@ -49,7 +49,7 @@ kotlin {
     val commonMain by getting {
       dependencies {
         implementation(kotlin("reflect"))
-        implementation(project(":api"))
+        implementation(project(":core"))
         implementation(libs.oshai.logging)
       }
     }

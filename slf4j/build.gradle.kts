@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
   implementation(libs.slf4j.api)
-  implementation(project(":api"))
+  implementation(project(":core"))
   implementation(kotlin("stdlib-jdk8"))
   testImplementation(kotlin("test"))
   testImplementation(libs.logback.classic)
