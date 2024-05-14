@@ -1,15 +1,16 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
 import org.danbrough.klog.support.Constants
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
+import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
-  alias(libs.plugins.kotlin.multiplatform) apply false
-  alias(libs.plugins.android.library) apply false
+  alias(libs.plugins.kotlin.multiplatform)
+  alias(libs.plugins.android.library)
   id("org.danbrough.klog.support")
-  alias(libs.plugins.kotlin.jvm) apply false
+  `maven-publish`
   signing
 }
 
@@ -21,48 +22,6 @@ repositories {
   google()
 }
 
-allprojects {
-  tasks.withType<AbstractTestTask> {
-    if (this is Test) {
-      useJUnitPlatform()
-    }
-
-    testLogging {
-      events = setOf(
-        TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
-      )
-      showStandardStreams = true
-      showStackTraces = true
-      exceptionFormat = TestExceptionFormat.FULL
-    }
-
-    outputs.upToDateWhen {
-      false
-    }
-  }
-
-  pluginManager.apply("maven-publish")
-  pluginManager.apply("signing")
-  extensions.findByType<PublishingExtension>()?.apply {
-
-
-    repositories {
-      maven(rootProject.layout.buildDirectory.asFile.get().resolve("m2")) {
-        name = "Local"
-      }
-    }
-
-    extensions.findByType<SigningExtension>()?.apply {
-      publications.all {
-        sign(this)
-      }
-    }
-
-  }
-
-}
-
-/*
 kotlin {
   applyDefaultHierarchyTemplate()
 
@@ -106,6 +65,7 @@ kotlin {
     val commonMain by getting {
       dependencies {
         implementation(kotlin("reflect"))
+        implementation(project(":api"))
         implementation(libs.oshai.logging)
       }
     }
@@ -119,7 +79,7 @@ kotlin {
     val jvmAndroidMain by creating {
       dependsOn(commonMain)
       dependencies {
-        implementation(libs.slf4j.api)
+        implementation(libs.logback.classic)
       }
     }
 
@@ -127,20 +87,15 @@ kotlin {
       dependsOn(jvmAndroidMain)
     }
 
-    val androidInstrumentedTest by getting {
-      dependencies {
-        implementation(kotlin("test-junit"))
-        implementation(libs.androidx.test.runner)
-      }
-    }
 
     jvmMain {
       dependsOn(jvmAndroidMain)
     }
 
-    jvmTest {
+    val androidInstrumentedTest by getting {
       dependencies {
-        implementation(libs.logback.classic)
+        implementation(kotlin("test-junit"))
+        implementation(libs.androidx.test.runner)
       }
     }
 
@@ -176,38 +131,3 @@ android {
   }
 }
 
-publishing {
-  repositories {
-    maven(rootProject.layout.buildDirectory.asFile.get().resolve("m2")) {
-      name = "Local"
-    }
-  }
-
-  signing {
-    publications.all {
-      sign(this)
-    }
-  }
-}
-
-
-tasks.withType<AbstractTestTask> {
-  if (this is Test) {
-    useJUnitPlatform()
-  }
-
-  testLogging {
-    events = setOf(
-      TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
-    )
-    showStandardStreams = true
-    showStackTraces = true
-    exceptionFormat = TestExceptionFormat.FULL
-  }
-
-  outputs.upToDateWhen {
-    false
-  }
-}
-
-*/
