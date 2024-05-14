@@ -1,10 +1,10 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
 import org.danbrough.klog.support.Constants
+import org.danbrough.klog.support.declareNativeTargets
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
-import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
@@ -23,21 +23,7 @@ repositories {
 }
 
 kotlin {
-  applyDefaultHierarchyTemplate()
-
-  mingwX64()
-  linuxX64()
-  linuxArm64()
-  androidNativeX64()
-  androidNativeArm64()
-
-
-  if (HostManager.hostIsMac) {
-    macosArm64()
-    macosX64()
-    iosArm64()
-    iosX64()
-  }
+  declareNativeTargets()
 
   jvm {
     compilerOptions {
@@ -123,20 +109,6 @@ android {
   compileOptions {
     sourceCompatibility = Constants.JAVA_VERSION
     targetCompatibility = Constants.JAVA_VERSION
-  }
-}
-
-publishing {
-  repositories {
-    maven(rootProject.layout.buildDirectory.asFile.get().resolve("m2")) {
-      name = "Local"
-    }
-  }
-
-  signing {
-    publications.all {
-      sign(this)
-    }
   }
 }
 

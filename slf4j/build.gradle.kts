@@ -4,6 +4,8 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 plugins {
   id("java-library")
   alias(libs.plugins.kotlin.jvm)
+  `maven-publish`
+  signing
 }
 
 java {
@@ -31,4 +33,13 @@ dependencies {
   implementation(kotlin("stdlib-jdk8"))
   testImplementation(kotlin("test"))
   testImplementation(libs.logback.classic)
+}
+
+
+publishing {
+  publications {
+    create<MavenPublication>("slf4j") {
+      from(components["java"])
+    }
+  }
 }

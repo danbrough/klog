@@ -1,5 +1,7 @@
 package klog
 
+import klog.stdout.StdoutLogging
+
 class TestApp {
   companion object {
     init {

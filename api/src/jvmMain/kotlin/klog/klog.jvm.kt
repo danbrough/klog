@@ -1,5 +1,6 @@
 package klog
 
+import klog.stdout.StdoutLogging
 import java.lang.reflect.Modifier
 import kotlin.reflect.KClass
 

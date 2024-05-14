@@ -2,11 +2,12 @@
 
 package klog
 
+import klog.stdout.StdoutLogging
 import kotlin.reflect.KClass
 
 expect fun <T : Any> loggerName(clazz: KClass<T>): String
 
-expect fun kloggingDefault(): KLogFactory
+internal expect fun kloggingDefault(): KLogFactory
 
 var klogging: KLogFactory = kloggingDefault()
 
