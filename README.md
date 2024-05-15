@@ -33,12 +33,14 @@ you jvm or android application.
 Initialise it with `klog.kloggingSlf4j{}` and configure your slf4j implementation as per usual.
 
 ```kotlin
+package stuff
+
 import klog.logging
 
 class Foo {
-  private val log by logging() //logger with name "Foo"
+  private val log by logger() //logger with name "stuff.Foo"
   //alternatively:
-  //private val log = klog.logger("Foo")
+  //private val log = klog.logger("stuff.Foo")
 
   fun test() {
     log.trace { "A trace call" } //or debug,info,warn,error ..

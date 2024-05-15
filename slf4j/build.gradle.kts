@@ -32,7 +32,6 @@ dependencies {
   implementation(project(":core"))
   implementation(kotlin("stdlib-jdk8"))
   testImplementation(kotlin("test"))
-  testImplementation(libs.logback.classic)
 }
 
 
