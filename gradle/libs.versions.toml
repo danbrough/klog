@@ -16,7 +16,7 @@ xtras-mqtt = { id = "org.danbrough.xtras.mqtt", version.ref = "xtras-mqtt" }
 
 [versions]
 
-agp = "8.4.0"
+agp = "8.4.1"
 ##⬆= "8.5.0-alpha01"
 ##⬆= "8.5.0-alpha02"
 ##⬆= "8.5.0-alpha03"
@@ -26,10 +26,12 @@ agp = "8.4.0"
 ##⬆= "8.5.0-alpha07"
 ##⬆= "8.5.0-alpha08"
 ##⬆= "8.5.0-beta01"
+##⬆= "8.5.0-beta02"
 ##⬆= "8.6.0-alpha01"
+##⬆= "8.6.0-alpha02"
 
 xtras-core = "0.0.1-alpha01"
-kotlin = "2.0.0-RC3"
+kotlin = "2.0.0"
 
 xtrasPackage = "org.danbrough.xtras"
 xtras-version = "0.0.1-alpha02"
@@ -47,7 +49,7 @@ slf4j-api = "2.0.13"
 slf4j-simple = "2.0.12"
 logback-classic = "1.5.6"
 
-kotlinx-coroutines = "1.8.0"
+kotlinx-coroutines = "1.8.1"
 
 androidx-test-runner = "1.5.2"
 ##                ⬆ = "1.5.3-alpha01"
@@ -58,6 +60,7 @@ androidx-test-runner = "1.5.2"
 ##                ⬆ = "1.6.0-alpha05"
 ##                ⬆ = "1.6.0-alpha06"
 ##                ⬆ = "1.6.0-alpha07"
+##                ⬆ = "1.6.0-beta01"
 
 [libraries]
 

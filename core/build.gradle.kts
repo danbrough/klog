@@ -7,108 +7,113 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 
 plugins {
-  alias(libs.plugins.kotlin.multiplatform)
-  alias(libs.plugins.android.library)
-  id("org.danbrough.klog.support")
-  `maven-publish`
-  signing
+	alias(libs.plugins.kotlin.multiplatform)
+	alias(libs.plugins.android.library)
+	id("org.danbrough.klog.support")
+	`maven-publish`
+	signing
 }
 
 group = Constants.KLOG_PACKAGE
 version = "0.0.3-beta01"
 
 repositories {
-  mavenCentral()
-  google()
+	mavenCentral()
+	google()
 }
 
 kotlin {
-  declareNativeTargets()
+	declareNativeTargets()
 
-  jvm {
-    compilerOptions {
-      jvmTarget = Constants.JVM_TARGET
-    }
-  }
+	jvm {
+		compilerOptions {
+			jvmTarget = Constants.JVM_TARGET
+		}
+	}
 
-  androidTarget {
-    publishLibraryVariants("release")
+	js {
+		browser {
+		}
+	}
 
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    compilerOptions {
-      jvmTarget = Constants.JVM_TARGET
-    }
-  }
+	androidTarget {
+		publishLibraryVariants("release")
 
-  compilerOptions {
-    languageVersion = KotlinVersion.KOTLIN_1_9
-    apiVersion = KotlinVersion.KOTLIN_1_9
-    freeCompilerArgs = listOf("-Xexpect-actual-classes")
-  }
+		@OptIn(ExperimentalKotlinGradlePluginApi::class)
+		compilerOptions {
+			jvmTarget = Constants.JVM_TARGET
+		}
+	}
 
-  sourceSets {
+	compilerOptions {
+		languageVersion = KotlinVersion.KOTLIN_1_9
+		apiVersion = KotlinVersion.KOTLIN_1_9
+		freeCompilerArgs = listOf("-Xexpect-actual-classes")
+	}
 
-    val commonMain by getting {
-      dependencies {
-        implementation(kotlin("reflect"))
-      }
-    }
+	sourceSets {
 
-    commonTest {
-      dependencies {
-        implementation(kotlin("test"))
-      }
-    }
-    /*
-        val jvmAndroidMain by creating {
-          dependsOn(commonMain)
-        }*/
+		val commonMain by getting {
+			dependencies {
+				implementation(kotlin("reflect"))
+			}
+		}
 
-    androidMain {
-      //dependsOn(jvmAndroidMain)
-    }
+		commonTest {
+			dependencies {
+				implementation(kotlin("test"))
+			}
+		}
+		/*
+				val jvmAndroidMain by creating {
+					dependsOn(commonMain)
+				}*/
 
-
-    jvmMain {
-      //dependsOn(jvmAndroidMain)
-    }
-
-    val androidInstrumentedTest by getting {
-      dependencies {
-        implementation(kotlin("test-junit"))
-        implementation(libs.androidx.test.runner)
-      }
-    }
-
-    nativeMain {
-      dependencies {
-      }
-    }
-  }
+		androidMain {
+			//dependsOn(jvmAndroidMain)
+		}
 
 
-  targets.withType<KotlinJvmTarget> {
-    mainRun {
-      mainClass = "klog.TestApp"
-      classpath(compilations["test"])
-    }
-  }
+		jvmMain {
+			//dependsOn(jvmAndroidMain)
+		}
+
+		val androidInstrumentedTest by getting {
+			dependencies {
+				implementation(kotlin("test-junit"))
+				implementation(libs.androidx.test.runner)
+			}
+		}
+
+		nativeMain {
+			dependencies {
+			}
+		}
+	}
+
+
+	targets.withType<KotlinJvmTarget> {
+		mainRun {
+			mainClass = "klog.TestApp"
+			classpath(compilations["test"])
+		}
+	}
 }
 
 
 
 android {
-  compileSdk = Constants.Android.COMPILE_SDK
-  namespace = project.group.toString()
+	compileSdk = Constants.Android.COMPILE_SDK
+	namespace = project.group.toString()
 
-  defaultConfig {
-    minSdk = Constants.Android.MIN_SDK
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-  }
+	defaultConfig {
+		minSdk = Constants.Android.MIN_SDK
+		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+	}
 
-  compileOptions {
-    sourceCompatibility = Constants.JAVA_VERSION
-    targetCompatibility = Constants.JAVA_VERSION
-  }
+	compileOptions {
+		sourceCompatibility = Constants.JAVA_VERSION
+		targetCompatibility = Constants.JAVA_VERSION
+	}
 }
 
