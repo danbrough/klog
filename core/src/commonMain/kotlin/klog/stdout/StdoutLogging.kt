@@ -8,7 +8,7 @@ import klog.LoggerImpl
 import klog.LoggerMethod
 
 
-typealias StdoutMessageFormatter = (level: Logger.Level, name: String, message: () -> String) -> String
+typealias StdoutMessageFormatter = (level: Logger.Level, name: String, message: () -> String?) -> String
 
 
 var colorString: (level: Logger.Level, s: String) -> String =
