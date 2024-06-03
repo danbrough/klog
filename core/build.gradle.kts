@@ -4,6 +4,7 @@ import org.danbrough.klog.support.Constants
 import org.danbrough.klog.support.declareNativeTargets
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 
 plugins {
@@ -34,6 +35,11 @@ kotlin {
 	js {
 		browser {
 		}
+	}
+
+	@OptIn(ExperimentalWasmDsl::class)
+	wasmJs {
+
 	}
 
 	androidTarget {
