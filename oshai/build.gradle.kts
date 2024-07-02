@@ -24,6 +24,8 @@ repositories {
 
 kotlin {
   declareNativeTargets()
+  androidNativeArm32()
+  
   jvm {
     compilerOptions {
       jvmTarget = Constants.JVM_TARGET
