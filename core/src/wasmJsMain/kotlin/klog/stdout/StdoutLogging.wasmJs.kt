@@ -1,4 +1,4 @@
 package klog.stdout
 
-actual fun printMethodStderr(): PrintMethod = TODO("Not supported on WasmJS")
+actual fun printMethodStderr(): Printer = TODO("Not supported on WasmJS")
 

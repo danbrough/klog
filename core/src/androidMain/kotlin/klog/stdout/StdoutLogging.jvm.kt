@@ -1,5 +1,5 @@
 package klog.stdout
 
-actual fun printMethodStderr(): PrintMethod = {
+actual fun printMethodStderr(): Printer = {
   System.err.println(it?.toString())
 }

@@ -10,7 +10,7 @@ import klog.LoggerMethod
 
 typealias StdoutMessageFormatter = (level: Logger.Level, name: String, message: () -> Any?) -> String
 
-typealias PrintMethod = (Any?) -> Unit
+typealias Printer = (Any?) -> Unit
 
 
 var colorString: (level: Logger.Level, s: String) -> String =
@@ -20,20 +20,21 @@ val defaultMessageFormatter: StdoutMessageFormatter = { level, name, message ->
   colorString(level, "$level:$name: ${message()}")
 }
 
-expect fun printMethodStderr(): PrintMethod
+expect fun printMethodStderr(): Printer
 
-val printMethodStderr: PrintMethod = printMethodStderr()
-val printMethodStdout: PrintMethod = ::println
+val stderrPrinter: Printer = printMethodStderr()
+val stdoutPrinter: Printer = ::println
 
 object StdoutLogging : KLogFactory() {
   var coloredOutput: Boolean = true
+
   var useStderr: Boolean = false
     set(value) {
       field = value
-      if (value) printMethod = printMethodStderr else printMethodStdout
+      if (value) printer = stderrPrinter else stdoutPrinter
     }
 
-  var printMethod: PrintMethod = printMethodStdout
+  var printer: Printer = stdoutPrinter
 
   var formatter: StdoutMessageFormatter = defaultMessageFormatter
 
