@@ -2,41 +2,41 @@ package klog
 
 import klog.Logger.Level
 
-typealias LoggerMethod = (level: Level, name: String, message: () -> String?, t: Throwable?) -> Unit
+typealias LoggerMethod = (level: Level, name: String, message: () -> Any?, t: Throwable?) -> Unit
 
 interface Logger {
 
-	val name: String
+  val name: String
 
-	enum class Level {
-		TRACE, DEBUG, INFO, WARN, ERROR, NONE;
-	}
+  enum class Level {
+    TRACE, DEBUG, INFO, WARN, ERROR, NONE;
+  }
 
-	fun trace(t: Throwable? = null, message: () -> String?)
-	fun debug(t: Throwable? = null, message: () -> String?)
-	fun info(t: Throwable? = null, message: () -> String?)
-	fun warn(t: Throwable? = null, message: () -> String?)
-	fun error(t: Throwable? = null, message: () -> String?)
+  fun trace(t: Throwable? = null, message: () -> Any?)
+  fun debug(t: Throwable? = null, message: () -> Any?)
+  fun info(t: Throwable? = null, message: () -> Any?)
+  fun warn(t: Throwable? = null, message: () -> Any?)
+  fun error(t: Throwable? = null, message: () -> Any?)
 }
 
 interface DelegatingLogger : Logger {
 
-	var log: LoggerMethod
+  var log: LoggerMethod
 
-	override fun trace(t: Throwable?, message: () -> String?) =
-		log.invoke(Level.TRACE, name, message, t)
+  override fun trace(t: Throwable?, message: () -> Any?) =
+    log.invoke(Level.TRACE, name, message, t)
 
-	override fun debug(t: Throwable?, message: () -> String?) =
-		log.invoke(Level.DEBUG, name, message, t)
+  override fun debug(t: Throwable?, message: () -> Any?) =
+    log.invoke(Level.DEBUG, name, message, t)
 
-	override fun info(t: Throwable?, message: () -> String?) =
-		log.invoke(Level.INFO, name, message, t)
+  override fun info(t: Throwable?, message: () -> Any?) =
+    log.invoke(Level.INFO, name, message, t)
 
-	override fun warn(t: Throwable?, message: () -> String?) =
-		log.invoke(Level.WARN, name, message, t)
+  override fun warn(t: Throwable?, message: () -> Any?) =
+    log.invoke(Level.WARN, name, message, t)
 
-	override fun error(t: Throwable?, message: () -> String?) =
-		log.invoke(Level.ERROR, name, message, t)
+  override fun error(t: Throwable?, message: () -> Any?) =
+    log.invoke(Level.ERROR, name, message, t)
 }
 
 
