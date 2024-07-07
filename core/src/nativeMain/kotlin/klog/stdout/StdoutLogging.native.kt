@@ -3,9 +3,10 @@
 package klog.stdout
 
 import kotlinx.cinterop.ExperimentalForeignApi
+import platform.posix.stderr
 
 val printMethodStderr: PrintMethod = {
   platform.posix.fprintf(stderr, it?.toString())
 }
 
-expect fun printMethodStderr(): PrintMethod = printMethodStderr
+actual fun printMethodStderr(): PrintMethod = printMethodStderr
