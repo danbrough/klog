@@ -18,11 +18,11 @@ class AndroidLogger(override val name: String) : DelegatingLogger {
 
     if (Log.isLoggable(name, androidLevel)) {
       when (androidLevel) {
-        Log.VERBOSE -> Log.v(name, message(), t)
-        Log.DEBUG -> Log.d(name, message(), t)
-        Log.INFO -> Log.i(name, message(), t)
-        Log.WARN -> Log.w(name, message(), t)
-        Log.ERROR -> Log.e(name, message(), t)
+        Log.VERBOSE -> Log.v(name, message()?.toString(), t)
+        Log.DEBUG -> Log.d(name, message()?.toString(), t)
+        Log.INFO -> Log.i(name, message()?.toString(), t)
+        Log.WARN -> Log.w(name, message()?.toString(), t)
+        Log.ERROR -> Log.e(name, message()?.toString(), t)
         else -> Unit
       }
     }

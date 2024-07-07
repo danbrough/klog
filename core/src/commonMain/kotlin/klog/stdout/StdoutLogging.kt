@@ -8,7 +8,7 @@ import klog.LoggerImpl
 import klog.LoggerMethod
 
 
-typealias StdoutMessageFormatter = (level: Logger.Level, name: String, message: () -> String?) -> String
+typealias StdoutMessageFormatter = (level: Logger.Level, name: String, message: () -> Any?) -> String
 
 typealias PrintMethod = (Any?) -> Unit
 
@@ -25,6 +25,11 @@ expect fun printMethodStderr(): PrintMethod
 object StdoutLogging : KLogFactory() {
   var coloredOutput: Boolean = true
   var printToStdErr: Boolean = false
+    set(value) {
+      field = value
+      if (value) printMethod = ::println else printMethodStderr()
+    }
+
   var printMethod: PrintMethod = ::println
 
   var formatter: StdoutMessageFormatter = defaultMessageFormatter
