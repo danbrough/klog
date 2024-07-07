@@ -10,11 +10,11 @@ private class Slf4jLog(private val logger: Logger) : DelegatingLogger {
 
   override var log: LoggerMethod = { level, _, message, t ->
     when (level) {
-      klog.Logger.Level.TRACE -> if (logger.isTraceEnabled) logger.trace(message(), t)
-      klog.Logger.Level.DEBUG -> if (logger.isDebugEnabled) logger.debug(message(), t)
-      klog.Logger.Level.INFO -> if (logger.isInfoEnabled) logger.info(message(), t)
-      klog.Logger.Level.WARN -> if (logger.isWarnEnabled) logger.warn(message(), t)
-      klog.Logger.Level.ERROR -> if (logger.isErrorEnabled) logger.error(message(), t)
+      klog.Logger.Level.TRACE -> if (logger.isTraceEnabled) logger.trace(message().toString(), t)
+      klog.Logger.Level.DEBUG -> if (logger.isDebugEnabled) logger.debug(message().toString(), t)
+      klog.Logger.Level.INFO -> if (logger.isInfoEnabled) logger.info(message().toString(), t)
+      klog.Logger.Level.WARN -> if (logger.isWarnEnabled) logger.warn(message().toString(), t)
+      klog.Logger.Level.ERROR -> if (logger.isErrorEnabled) logger.error(message().toString(), t)
       klog.Logger.Level.NONE -> Unit
     }
   }
