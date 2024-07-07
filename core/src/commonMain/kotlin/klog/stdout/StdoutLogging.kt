@@ -22,15 +22,18 @@ val defaultMessageFormatter: StdoutMessageFormatter = { level, name, message ->
 
 expect fun printMethodStderr(): PrintMethod
 
+val printMethodStderr: PrintMethod = printMethodStderr()
+val printMethodStdout: PrintMethod = ::println
+
 object StdoutLogging : KLogFactory() {
   var coloredOutput: Boolean = true
-  var printToStdErr: Boolean = false
+  var useStderr: Boolean = false
     set(value) {
       field = value
-      if (value) printMethod = ::println else printMethodStderr()
+      if (value) printMethod = printMethodStderr else printMethodStdout
     }
 
-  var printMethod: PrintMethod = ::println
+  var printMethod: PrintMethod = printMethodStdout
 
   var formatter: StdoutMessageFormatter = defaultMessageFormatter
 
