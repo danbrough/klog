@@ -39,9 +39,9 @@ object StdoutLogging : KLogFactory() {
   var formatter: StdoutMessageFormatter = defaultMessageFormatter
 
   var log: LoggerMethod = { level, name, message, t ->
-    println(formatter.invoke(level, name, message))
+    printer(formatter.invoke(level, name, message))
 
-    if (t != null) println(colorString(Logger.Level.ERROR, t.stackTraceToString()))
+    if (t != null) printer(colorString(Logger.Level.ERROR, t.stackTraceToString()))
   }
 
   override fun logger(logName: String) = LoggerImpl(logName, log)
