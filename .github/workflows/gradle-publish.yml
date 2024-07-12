@@ -39,10 +39,15 @@ jobs:
         run: ./gradlew build -x jsTest -x jsNodeTest -x test -x testDebugUnitTest -x testReleaseUnitTest -x wasmJsNodeTest
 
 
+      - name: Test
+        shell: bash
+        run: echo the actor is ${{ github.actor }}
+
       # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
       # the publishing section of your build.gradle
       - name: Publish to GitHub Packages
-        run: ./gradlew  publish -x jsTest -x jsNodeTest -x test -x testDebugUnitTest -x testReleaseUnitTest -x wasmJsNodeTest
         env:
           GITHUB_USERNAME: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew  publish -x jsTest -x jsNodeTest -x test -x testDebugUnitTest -x testReleaseUnitTest -x wasmJsNodeTest
+
