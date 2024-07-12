@@ -46,8 +46,8 @@ jobs:
           -Psonatype.username=${{ secrets.SONATYPE_USERNAME }} \
           -Psonatype.password=${{ secrets.SONATYPE_PASSWORD }} \
           -Psonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }} \
-          -Psigning.keyId = ${{ secrets.SIGNING_KEY_ID }} \
-          -Psigning.password = ${{ secrets.SIGNING_PASSWORD }}
+          -Psigning.keyId=${{ secrets.SIGNING_KEY_ID }} \
+          -Psigning.password=${{ secrets.SIGNING_PASSWORD }}
         
         
         env:
