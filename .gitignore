@@ -18,3 +18,4 @@ CMakeUserPresets.json
 **.log
 versions.properties
 kotlin-js-store
+.secrets

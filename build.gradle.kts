@@ -83,6 +83,12 @@ allprojects {
 
 
     extensions.findByType<SigningExtension>()?.apply {
+
+      useInMemoryPgpKeys(
+        findProperty("signingKey").toString(),
+        findProperty("signingPassword").toString()
+      )
+      
       publications.all {
         sign(this)
         if (this is MavenPublication) {
