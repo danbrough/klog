@@ -12,7 +12,12 @@ jobs:
       contents: read
       packages: write
 
+
     steps:
+      - name: TEst Something
+        shell: bash
+        run: echo the ACTOR is ${{ github.actor }} and $GITHUB_ACTOR
+        
       - uses: actions/checkout@v4
       - name: Set up JDK 17
         uses: actions/setup-java@v4
