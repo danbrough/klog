@@ -44,7 +44,7 @@ allprojects {
   }
 
   pluginManager.apply("maven-publish")
-  pluginManager.apply("signing")
+//  pluginManager.apply("signing")
   extensions.findByType<PublishingExtension>()?.apply {
     repositories {
       maven(rootProject.layout.buildDirectory.asFile.get().resolve("m2")) {
@@ -61,10 +61,10 @@ allprojects {
       }
     }
 
-    extensions.findByType<SigningExtension>()?.apply {
-      publications.all {
-        sign(this)
-      }
-    }
+    /*    extensions.findByType<SigningExtension>()?.apply {
+          publications.all {
+            sign(this)
+          }
+        }*/
   }
 }
