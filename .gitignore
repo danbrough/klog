@@ -17,3 +17,4 @@ CMakeUserPresets.json
 /upstream
 **.log
 versions.properties
+kotlin-js-store
