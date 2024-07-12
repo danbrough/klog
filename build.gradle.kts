@@ -47,9 +47,9 @@ allprojects {
   pluginManager.apply("signing")
   extensions.findByType<PublishingExtension>()?.apply {
     repositories {
-/*      maven(rootProject.layout.buildDirectory.asFile.get().resolve("m2")) {
+      maven(rootProject.layout.buildDirectory.asFile.get().resolve("m2")) {
         name = "Local"
-      }*/
+      }
 
       maven("https://maven.pkg.github.com/danbrough/klog") {
         name = "GitHubPackages"

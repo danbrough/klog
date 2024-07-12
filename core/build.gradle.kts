@@ -34,13 +34,12 @@ kotlin {
   }
 
   js {
-    browser {
-    }
+    nodejs()
   }
 
   @OptIn(ExperimentalWasmDsl::class)
   wasmJs {
-
+    nodejs()
   }
 
   androidTarget {
