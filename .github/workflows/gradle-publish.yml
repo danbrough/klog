@@ -40,10 +40,16 @@ jobs:
           # Verify gpg secret key
           gpg --list-secret-keys --keyid-format LONG
 
-      # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
-      # the publishing section of your build.gradle
-      - name: Publish to GitHub Packages
-        run: ./gradlew publish
+      - name: Publish to Sonatype
+        run: |
+          ./gradlew publishAllPublicationsToSonatype \
+          -Psonatype.username=${{ secrets.SONATYPE_USERNAME }} \
+          -Psonatype.password=${{ secrets.SONATYPE_PASSWORD }} \
+          -Psonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }} 
+        
+        
         env:
           USERNAME: ${{ github.actor }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
