@@ -54,17 +54,14 @@ jobs:
 
       - name: Publish to Sonatype
         env:
-          GPG_SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY }}
-          GPG_SIGNING_PASSWORD=${{ secrets.GPG_SIGNING_PASSWORD }}
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          GPG_SIGNING_PASSWORD: ${{ secrets.GPG_SIGNING_PASSWORD }}
+          USERNAME: ${{ github.actor }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
         run: |
           ./gradlew publishAllPublicationsToSonatype \
           -Psonatype.username=${{ secrets.SONATYPE_USERNAME }} \
           -Psonatype.password=${{ secrets.SONATYPE_PASSWORD }} \
           -Psonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }} 
         
-        
-        env:
-          USERNAME: ${{ github.actor }}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
