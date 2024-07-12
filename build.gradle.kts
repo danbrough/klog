@@ -1,6 +1,7 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
 import org.danbrough.klog.support.Constants
+import org.danbrough.xtras.sonatype.sonatypeStaging
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
@@ -10,6 +11,7 @@ plugins {
   alias(libs.plugins.android.library) apply false
   id("org.danbrough.klog.support")
   alias(libs.plugins.kotlin.jvm) apply false
+  alias(libs.plugins.xtras) apply false
   signing
 }
 
@@ -44,7 +46,9 @@ allprojects {
   }
 
   pluginManager.apply("maven-publish")
-//  pluginManager.apply("signing")
+  pluginManager.apply("signing")
+  pluginManager.apply("org.danbrough.xtras.sonatype")
+
   extensions.findByType<PublishingExtension>()?.apply {
     repositories {
       maven(rootProject.layout.buildDirectory.asFile.get().resolve("m2")) {
@@ -55,16 +59,23 @@ allprojects {
         name = "GitHubPackages"
 
         credentials {
-          username = System.getenv("GITHUB_ACTOR")
-          password = System.getenv("GITHUB_TOKEN")
+          username = System.getenv("USERNAME")
+          password = System.getenv("TOKEN")
         }
       }
     }
 
-    /*    extensions.findByType<SigningExtension>()?.apply {
-          publications.all {
-            sign(this)
-          }
-        }*/
+
+    extensions.findByType<SigningExtension>()?.apply {
+      publications.all {
+        sign(this)
+      }
+
+      sonatypeStaging()
+    }
   }
 }
+
+
+
+
