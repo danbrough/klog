@@ -26,11 +26,23 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: gradle
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
+      - name: Set up Android SDK
+        if: ${{ env.ACT }} # Only run on local act setups, as GitHub Actions provides the Android SDK on Ubuntu
+        uses: android-actions/setup-android@v2
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+
+      - name: Cache Kotlin Konan
+        id: cache-kotlin-konan
+        uses: actions/cache@v3
+        with:
+          path: ~/.konan/**/*
+          key: kotlin-konan-${{ runner.os }}
 
       - id: install-secret-key
         name: Install gpg secret key
@@ -47,7 +59,8 @@ jobs:
           -Psonatype.password=${{ secrets.SONATYPE_PASSWORD }} \
           -Psonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }} \
           -Psigning.keyId=${{ secrets.SIGNING_KEY_ID }} \
-          -Psigning.password=${{ secrets.SIGNING_PASSWORD }}
+          -Psigning.password=${{ secrets.SIGNING_PASSWORD }} \
+          -Psigning.secretKeyRingFile=${{ env.HOME }}/.gnupg/secring.gpg
         
         
         env:
