@@ -14,7 +14,7 @@ plugins {
   signing
 }
 
-val projectVersion = "0.0.3-beta01"
+val projectVersion = "0.0.3-beta02"
 
 repositories {
   mavenCentral()
