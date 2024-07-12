@@ -12,12 +12,8 @@ or you can trivially wire it up to anything with a similar api.
 Initial demo builds are available via maven at:
 
 ```kotlin
-repositories {
-  maven("https://maven.danbrough.org")
-}
-
 dependencies {
-  implementation("org.danbrough.klog:core:0.0.3-beta01")
+  implementation("org.danbrough.klog:core:0.0.3-beta02")
 }
 ```
 
