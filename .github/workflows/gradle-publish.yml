@@ -53,14 +53,14 @@ jobs:
           gpg --list-secret-keys --keyid-format LONG
 
       - name: Publish to Sonatype
+        env:
+          GPG_SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY }}
+          GPG_SIGNING_PASSWORD=${{ secrets.GPG_SIGNING_PASSWORD }}
         run: |
           ./gradlew publishAllPublicationsToSonatype \
           -Psonatype.username=${{ secrets.SONATYPE_USERNAME }} \
           -Psonatype.password=${{ secrets.SONATYPE_PASSWORD }} \
-          -Psonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }} \
-          -Psigning.keyId=${{ secrets.SIGNING_KEY_ID }} \
-          -Psigning.password=${{ secrets.SIGNING_PASSWORD }} \
-          -Psigning.secretKeyRingFile=${{ env.HOME }}/.gnupg/secring.gpg
+          -Psonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }} 
         
         
         env:

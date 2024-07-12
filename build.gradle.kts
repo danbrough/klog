@@ -50,16 +50,18 @@ allprojects {
 
   extensions.findByType<PublishingExtension>()?.apply {
     repositories {
+/*
       maven(rootProject.layout.buildDirectory.asFile.get().resolve("m2")) {
         name = "Local"
       }
+*/
 
       maven("https://maven.pkg.github.com/danbrough/klog") {
         name = "GitHubPackages"
 
         credentials {
-          username = System.getenv("USERNAME")
-          password = System.getenv("TOKEN")
+          username = project.property("sonatype.username")!!.toString()
+          password = project.property("sonatype.password")!!.toString()
         }
       }
 
@@ -84,11 +86,18 @@ allprojects {
 
     extensions.findByType<SigningExtension>()?.apply {
 
-      useInMemoryPgpKeys(
-        findProperty("signingKey").toString(),
-        findProperty("signingPassword").toString()
-      )
-      
+      val signingKey =
+        findProperty("GPG_SIGNING_KEY")?.toString() ?: System.getenv("GPG_SIGNING_KEY")
+      val signingPassword =
+        findProperty("GPG_SIGNING_PASSWORD")?.toString() ?: System.getenv("GPG_SIGNING_PASSWORD")!!
+
+      if (signingKey != null) {
+        useInMemoryPgpKeys(
+          signingKey.replace("\\n", "\n"),
+          signingPassword
+        )
+      } else logger.info("pgp signing disabled as GPG_SIGNING_KEY not set")
+
       publications.all {
         sign(this)
         if (this is MavenPublication) {
