@@ -11,7 +11,7 @@ plugins {
 java {
   sourceCompatibility = Constants.JAVA_VERSION
   targetCompatibility = Constants.JAVA_VERSION
-  withJavadocJar()
+  //withJavadocJar()
   withSourcesJar()
 }
 
