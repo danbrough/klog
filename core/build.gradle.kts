@@ -15,17 +15,15 @@ plugins {
   signing
 }
 
-group = Constants.KLOG_PACKAGE
-version = "0.0.3-beta01"
 
 repositories {
   mavenCentral()
   google()
 }
 
+
 kotlin {
   declareNativeTargets()
-  androidNativeArm32()
 
   jvm {
     compilerOptions {
@@ -124,3 +122,13 @@ android {
 }
 
 
+
+afterEvaluate {
+  val signTasks = tasks.withType(Sign::class.java).map { it.name }
+  if (signTasks.isNotEmpty()) {
+    tasks.withType(PublishToMavenRepository::class.java) {
+      println("$name => $signTasks")
+      dependsOn(signTasks)
+    }
+  }
+}

@@ -10,18 +10,21 @@ plugins {
   alias(libs.plugins.android.library) apply false
   id("org.danbrough.klog.support")
   alias(libs.plugins.kotlin.jvm) apply false
+  alias(libs.plugins.dokka) apply false
   //alias(libs.plugins.xtras) apply false
   signing
 }
 
 val projectVersion = "0.0.3-beta02"
+group = Constants.KLOG_PACKAGE
+version = projectVersion
 
 repositories {
   mavenCentral()
   google()
 }
 
-allprojects {
+subprojects {
   group = Constants.KLOG_PACKAGE
   version = projectVersion
 
@@ -46,24 +49,29 @@ allprojects {
 
   pluginManager.apply("maven-publish")
   pluginManager.apply("signing")
+  pluginManager.apply("org.jetbrains.dokka")
+
+  val javadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+    from(tasks.getByName("dokkaHtml"))
+  }
+
 //  pluginManager.apply("org.danbrough.xtras.sonatype")
-
-  extensions.findByType<PublishingExtension>()?.apply {
+  extensions.findByType<PublishingExtension>()!!.apply {
     repositories {
-/*
-      maven(rootProject.layout.buildDirectory.asFile.get().resolve("m2")) {
-        name = "Local"
+      maven("/tmp/maven") {
+        name = "Thang"
       }
-*/
+      /*
+            maven("https://maven.pkg.github.com/danbrough/klog") {
+              name = "GitHubPackages"
 
-      maven("https://maven.pkg.github.com/danbrough/klog") {
-        name = "GitHubPackages"
-
-        credentials {
-          username = project.property("sonatype.username")!!.toString()
-          password = project.property("sonatype.password")!!.toString()
-        }
-      }
+              credentials {
+                username = project.property("sonatype.username")!!.toString()
+                password = project.property("sonatype.password")!!.toString()
+              }
+            }
+      */
 
       maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
         name = "Sonatype"
@@ -80,16 +88,15 @@ allprojects {
           password = project.property("sonatype.password")!!.toString()
         }
       }
-
     }
-
 
     extensions.findByType<SigningExtension>()?.apply {
 
       val signingKey =
         findProperty("GPG_SIGNING_KEY")?.toString() ?: System.getenv("GPG_SIGNING_KEY")
       val signingPassword =
-        findProperty("GPG_SIGNING_PASSWORD")?.toString() ?: System.getenv("GPG_SIGNING_PASSWORD")!!
+        findProperty("GPG_SIGNING_PASSWORD")?.toString()
+          ?: System.getenv("GPG_SIGNING_PASSWORD")!!
 
       if (signingKey != null) {
         useInMemoryPgpKeys(
@@ -98,9 +105,20 @@ allprojects {
         )
       } else logger.info("pgp signing disabled as GPG_SIGNING_KEY not set")
 
+//      afterEvaluate {
+//        if (project.kotlinExtension is KotlinMultiplatformExtension) {
+//          val kotlinMultiplatform by publications.getting(MavenPublication::class) {
+//            artifact(javadocJar)
+//          }
+//        }
+//      }
+
       publications.all {
-        sign(this)
         if (this is MavenPublication) {
+          println("PUBLICATION: $name")
+          //if (name in setOf("kotlinMultiplatform", "jvm"))
+          artifact(javadocJar)
+
           pom {
             name.set("KLog")
             description.set("Kotlin logging facade")
@@ -134,7 +152,10 @@ allprojects {
             }
           }
         }
+        sign(this)
       }
+
+      
     }
   }
 }
