@@ -9,9 +9,6 @@ import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.android.library)
-  id("org.danbrough.klog.support")
-  `maven-publish`
-  signing
 }
 
 
@@ -117,12 +114,3 @@ android {
   }
 }
 
-afterEvaluate {
-  val signTasks = tasks.withType(Sign::class.java).map { it.name }
-  if (signTasks.isNotEmpty()) {
-    tasks.withType(PublishToMavenRepository::class.java) {
-      println("$name => $signTasks")
-      dependsOn(signTasks)
-    }
-  }
-}

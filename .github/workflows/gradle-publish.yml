@@ -44,24 +44,20 @@ jobs:
           path: ~/.konan/**/*
           key: kotlin-konan-${{ runner.os }}
 
-      - id: install-secret-key
-        name: Install gpg secret key
-        run: |
-          # Install gpg secret key
-          cat <(echo -e "${{ secrets.SONATYPE_SECRET_KEY }}") | gpg --batch --import
-          # Verify gpg secret key
-          gpg --list-secret-keys --keyid-format LONG
-
       - name: Publish to Sonatype
         env:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
           GPG_SIGNING_PASSWORD: ${{ secrets.GPG_SIGNING_PASSWORD }}
           USERNAME: ${{ github.actor }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
 
         run: |
+          echo xtras.dir = ${{ env.HOME }}/xtras
           ./gradlew publishAllPublicationsToSonatype \
+          -Ppublish.sign=1 -Ppublish.docs=1 \
+          -Pxtras.dir=${{ env.HOME }}/xtras \
           -Psonatype.username=${{ secrets.SONATYPE_USERNAME }} \
           -Psonatype.password=${{ secrets.SONATYPE_PASSWORD }} \
-          -Psonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }} 
-        
+          -Psonatype.profileID=${{ secrets.SONATYPE_PROFILE_ID }}
+

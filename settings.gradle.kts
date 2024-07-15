@@ -1,6 +1,6 @@
 pluginManagement {
   repositories {
-    maven("https://maven.danbrough.org")
+    //maven("https://maven.danbrough.org")
 
     mavenCentral()
     google()
@@ -14,6 +14,7 @@ plugins {
 }
 
 rootProject.name = "klog"
+includeBuild("../../xtras/plugin")
 
 includeBuild("support")
 
