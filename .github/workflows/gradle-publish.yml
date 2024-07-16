@@ -53,7 +53,7 @@ jobs:
         shell: bash
 
         run: |
-          echo xtras.dir = ${{ env.HOME }}/xtras
+          echo xtras.dir = $HOME/xtras
           ./gradlew publishAllPublicationsToSonatype \
           -Ppublish.sign=1 -Ppublish.docs=1 \
           -Pxtras.dir=$HOME/xtras \

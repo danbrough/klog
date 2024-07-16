@@ -14,7 +14,7 @@ plugins {
 }
 
 rootProject.name = "klog"
-//includeBuild("../../xtras/plugin")
+includeBuild("../../xtras/plugin")
 
 includeBuild("support")
 
