@@ -9,8 +9,8 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 
-#xtras = { id = "org.danbrough.xtras", version.ref = "xtras-version" }
-xtras = { id = "org.danbrough.xtras" }
+xtras = { id = "org.danbrough.xtras", version.ref = "xtras-version" }
+#xtras = { id = "org.danbrough.xtras" }
 xtras-sonatype = { id = "org.danbrough.xtras.sonatype", version.ref = "xtras-version" }
 xtras-openssl = { id = "org.danbrough.xtras.openssl", version.ref = "xtras-openssl" }
 xtras-mqtt = { id = "org.danbrough.xtras.mqtt", version.ref = "xtras-mqtt" }
@@ -37,7 +37,7 @@ kotlin = "2.0.0"
 
 xtrasPackage = "org.danbrough.xtras"
 xtras-core = "0.0.1-alpha01"
-xtras-version = "0.0.1-alpha05"
+xtras-version = "0.0.1-alpha06"
 xtras-openssl = "0.0.1-alpha01"
 xtras-mqtt = "0.0.1-alpha01"
 oshai-logging = "7.0.0"
