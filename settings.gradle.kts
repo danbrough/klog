@@ -7,7 +7,7 @@ pluginManagement {
     gradlePluginPortal()
   }
 }
-//includeBuild("../../xtras/plugin")
+includeBuild("../../xtras/plugin")
 
 plugins {
   id("de.fayard.refreshVersions") version "0.60.5"
