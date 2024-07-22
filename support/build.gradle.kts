@@ -1,7 +1,6 @@
 plugins {
   `kotlin-dsl`
   `java-gradle-plugin`
-  signing
 }
 
 repositories {
