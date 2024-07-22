@@ -7,14 +7,15 @@ pluginManagement {
     gradlePluginPortal()
   }
 }
+includeBuild("../../xtras/plugin")
 
 
 plugins {
   id("de.fayard.refreshVersions") version "0.60.5"
+  //id("org.danbrough.xtras")
 }
 
 rootProject.name = "klog"
-//includeBuild("../../xtras/plugin")
 
 includeBuild("support")
 
