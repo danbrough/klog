@@ -1,6 +1,5 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
-import com.android.build.gradle.tasks.factory.AndroidUnitTest
 import org.danbrough.klog.support.Constants
 import org.danbrough.klog.support.declareNativeTargets
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
@@ -121,7 +120,7 @@ android {
 }
 
 
-
+/*
 afterEvaluate {
 
   tasks.withType<AndroidUnitTest> {
@@ -132,4 +131,4 @@ afterEvaluate {
     enabled = false
   }
 
-}
+}*/

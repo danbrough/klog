@@ -1,7 +1,7 @@
 pluginManagement {
   repositories {
     //maven("https://maven.danbrough.org")
-    //maven("https://s01.oss.sonatype.org/content/groups/staging/")
+    maven("https://s01.oss.sonatype.org/content/groups/staging/")
     mavenCentral()
     google()
     gradlePluginPortal()
@@ -14,7 +14,7 @@ plugins {
   //id("org.danbrough.xtras")
 }
 includeBuild("support")
-includeBuild("../../xtras/plugin")
+//includeBuild("../../xtras/plugin")
 
 
 rootProject.name = "klog"
