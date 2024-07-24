@@ -56,7 +56,7 @@ jobs:
         run: |
           echo xtras.dir = $HOME/xtras
           ./gradlew publishAllPublicationsToSonatype \
-          -Ppublish.sign=1 -Ppublish.docs=1 \
+          -Ppublish.sign=1 -Ppublish.docs=1 -Psonatype.closeRepository=1 \
           -Pxtras.dir=$HOME/xtras \
           -Psigning.key="${{ secrets.GPG_SIGNING_KEY }}" \
           -Psigning.password="${{ secrets.GPG_SIGNING_PASSWORD }}" \
