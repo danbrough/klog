@@ -5,14 +5,14 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 
 object Constants {
-	const val KLOG_PACKAGE = "org.danbrough.klog"
-	val JAVA_VERSION = JavaVersion.VERSION_1_8
-	val JVM_TARGET = JvmTarget.JVM_1_8
+  const val KLOG_PACKAGE = "org.danbrough.klog"
+  val JAVA_VERSION = JavaVersion.VERSION_11
+  val JVM_TARGET = JvmTarget.JVM_11
 
-	object Android {
-		const val COMPILE_SDK = 34
-		const val MIN_SDK = 19
-	}
+  object Android {
+    const val COMPILE_SDK = 34
+    const val MIN_SDK = 19
+  }
 }
 
 
