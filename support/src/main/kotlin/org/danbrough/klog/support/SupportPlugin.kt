@@ -21,6 +21,7 @@ fun KotlinMultiplatformExtension.declareNativeTargets() {
 
   androidNativeX64()
   androidNativeArm64()
+  androidNativeArm32()
 
   if (HostManager.hostIsMac) {
     macosArm64()
