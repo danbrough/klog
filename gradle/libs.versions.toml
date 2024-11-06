@@ -30,6 +30,9 @@ agp = "8.7.2"
 ##⬆= "8.8.0-alpha09"
 
 kotlin = "2.0.21"
+##  ⬆ = "2.1.0-Beta1"
+##  ⬆ = "2.1.0-Beta2"
+##  ⬆ = "2.1.0-RC"
 
 xtrasPackage = "org.danbrough.xtras"
 xtras-core = "0.0.1-alpha01"
