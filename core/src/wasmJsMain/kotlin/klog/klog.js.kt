@@ -8,4 +8,4 @@ var loggerName = "klog"
 
 actual fun kloggingDefault(): KLogFactory = StdoutLogging
 
-actual fun <T : Any> loggerName(clazz: KClass<T>): String = loggerName
+actual fun <T : Any> loggerName(clazz: KClass<T>): String = "KOTLIN"

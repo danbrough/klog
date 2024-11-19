@@ -1,3 +1,3 @@
 package klog.stdout
 
-actual fun printMethodStderr(): Printer = TODO("Not supported on JS")
+actual fun printMethodStderr(): Printer = stdoutPrinter

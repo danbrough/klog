@@ -18,24 +18,11 @@ xtras-mqtt = { id = "org.danbrough.xtras.mqtt", version.ref = "xtras-mqtt" }
 
 [versions]
 
-agp = "8.7.2"
-##⬆= "8.8.0-alpha01"
-##⬆= "8.8.0-alpha02"
-##⬆= "8.8.0-alpha03"
-##⬆= "8.8.0-alpha04"
-##⬆= "8.8.0-alpha05"
-##⬆= "8.8.0-alpha06"
-##⬆= "8.8.0-alpha07"
-##⬆= "8.8.0-alpha08"
-##⬆= "8.8.0-alpha09"
+agp = "8.8.0-beta01"
 ##⬆= "8.9.0-alpha01"
 ##⬆= "8.9.0-alpha02"
 
-kotlin = "2.0.21"
-##  ⬆ = "2.1.0-Beta1"
-##  ⬆ = "2.1.0-Beta2"
-##  ⬆ = "2.1.0-RC"
-##  ⬆ = "2.1.0-RC2"
+kotlin = "2.1.0-RC2"
 
 xtrasPackage = "org.danbrough.xtras"
 xtras-core = "0.0.1-alpha01"
