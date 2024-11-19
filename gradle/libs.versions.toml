@@ -28,11 +28,14 @@ agp = "8.7.2"
 ##⬆= "8.8.0-alpha07"
 ##⬆= "8.8.0-alpha08"
 ##⬆= "8.8.0-alpha09"
+##⬆= "8.9.0-alpha01"
+##⬆= "8.9.0-alpha02"
 
 kotlin = "2.0.21"
 ##  ⬆ = "2.1.0-Beta1"
 ##  ⬆ = "2.1.0-Beta2"
 ##  ⬆ = "2.1.0-RC"
+##  ⬆ = "2.1.0-RC2"
 
 xtrasPackage = "org.danbrough.xtras"
 xtras-core = "0.0.1-alpha01"
@@ -51,7 +54,7 @@ slf4j-api = "2.0.16"
 slf4j-simple = "2.0.12"
 logback-classic = "1.5.12"
 
-kotlinx-coroutines = "1.8.1"
+kotlinx-coroutines = "1.9.0"
 
 androidx-test-runner = "1.6.2"
 
