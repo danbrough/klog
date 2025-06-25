@@ -20,6 +20,7 @@ repositories {
 java {
   sourceCompatibility = Constants.JAVA_VERSION
   targetCompatibility = Constants.JAVA_VERSION
+//  withSourcesJar()
 }
 
 kotlin {
@@ -43,8 +44,8 @@ kotlin {
   }
 
   compilerOptions {
-    languageVersion = KotlinVersion.KOTLIN_1_9
-    apiVersion = KotlinVersion.KOTLIN_1_9
+    languageVersion = KotlinVersion.KOTLIN_2_1
+    apiVersion = KotlinVersion.KOTLIN_2_1
     freeCompilerArgs = listOf("-Xexpect-actual-classes")
   }
   sourceSets {

@@ -16,8 +16,8 @@ java {
 kotlin {
 
   compilerOptions {
-    languageVersion = KotlinVersion.KOTLIN_1_9
-    apiVersion = KotlinVersion.KOTLIN_1_9
+    languageVersion = KotlinVersion.KOTLIN_2_1
+    apiVersion = KotlinVersion.KOTLIN_2_1
     jvmTarget = Constants.JVM_TARGET
     //freeCompilerArgs = listOf("-Xexpect-actual-classes")
   }
