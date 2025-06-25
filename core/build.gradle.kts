@@ -118,6 +118,11 @@ android {
   }
 }
 
+java {
+  sourceCompatibility = Constants.JAVA_VERSION
+  targetCompatibility = Constants.JAVA_VERSION
+}
+
 
 /*
 afterEvaluate {
