@@ -17,11 +17,7 @@ repositories {
   google()
 }
 
-java {
-  sourceCompatibility = Constants.JAVA_VERSION
-  targetCompatibility = Constants.JAVA_VERSION
-//  withSourcesJar()
-}
+
 
 kotlin {
   declareNativeTargets()
@@ -113,9 +109,9 @@ android {
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
-  compileOptions {
-    sourceCompatibility = Constants.JAVA_VERSION
-    targetCompatibility = Constants.JAVA_VERSION
-  }
+  /*  compileOptions {
+      sourceCompatibility = Constants.JAVA_VERSION
+      targetCompatibility = Constants.JAVA_VERSION
+    }*/
 }
 

@@ -22,9 +22,6 @@ kotlin {
   declareNativeTargets()
 
   jvm {
-    compilerOptions {
-      jvmTarget = Constants.JVM_TARGET
-    }
   }
 
   js {
@@ -112,15 +109,10 @@ android {
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 
-  compileOptions {
-    sourceCompatibility = Constants.JAVA_VERSION
-    targetCompatibility = Constants.JAVA_VERSION
-  }
-}
-
-java {
-  sourceCompatibility = Constants.JAVA_VERSION
-  targetCompatibility = Constants.JAVA_VERSION
+  /*  compileOptions {
+      sourceCompatibility = Constants.JAVA_VERSION
+      targetCompatibility = Constants.JAVA_VERSION
+    }*/
 }
 
 

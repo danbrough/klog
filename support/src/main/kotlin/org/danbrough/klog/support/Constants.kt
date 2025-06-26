@@ -10,7 +10,7 @@ object Constants {
   val JVM_TARGET = JvmTarget.JVM_11
 
   object Android {
-    const val COMPILE_SDK = 34
+    const val COMPILE_SDK = 36
     const val MIN_SDK = 19
   }
 }

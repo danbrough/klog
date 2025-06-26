@@ -6,12 +6,14 @@ plugins {
   alias(libs.plugins.kotlin.jvm)
   `maven-publish`
 }
+/*
 
 java {
   sourceCompatibility = Constants.JAVA_VERSION
   targetCompatibility = Constants.JAVA_VERSION
   withSourcesJar()
 }
+*/
 
 kotlin {
 
