@@ -1,9 +1,7 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
 import org.danbrough.klog.support.Constants
-import org.danbrough.klog.support.declareNativeTargets
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 
 plugins {
@@ -19,7 +17,6 @@ repositories {
 
 
 kotlin {
-  declareNativeTargets()
 
   jvm {
   }

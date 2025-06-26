@@ -6,7 +6,9 @@ import org.danbrough.xtras.logInfo
 import org.danbrough.xtras.logWarn
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
+import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform) apply false
@@ -36,5 +38,31 @@ subprojects {
       sourceCompatibility = Constants.JAVA_VERSION
       targetCompatibility = Constants.JAVA_VERSION
     }
+  }
+
+  extensions.findByType<KotlinMultiplatformExtension>()?.apply {
+
+    applyDefaultHierarchyTemplate()
+
+    mingwX64()
+    linuxX64()
+    linuxArm64()
+
+    androidNativeX64()
+    androidNativeArm64()
+    androidNativeArm32()
+
+    if (HostManager.hostIsMac) {
+      macosArm64()
+      macosX64()
+      iosArm64()
+      iosX64()
+      iosSimulatorArm64()
+      watchosX64()
+      watchosArm64()
+      tvosX64()
+      tvosArm64()
+    }
+
   }
 }
