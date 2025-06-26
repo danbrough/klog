@@ -36,15 +36,15 @@ kotlin {
   androidTarget {
     publishLibraryVariants("release")
 
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    /*@OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
       jvmTarget = Constants.JVM_TARGET
-    }
+    }*/
   }
 
   compilerOptions {
-    languageVersion = KotlinVersion.KOTLIN_2_1
-    apiVersion = KotlinVersion.KOTLIN_2_1
+/*    languageVersion = KotlinVersion.KOTLIN_2_1
+    apiVersion = KotlinVersion.KOTLIN_2_1*/
     freeCompilerArgs = listOf("-Xexpect-actual-classes")
   }
 
