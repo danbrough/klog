@@ -38,31 +38,31 @@ subprojects {
       sourceCompatibility = Constants.JAVA_VERSION
       targetCompatibility = Constants.JAVA_VERSION
     }
-  }
 
-  extensions.findByType<KotlinMultiplatformExtension>()?.apply {
 
-    applyDefaultHierarchyTemplate()
+    extensions.findByType<KotlinMultiplatformExtension>()?.apply {
 
-    mingwX64()
-    linuxX64()
-    linuxArm64()
+      applyDefaultHierarchyTemplate()
 
-    androidNativeX64()
-    androidNativeArm64()
-    androidNativeArm32()
+      mingwX64()
+      linuxX64()
+      linuxArm64()
 
-    if (HostManager.hostIsMac) {
-      macosArm64()
-      macosX64()
-      iosArm64()
-      iosX64()
-      iosSimulatorArm64()
-      watchosX64()
-      watchosArm64()
-      tvosX64()
-      tvosArm64()
+      androidNativeX64()
+      androidNativeArm64()
+      androidNativeArm32()
+
+      if (HostManager.hostIsMac) {
+        macosArm64()
+        macosX64()
+        iosArm64()
+        iosX64()
+        iosSimulatorArm64()
+        watchosX64()
+        watchosArm64()
+        tvosX64()
+        tvosArm64()
+      }
     }
-
   }
 }
