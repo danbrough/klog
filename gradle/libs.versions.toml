@@ -48,7 +48,7 @@ slf4j-simple = "2.0.17"
 logback-classic = "1.5.18"
 
 kotlinx-coroutines = "1.10.2"
-
+kotlinx-browser = "0.3"
 androidx-test-runner = "1.6.2"
 ##                ⬆ = "1.7.0-alpha01"
 ##                ⬆ = "1.7.0-alpha02"
@@ -61,7 +61,7 @@ oshai-logging = { module = "io.github.oshai:kotlin-logging", version.ref = "osha
 kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin" }
-
+kotlinx-browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.ref = "kotlinx-browser" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test-runner" }
 dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
 

@@ -28,6 +28,7 @@ kotlin {
   @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
   wasmJs {
     nodejs()
+    browser()
   }
 
   androidTarget {
@@ -83,6 +84,12 @@ kotlin {
 
     nativeMain {
       dependencies {
+      }
+    }
+
+    wasmJsMain {
+      dependencies {
+        implementation(libs.kotlinx.browser)
       }
     }
   }
