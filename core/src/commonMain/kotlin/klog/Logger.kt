@@ -13,6 +13,8 @@ interface Logger {
   }
 
   fun trace(t: Throwable? = null, message: () -> Any?)
+  fun trace(t: Throwable? = null, message: suspend () -> Any?)
+
   fun debug(t: Throwable? = null, message: () -> Any?)
   fun info(t: Throwable? = null, message: () -> Any?)
   fun warn(t: Throwable? = null, message: () -> Any?)
@@ -25,6 +27,8 @@ interface DelegatingLogger : Logger {
 
   override fun trace(t: Throwable?, message: () -> Any?) =
     log.invoke(Level.TRACE, name, message, t)
+
+  override fun trace(t: Throwable?, message: suspend () -> Any?) = trace(t, runBlocking(message))
 
   override fun debug(t: Throwable?, message: () -> Any?) =
     log.invoke(Level.DEBUG, name, message, t)

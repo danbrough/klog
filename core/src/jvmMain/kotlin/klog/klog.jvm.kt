@@ -1,6 +1,7 @@
 package klog
 
 import klog.stdout.StdoutLogging
+import kotlinx.coroutines.runBlocking
 import java.lang.reflect.Modifier
 import kotlin.reflect.KClass
 
@@ -10,6 +11,9 @@ actual fun <T : Any> loggerName(clazz: KClass<T>): String = unwrapCompanionClass
 
 private fun <T : Any> unwrapCompanionClass(clazz: Class<T>): Class<*> {
   return clazz.enclosingClass?.let { enclosingClass ->
+    runBlocking {
+
+    }
     try {
       enclosingClass.declaredFields
         .find { field ->
