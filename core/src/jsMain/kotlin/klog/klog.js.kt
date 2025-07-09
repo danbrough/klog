@@ -1,21 +1,22 @@
 package klog
 
 import klog.stdout.StdoutLogging
+import klog.stdout.StdoutMessageFormatter
 import klog.stdout.colorString
+import klog.stdout.defaultMessageFormatter
 import kotlin.reflect.KClass
 
 object JsLogFactory : KLogFactory() {
 
-	init {
-		StdoutLogging.coloredOutput = false
-	}
+  var formatter: StdoutMessageFormatter = defaultMessageFormatter
 
-	private var log: LoggerMethod = { level, name, message, t ->
-		console.log(StdoutLogging.formatter.invoke(level, name, message))
-		if (t != null) console.log(colorString(Logger.Level.ERROR, t.stackTraceToString()))
-	}
 
-	override fun logger(logName: String) = LoggerImpl(logName, log)
+  private var log: LoggerMethod = { level, name, message, t ->
+    console.log(StdoutLogging.formatter.invoke(level, name, message))
+    if (t != null) console.log(colorString(Logger.Level.ERROR, t.stackTraceToString()))
+  }
+
+  override fun logger(logName: String) = LoggerImpl(logName, log)
 }
 
 internal actual fun kloggingDefault(): KLogFactory = JsLogFactory

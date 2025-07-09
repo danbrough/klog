@@ -52,7 +52,6 @@ kotlin {
       dependencies {
         implementation(kotlin("reflect"))
         implementation(libs.kotlinx.coroutines)
-
       }
     }
 
@@ -60,19 +59,6 @@ kotlin {
       dependencies {
         implementation(kotlin("test"))
       }
-    }
-    /*
-        val jvmAndroidMain by creating {
-          dependsOn(commonMain)
-        }*/
-
-    androidMain {
-      //dependsOn(jvmAndroidMain)
-    }
-
-
-    jvmMain {
-      //dependsOn(jvmAndroidMain)
     }
 
     val androidInstrumentedTest by getting {
@@ -114,23 +100,5 @@ android {
     minSdk = Constants.Android.MIN_SDK
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
-
-  /*  compileOptions {
-      sourceCompatibility = Constants.JAVA_VERSION
-      targetCompatibility = Constants.JAVA_VERSION
-    }*/
 }
 
-
-/*
-afterEvaluate {
-
-  tasks.withType<AndroidUnitTest> {
-    enabled = false
-  }
-
-  tasks.getByName("wasmJsTest") {
-    enabled = false
-  }
-
-}*/
