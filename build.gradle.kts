@@ -2,18 +2,14 @@
 
 
 import org.danbrough.klog.support.Constants
-import org.danbrough.xtras.logInfo
-import org.danbrough.xtras.logWarn
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 import org.jetbrains.kotlin.konan.target.HostManager
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform) apply false
   alias(libs.plugins.android.library) apply false
-  alias(libs.plugins.xtras)
+  //alias(libs.plugins.xtras)
   id("org.danbrough.klog.support")
   alias(libs.plugins.kotlin.jvm) apply false
   alias(libs.plugins.dokka)
@@ -31,10 +27,9 @@ repositories {
 
 subprojects {
   afterEvaluate {
-    logInfo("project: $name")
-    logWarn("kotlin extension $kotlinExtension ${kotlinExtension::class.java}")
+    /*logInfo("project: $name")
+    logWarn("kotlin extension $kotlinExtension ${kotlinExtension::class.java}")*/
     extensions.findByType<JavaPluginExtension>()?.apply {
-      //this.targetCompatibility =
       sourceCompatibility = Constants.JAVA_VERSION
       targetCompatibility = Constants.JAVA_VERSION
     }

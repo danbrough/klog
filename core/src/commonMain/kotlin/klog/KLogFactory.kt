@@ -6,7 +6,7 @@ abstract class KLogFactory {
 }
 
 
-object NOOPLogging : KLogFactory() {
+internal object NOOPLogging : KLogFactory() {
 
   object NOOPLogger : DelegatingLogger {
     override var log: LoggerMethod = { _, _, _, _ -> }

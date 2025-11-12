@@ -37,7 +37,7 @@ fun kloggingAndroid(block: AndroidLogging.() -> Unit = {}) {
   installLogging(AndroidLogging, block)
 }
 
-actual fun kloggingDefault(): KLogFactory = AndroidLogging
+actual fun klogDefaultFactory(): KLogFactory = AndroidLogging
 
 actual fun <T : Any> loggerName(clazz: KClass<T>): String = unwrapCompanionClass(clazz.java).name
 

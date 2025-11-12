@@ -19,6 +19,6 @@ object JsLogFactory : KLogFactory() {
   override fun logger(logName: String) = LoggerImpl(logName, log)
 }
 
-internal actual fun kloggingDefault(): KLogFactory = JsLogFactory
+internal actual fun klogDefaultFactory(): KLogFactory = JsLogFactory
 
 actual fun <T : Any> loggerName(clazz: KClass<T>): String = "KOTLIN"

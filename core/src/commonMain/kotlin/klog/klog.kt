@@ -7,25 +7,25 @@ import kotlin.reflect.KClass
 
 expect fun <T : Any> loggerName(clazz: KClass<T>): String
 
-internal expect fun kloggingDefault(): KLogFactory
+internal expect fun klogDefaultFactory(): KLogFactory
 
-var klogging: KLogFactory = kloggingDefault()
+var klogFactory: KLogFactory = klogDefaultFactory()
 
 fun <T : KLogFactory> installLogging(logging: T, block: T.() -> Unit = {}) {
-  klogging = logging
+  klogFactory = logging
   block.invoke(logging)
 }
 
 fun kloggingStdout() {
-  klogging = StdoutLogging
+  klogFactory = StdoutLogging
 }
 
 fun kloggingDisabled() {
-  klogging = NOOPLogging
+  klogFactory = NOOPLogging
 }
 
-fun logger(name: String): Logger = klogging.logger(name)
+fun logger(name: String): Logger = klogFactory.logger(name)
 
 inline fun <reified T : Any> T.logger(): Lazy<Logger> = lazy {
-  klogging.logger(loggerName(T::class))
+  klogFactory.logger(loggerName(T::class))
 }

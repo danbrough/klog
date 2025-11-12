@@ -5,7 +5,7 @@ import kotlinx.coroutines.runBlocking
 import java.lang.reflect.Modifier
 import kotlin.reflect.KClass
 
-actual fun kloggingDefault(): KLogFactory = StdoutLogging
+actual fun klogDefaultFactory(): KLogFactory = StdoutLogging
 
 actual fun <T : Any> loggerName(clazz: KClass<T>): String = unwrapCompanionClass(clazz.java).name
 
