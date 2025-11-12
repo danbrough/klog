@@ -34,6 +34,12 @@ subprojects {
       targetCompatibility = Constants.JAVA_VERSION
     }
 
+    publishing {
+      repositories {
+
+      }
+    }
+
 
     extensions.findByType<KotlinMultiplatformExtension>()?.apply {
 
