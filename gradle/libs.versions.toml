@@ -9,8 +9,8 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 
-xtras = { id = "org.danbrough.xtras", version.ref = "xtras-version" }
-#xtras = { id = "org.danbrough.xtras" }
+#xtras = { id = "org.danbrough.xtras", version.ref = "xtras-version" }
+xtras = { id = "org.danbrough.xtras" }
 xtras-sonatype = { id = "org.danbrough.xtras.sonatype", version.ref = "xtras-version" }
 xtras-openssl = { id = "org.danbrough.xtras.openssl", version.ref = "xtras-openssl" }
 xtras-mqtt = { id = "org.danbrough.xtras.mqtt", version.ref = "xtras-mqtt" }
@@ -18,7 +18,7 @@ xtras-mqtt = { id = "org.danbrough.xtras.mqtt", version.ref = "xtras-mqtt" }
 
 [versions]
 
-agp ="8.13.1"
+agp = "8.13.1"
 ##⬆= "9.0.0-alpha01"
 ##⬆= "9.0.0-alpha02"
 ##⬆= "9.0.0-alpha03"
@@ -33,17 +33,23 @@ agp ="8.13.1"
 ##⬆= "9.0.0-alpha12"
 ##⬆= "9.0.0-alpha13"
 ##⬆= "9.0.0-alpha14"
+##⬆= "9.0.0-beta01"
+##⬆= "9.0.0-beta02"
+##⬆= "9.0.0-beta03"
 
 kotlin = "2.2.21"
 ##  ⬆ = "2.3.0-Beta1"
 ##  ⬆ = "2.3.0-Beta2"
+##  ⬆ = "2.3.0-RC"
+##  ⬆ = "2.3.0-RC2"
 
 xtrasPackage = "org.danbrough.xtras"
 xtras-core = "0.0.1-alpha01"
-xtras-version = "0.0.1-beta14"
+#xtras-version = "0.0.1-beta14"
+xtras-version = "0.0.2"
 xtras-openssl = "0.0.1-alpha01"
 xtras-mqtt = "0.0.1-alpha01"
-oshai-logging ="7.0.13"
+oshai-logging = "7.0.13"
 xtras-support = "0.0.1-beta01"
 dokka = "2.1.0"
 
@@ -53,11 +59,11 @@ slf4j-api = "2.0.17"
 ##     ⬆ = "2.1.0-alpha0"
 ##     ⬆ = "2.1.0-alpha1"
 slf4j-simple = "2.0.17"
-logback-classic ="1.5.21"
+logback-classic = "1.5.21"
 
 kotlinx-coroutines = "1.10.2"
-kotlinx-browser ="0.5.0"
-androidx-test-runner ="1.7.0"
+kotlinx-browser = "0.5.0"
+androidx-test-runner = "1.7.0"
 
 [libraries]
 

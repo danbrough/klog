@@ -9,7 +9,8 @@ import org.jetbrains.kotlin.konan.target.HostManager
 plugins {
   alias(libs.plugins.kotlin.multiplatform) apply false
   alias(libs.plugins.android.library) apply false
-  //alias(libs.plugins.xtras)
+  alias(libs.plugins.xtras)
+  //id("org.danbrough.xtras")
   id("org.danbrough.klog.support")
   alias(libs.plugins.kotlin.jvm) apply false
   alias(libs.plugins.dokka)
@@ -23,12 +24,14 @@ repositories {
   google()
 }
 
-
-
 subprojects {
   afterEvaluate {
     /*logInfo("project: $name")
     logWarn("kotlin extension $kotlinExtension ${kotlinExtension::class.java}")*/
+
+    pluginManager.apply("maven-publish")
+    pluginManager.apply("signing")
+
     extensions.findByType<JavaPluginExtension>()?.apply {
       sourceCompatibility = Constants.JAVA_VERSION
       targetCompatibility = Constants.JAVA_VERSION
@@ -36,9 +39,15 @@ subprojects {
 
     publishing {
       repositories {
-
+        maven("file:///tmp/foo") {
+          name = "foo"
+        }
       }
     }
+
+    this.group = this@afterEvaluate.properties["project.group"]!!.toString()
+    this.version = this@afterEvaluate.properties["project.version"]!!.toString()
+
 
 
     extensions.findByType<KotlinMultiplatformExtension>()?.apply {

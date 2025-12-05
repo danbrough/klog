@@ -7,6 +7,8 @@ import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.android.library)
+  `maven-publish`
+  signing
 }
 
 
@@ -15,6 +17,21 @@ repositories {
   google()
 }
 
+publishing {
+
+}
+
+signing {
+  val signingKey = ""
+  val signingPassword = ""
+  useInMemoryPgpKeys(signingKey, signingPassword)
+
+  /*  useInMemoryPgpKeys(signingKey, signingPassword)
+
+    withPublishing {
+      sign(publications)
+    }*/
+}
 
 kotlin {
 
@@ -40,8 +57,7 @@ kotlin {
     }*/
   }
 
-  compilerOptions {
-/*    languageVersion = KotlinVersion.KOTLIN_2_1
+  compilerOptions {/*    languageVersion = KotlinVersion.KOTLIN_2_1
     apiVersion = KotlinVersion.KOTLIN_2_1*/
     freeCompilerArgs = listOf("-Xexpect-actual-classes")
   }

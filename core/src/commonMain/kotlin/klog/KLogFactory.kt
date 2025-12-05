@@ -10,6 +10,7 @@ internal object NOOPLogging : KLogFactory() {
 
   object NOOPLogger : DelegatingLogger {
     override var log: LoggerMethod = { _, _, _, _ -> }
+    override var level: Logger.Level = Logger.Level.NONE
     override val name: String = ""
   }
 

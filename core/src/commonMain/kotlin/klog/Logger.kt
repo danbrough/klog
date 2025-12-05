@@ -2,7 +2,7 @@ package klog
 
 import klog.Logger.Level
 
-typealias LoggerMethod = (level: Level, name: String, message: () -> Any?, t: Throwable?) -> Unit
+typealias LoggerMethod = Logger.(level: Level, name: String, message: () -> Any?, t: Throwable?) -> Unit
 
 interface Logger {
 
@@ -23,22 +23,28 @@ interface DelegatingLogger : Logger {
 
   var log: LoggerMethod
 
+  var level: Level
+
   override fun trace(t: Throwable?, message: () -> Any?) =
-    log.invoke(Level.TRACE, name, message, t)
+    if (level <= Level.TRACE) log.invoke(this, Level.TRACE, name, message, t) else Unit
 
   override fun debug(t: Throwable?, message: () -> Any?) =
-    log.invoke(Level.DEBUG, name, message, t)
+    if (level <= Level.DEBUG) log.invoke(this, Level.DEBUG, name, message, t) else Unit
 
   override fun info(t: Throwable?, message: () -> Any?) =
-    log.invoke(Level.INFO, name, message, t)
+    if (level <= Level.INFO) log.invoke(this, Level.INFO, name, message, t) else Unit
 
   override fun warn(t: Throwable?, message: () -> Any?) =
-    log.invoke(Level.WARN, name, message, t)
+    if (level <= Level.WARN) log.invoke(this, Level.WARN, name, message, t) else Unit
 
   override fun error(t: Throwable?, message: () -> Any?) =
-    log.invoke(Level.ERROR, name, message, t)
+    if (level <= Level.ERROR) log.invoke(this, Level.ERROR, name, message, t) else Unit
+
+
 }
 
 
-class LoggerImpl(override val name: String, override var log: LoggerMethod) : DelegatingLogger
+class LoggerImpl(override val name: String, override var log: LoggerMethod) : DelegatingLogger {
+  override var level: Level = Level.NONE
+}
 
