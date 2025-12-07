@@ -45,6 +45,6 @@ interface DelegatingLogger : Logger {
 
 
 class LoggerImpl(override val name: String, override var log: LoggerMethod) : DelegatingLogger {
-  override var level: Level = Level.NONE
+  override var level: Level = Level.TRACE
 }
 
