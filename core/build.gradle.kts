@@ -17,21 +17,6 @@ repositories {
   google()
 }
 
-publishing {
-
-}
-
-signing {
-  val signingKey = ""
-  val signingPassword = ""
-  useInMemoryPgpKeys(signingKey, signingPassword)
-
-  /*  useInMemoryPgpKeys(signingKey, signingPassword)
-
-    withPublishing {
-      sign(publications)
-    }*/
-}
 
 kotlin {
 

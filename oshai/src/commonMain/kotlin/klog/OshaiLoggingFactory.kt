@@ -18,6 +18,7 @@ object OshaiLoggingFactory : KLogFactory() {
         Logger.Level.NONE -> {}
       }
     }
+    override var level: Logger.Level = Logger.Level.TRACE
   }
 
   override fun logger(logName: String) = OshaiLogger(logName)

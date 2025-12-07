@@ -1,5 +1,4 @@
 import org.danbrough.klog.support.Constants
-import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {

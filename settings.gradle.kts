@@ -22,7 +22,7 @@ dependencyResolutionManagement {
 
     mavenLocal()
     mavenCentral()
-    maven("https://maven.danbrough.org")
+    //maven("https://maven.danbrough.org")
 
   }
 }

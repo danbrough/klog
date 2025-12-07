@@ -8,6 +8,8 @@ interface Logger {
 
   val name: String
 
+  var level: Level
+
   enum class Level {
     TRACE, DEBUG, INFO, WARN, ERROR, NONE;
   }
@@ -22,8 +24,6 @@ interface Logger {
 interface DelegatingLogger : Logger {
 
   var log: LoggerMethod
-
-  var level: Level
 
   override fun trace(t: Throwable?, message: () -> Any?) =
     if (level <= Level.TRACE) log.invoke(this, Level.TRACE, name, message, t) else Unit

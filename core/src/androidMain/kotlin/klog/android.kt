@@ -27,6 +27,7 @@ class AndroidLogger(override val name: String) : DelegatingLogger {
       }
     }
   }
+  override var level: Logger.Level = Logger.Level.TRACE
 }
 
 object AndroidLogging : KLogFactory() {

@@ -18,6 +18,7 @@ private class Slf4jLog(private val logger: Logger) : DelegatingLogger {
       klog.Logger.Level.NONE -> Unit
     }
   }
+  override var level: klog.Logger.Level = klog.Logger.Level.TRACE
 }
 
 object Slf4jLogging : KLogFactory() {

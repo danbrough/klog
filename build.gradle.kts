@@ -2,6 +2,11 @@
 
 
 import org.danbrough.klog.support.Constants
+import org.danbrough.xtras.xError
+import org.danbrough.xtras.xInfo
+import org.danbrough.xtras.xtrasDir
+import org.danbrough.xtras.xtrasMavenDir
+import org.danbrough.xtras.xtrasPublishing
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.konan.target.HostManager
@@ -9,8 +14,8 @@ import org.jetbrains.kotlin.konan.target.HostManager
 plugins {
   alias(libs.plugins.kotlin.multiplatform) apply false
   alias(libs.plugins.android.library) apply false
-  alias(libs.plugins.xtras)
-  //id("org.danbrough.xtras")
+  //alias(libs.plugins.xtras)
+  id("org.danbrough.xtras")
   id("org.danbrough.klog.support")
   alias(libs.plugins.kotlin.jvm) apply false
   alias(libs.plugins.dokka)
@@ -24,10 +29,17 @@ repositories {
   google()
 }
 
+
 subprojects {
+
+
   afterEvaluate {
-    /*logInfo("project: $name")
-    logWarn("kotlin extension $kotlinExtension ${kotlinExtension::class.java}")*/
+
+    xInfo("project: $name")
+    xtrasPublishing()
+
+    xInfo("xtras maven dir: $xtrasMavenDir")
+    //logWarn("kotlin extension $kotlinExtension ${kotlinExtension::class.java}")*/
 
     pluginManager.apply("maven-publish")
     pluginManager.apply("signing")
@@ -36,19 +48,6 @@ subprojects {
       sourceCompatibility = Constants.JAVA_VERSION
       targetCompatibility = Constants.JAVA_VERSION
     }
-
-    publishing {
-      repositories {
-        maven("file:///tmp/foo") {
-          name = "foo"
-        }
-      }
-    }
-
-    this.group = this@afterEvaluate.properties["project.group"]!!.toString()
-    this.version = this@afterEvaluate.properties["project.version"]!!.toString()
-
-
 
     extensions.findByType<KotlinMultiplatformExtension>()?.apply {
 
