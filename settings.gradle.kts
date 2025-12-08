@@ -1,6 +1,6 @@
 pluginManagement {
   repositories {
-    mavenLocal()
+    maven("https://maven.danbrough.org")
     maven("https://s01.oss.sonatype.org/content/groups/staging/")
     mavenCentral()
     google()
@@ -20,9 +20,9 @@ dependencyResolutionManagement {
         }
       }*/
 
-    mavenLocal()
+    maven("https://maven.danbrough.org")
     mavenCentral()
-    //maven("https://maven.danbrough.org")
+
 
   }
 }
@@ -32,7 +32,7 @@ plugins {
   id("de.fayard.refreshVersions") version "0.60.6"
 }
 includeBuild("support")
-includeBuild("../xtras/plugin")
+//includeBuild("../xtras/plugin")
 
 
 rootProject.name = "klog"
