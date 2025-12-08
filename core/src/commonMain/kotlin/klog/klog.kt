@@ -21,7 +21,9 @@ fun kloggingStdout() {
 }
 
 fun kloggingDisabled() {
-  klogFactory = NOOPLogging
+  klogFactory = object : KLogFactory() {
+    override fun logger(logName: String) = NOOPLogger
+  }
 }
 
 fun logger(name: String): Logger = klogFactory.logger(name)
