@@ -7,6 +7,8 @@ import org.danbrough.xtras.xInfo
 import org.danbrough.xtras.xtrasDir
 import org.danbrough.xtras.xtrasMavenDir
 import org.danbrough.xtras.xtrasPublishing
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.konan.target.HostManager
@@ -71,6 +73,26 @@ subprojects {
         watchosArm64()
         tvosX64()
         tvosArm64()
+      }
+    }
+
+    tasks.withType<AbstractTestTask> {
+
+      if (this is Test) {
+        useJUnitPlatform()
+      }
+
+      testLogging {
+        events = setOf(
+          TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
+        )
+        exceptionFormat = TestExceptionFormat.FULL
+        showStandardStreams = true
+        showStackTraces = true
+      }
+
+      outputs.upToDateWhen {
+        false
       }
     }
   }

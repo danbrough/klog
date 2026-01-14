@@ -23,15 +23,15 @@ kotlin {
   jvm {
   }
 
-  js {
-    nodejs()
-  }
+  /*  js {
+      nodejs()
+    }
 
-  @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
-  wasmJs {
-    nodejs()
-    browser()
-  }
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+    wasmJs {
+      nodejs()
+      browser()
+    }*/
 
   androidTarget {
     publishLibraryVariants("release")

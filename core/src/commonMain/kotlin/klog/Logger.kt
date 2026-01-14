@@ -43,8 +43,16 @@ interface DelegatingLogger : Logger {
 
 }
 
-
-class LoggerImpl(override val name: String, override var log: LoggerMethod) : DelegatingLogger {
-  override var level: Level = Level.TRACE
+object NOOPLogger : DelegatingLogger {
+  override var log: LoggerMethod = { _, _, _, _ -> }
+  override var level: Level = Level.NONE
+  override val name: String = ""
 }
+
+
+open class LoggerImpl(
+  override val name: String,
+  override var log: LoggerMethod,
+  override var level: Level,
+) : DelegatingLogger
 

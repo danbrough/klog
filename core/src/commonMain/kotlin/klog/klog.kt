@@ -17,7 +17,7 @@ fun <T : KLogFactory> installLogging(logging: T, block: T.() -> Unit = {}) {
 }
 
 fun kloggingStdout() {
-  klogFactory = StdoutLogging
+  klogFactory = StdoutLogging()
 }
 
 fun kloggingDisabled() {
@@ -31,3 +31,5 @@ fun logger(name: String): Logger = klogFactory.logger(name)
 inline fun <reified T : Any> T.logger(): Lazy<Logger> = lazy {
   klogFactory.logger(loggerName(T::class))
 }
+
+expect fun getEnv(name: String): String?

@@ -1,5 +1,6 @@
 package klog
 
+import klog.Logger.Level
 import klog.stdout.StdoutLogging
 import klog.stdout.StdoutMessageFormatter
 import klog.stdout.colorString
@@ -11,14 +12,17 @@ object JsLogFactory : KLogFactory() {
   var formatter: StdoutMessageFormatter = defaultMessageFormatter
 
 
+  val stdoutLogging = StdoutLogging()
   private var log: LoggerMethod = { level, name, message, t ->
-    console.log(StdoutLogging.formatter.invoke(level, name, message))
-    if (t != null) console.log(colorString(Logger.Level.ERROR, t.stackTraceToString()))
+    console.log(stdoutLogging.formatter.invoke(stdoutLogging, level, name, message))
+    if (t != null) console.log(stdoutLogging.colorString(Level.ERROR, t.stackTraceToString()))
   }
 
-  override fun logger(logName: String) = LoggerImpl(logName, log)
+  override fun logger(logName: String) = LoggerImpl(logName, log, Level.TRACE)
 }
 
 internal actual fun klogDefaultFactory(): KLogFactory = JsLogFactory
 
 actual fun <T : Any> loggerName(clazz: KClass<T>): String = "KOTLIN"
+
+actual fun getEnv(name: String): String? = null
