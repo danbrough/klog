@@ -6,8 +6,9 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-android-application = { id = "com.android.application", version.ref = "agp" }
-android-library = { id = "com.android.library", version.ref = "agp" }
+#android-application = { id = "com.android.application", version.ref = "agp" }
+#android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 
 xtras = { id = "org.danbrough.xtras", version.ref = "xtras-version" }
 xtras-sonatype = { id = "org.danbrough.xtras.sonatype", version.ref = "xtras-version" }
@@ -16,35 +17,15 @@ xtras-mqtt = { id = "org.danbrough.xtras.mqtt", version.ref = "xtras-mqtt" }
 
 [versions]
 
-agp = "8.13.2"
-##⬆= "9.0.0-alpha01"
-##⬆= "9.0.0-alpha02"
-##⬆= "9.0.0-alpha03"
-##⬆= "9.0.0-alpha04"
-##⬆= "9.0.0-alpha05"
-##⬆= "9.0.0-alpha06"
-##⬆= "9.0.0-alpha07"
-##⬆= "9.0.0-alpha08"
-##⬆= "9.0.0-alpha09"
-##⬆= "9.0.0-alpha10"
-##⬆= "9.0.0-alpha11"
-##⬆= "9.0.0-alpha12"
-##⬆= "9.0.0-alpha13"
-##⬆= "9.0.0-alpha14"
-##⬆= "9.0.0-beta01"
-##⬆= "9.0.0-beta02"
-##⬆= "9.0.0-beta03"
-##⬆= "9.0.0-beta04"
-##⬆= "9.0.0-beta05"
-##⬆= "9.0.0-rc01"
-##⬆= "9.0.0-rc02"
-##⬆= "9.0.0-rc03"
+agp = "9.0.0"
 ##⬆= "9.1.0-alpha01"
 ##⬆= "9.1.0-alpha02"
 ##⬆= "9.1.0-alpha03"
 ##⬆= "9.1.0-alpha04"
+##⬆= "9.1.0-alpha05"
 
 kotlin = "2.3.0"
+##  ⬆ = "2.3.10-RC"
 ##  ⬆ = "2.3.20-Beta1"
 
 xtrasPackage = "org.danbrough.xtras"
@@ -60,6 +41,7 @@ oshai-logging = "7.0.14"
 ##         ⬆ = "8.0.00-beta-04"
 xtras-support = "0.0.1-beta01"
 dokka = "2.1.0"
+## ⬆ = "2.2.0-Beta"
 
 kotlinx-io = "0.3.2"
 
@@ -67,7 +49,7 @@ slf4j-api = "2.0.17"
 ##     ⬆ = "2.1.0-alpha0"
 ##     ⬆ = "2.1.0-alpha1"
 slf4j-simple = "2.0.17"
-logback-classic = "1.5.24"
+logback-classic = "1.5.26"
 
 kotlinx-coroutines = "1.10.2"
 kotlinx-browser = "0.5.0"

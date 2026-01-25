@@ -6,7 +6,8 @@ import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
-  alias(libs.plugins.android.library)
+  alias(libs.plugins.kotlin.android.library)
+  //alias(libs.plugins.android.library)
   `maven-publish`
   signing
 }
@@ -20,8 +21,23 @@ repositories {
 
 kotlin {
 
-  jvm {
+
+  android {
+    compileSdk = Constants.Android.COMPILE_SDK
+    namespace = project.group.toString()
+
+    minSdk = Constants.Android.MIN_SDK
+
+
+    /*defaultConfig {
+      minSdk = Constants.Android.MIN_SDK
+      testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }*/
   }
+
+  
+
+  jvm {}
 
   /*  js {
       nodejs()
@@ -33,14 +49,14 @@ kotlin {
       browser()
     }*/
 
-  androidTarget {
-    publishLibraryVariants("release")
+  /*  androidTarget {
+      publishLibraryVariants("release")
 
-    /*@OptIn(ExperimentalKotlinGradlePluginApi::class)
+      *//*@OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
       jvmTarget = Constants.JVM_TARGET
-    }*/
-  }
+    }*//*
+  }*/
 
   compilerOptions {/*    languageVersion = KotlinVersion.KOTLIN_2_1
     apiVersion = KotlinVersion.KOTLIN_2_1*/
@@ -62,16 +78,17 @@ kotlin {
       }
     }
 
-    val androidInstrumentedTest by getting {
-      dependencies {
-        implementation(kotlin("test-junit"))
-        implementation(libs.androidx.test.runner)
-      }
-    }
+
+    /*    val androidInstrumentedTest by getting {
+          dependencies {
+            implementation(kotlin("test-junit"))
+            implementation(libs.androidx.test.runner)
+          }
+        }*/
+
 
     nativeMain {
-      dependencies {
-      }
+      dependencies {}
     }
 
     wasmJsMain {
@@ -91,15 +108,4 @@ kotlin {
 }
 
 
-
-
-android {
-  compileSdk = Constants.Android.COMPILE_SDK
-  namespace = project.group.toString()
-
-  defaultConfig {
-    minSdk = Constants.Android.MIN_SDK
-    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-  }
-}
 

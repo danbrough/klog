@@ -38,4 +38,5 @@ includeBuild("support")
 rootProject.name = "klog"
 
 
-include(":core", ":slf4j", ":oshai")
+//include(":core", ":slf4j", ":oshai")
+include(":core", ":slf4j")
