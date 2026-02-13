@@ -14,6 +14,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.konan.target.HostManager
+import shadow.bundletool.com.android.tools.r8.internal.xE
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform) apply false
@@ -117,9 +118,17 @@ afterEvaluate {
   tasks.register<Exec>("publishToXtras") {
     dependsOn(deleteMavenTask)
     group = TaskNames.XTRAS_TASK_GROUP
-    dependsOn("*:publishAllPublicationsToXtrasRepository")
+    dependsOn(rootProject.childProjects.values.flatMap { it.tasks.filter { task -> task.name == "publishAllPublicationsToXtrasRepository" } })
     workingDir(mavenDir)
     commandLine("rsync", "-avHSx", "./", "maven:~/m2/")
   }
 
+
+}
+
+afterEvaluate {
+  tasks.register("thang") {
+
+
+  }
 }
