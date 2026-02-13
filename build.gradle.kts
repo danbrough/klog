@@ -117,7 +117,7 @@ afterEvaluate {
   tasks.register<Exec>("publishToXtras") {
     dependsOn(deleteMavenTask)
     group = TaskNames.XTRAS_TASK_GROUP
-    dependsOn("publishAllPublicationsToXtrasRepository")
+    dependsOn(*tasks.filter { it.name == "publishAllPublicationsToXtrasRepository" }.toTypedArray())
     workingDir(mavenDir)
     commandLine("rsync", "-avHSx", "./", "maven:~/m2/")
   }
