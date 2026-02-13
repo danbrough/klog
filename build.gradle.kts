@@ -54,7 +54,7 @@ subprojects {
 
     extensions.findByType<KotlinMultiplatformExtension>()?.apply {
 
-      applyDefaultHierarchyTemplate()
+      //applyDefaultHierarchyTemplate()
 
       mingwX64()
       linuxX64()
