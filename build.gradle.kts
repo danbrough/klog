@@ -125,10 +125,3 @@ afterEvaluate {
 
 
 }
-
-afterEvaluate {
-  tasks.register("thang") {
-
-
-  }
-}
