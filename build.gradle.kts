@@ -2,8 +2,10 @@
 
 
 import org.danbrough.klog.support.Constants
+import org.danbrough.xtras.TaskNames
 import org.danbrough.xtras.xError
 import org.danbrough.xtras.xInfo
+import org.danbrough.xtras.xWarn
 import org.danbrough.xtras.xtrasDir
 import org.danbrough.xtras.xtrasMavenDir
 import org.danbrough.xtras.xtrasPublishing
@@ -97,4 +99,27 @@ subprojects {
       }
     }
   }
+}
+
+
+afterEvaluate {
+
+
+  val mavenDir = project.xtrasMavenDir
+
+  val deleteMavenTask = tasks.register("deleteMavenDir") {
+    doFirst {
+      xWarn("deleting $mavenDir!")
+      mavenDir.deleteRecursively()
+    }
+  }
+
+  tasks.register<Exec>("publishToXtras") {
+    dependsOn(deleteMavenTask)
+    group = TaskNames.XTRAS_TASK_GROUP
+    dependsOn("publishAllPublicationsToXtrasRepository")
+    workingDir(mavenDir)
+    commandLine("rsync", "-avHSx", "./", "maven:~/m2/")
+  }
+
 }
