@@ -11,4 +11,4 @@ cd "$(dirname "$0")" && cd ..
 ./gradlew publishAllPublicationsToXtras || exit 1
 
 
-rsync -avHSx /Users/dan/xtras/xtras/maven/org/danbrough/klog/ maven:~/m2/org/danbrough/klog/
+rsync -avHSx /Users/dan/workspace/xtras/xtras/maven/org/danbrough/klog/ maven:~/m2/org/danbrough/klog/
