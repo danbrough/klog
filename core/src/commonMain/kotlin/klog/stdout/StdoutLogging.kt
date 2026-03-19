@@ -19,7 +19,10 @@ var colorString: StdoutLogging.(level: Level, s: String) -> String =
   { level, s -> if (coloredOutput) level.colored(s) else s }
 
 val defaultMessageFormatter: StdoutMessageFormatter = { level, name, message ->
-  colorString(level, "$level:$name: ${message()}")
+  colorString(
+    level,
+    "${level.toString().let { if (it.length == 4) " $it" else it }}:$name: ${message()}"
+  )
 }
 
 expect fun printMethodStderr(): Printer
