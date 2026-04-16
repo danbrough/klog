@@ -1,5 +1,4 @@
-import org.danbrough.klog.support.Constants
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
   id("java-library")
@@ -9,8 +8,8 @@ plugins {
 
 
 java {
-  sourceCompatibility = Constants.JAVA_VERSION
-  targetCompatibility = Constants.JAVA_VERSION
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
   withSourcesJar()
 }
 
@@ -18,8 +17,8 @@ java {
 kotlin {
 
   compilerOptions {
-    apiVersion = KotlinVersion.KOTLIN_2_1
-    jvmTarget = Constants.JVM_TARGET
+    //apiVersion = KotlinVersion.KOTLIN_2_1
+    jvmTarget = JvmTarget.JVM_11
 
     /*languageVersion = KotlinVersion.KOTLIN_2_1
     apiVersion = KotlinVersion.KOTLIN_2_1

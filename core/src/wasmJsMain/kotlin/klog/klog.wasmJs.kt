@@ -1,3 +1,9 @@
 package klog
 
-actual fun getEnv(name: String): String? = null
+import klog.stdout.StdoutLogging
+import kotlin.reflect.KClass
+
+
+actual fun klogDefaultFactory(): KLogFactory = StdoutLogging()
+
+actual fun <T : Any> loggerName(clazz: KClass<T>): String = "KOTLIN"

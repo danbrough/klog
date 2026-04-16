@@ -8,6 +8,11 @@ abstract class KLogFactory {
   abstract fun logger(logName: String): Logger
 }
 
+val klogFactoryNOOP = object : KLogFactory() {
+  override fun logger(logName: String) = NOOPLogger
+}
+
+
 abstract class PropertyResolver<T>(
   protected val nameDelimiter: String = "."
 ) {
@@ -46,5 +51,5 @@ open class CachingPropertyResolver<T>(nameDelimiter: String, val getter: (String
 }
 
 object EnvPropertyResolver :
-  CachingPropertyResolver<Level>("_", { name -> getEnv(name)?.let { Level.valueOf(it) } })
+  CachingPropertyResolver<Level>("_", { name -> Utils.getEnv(name)?.let { Level.valueOf(it) } })
 

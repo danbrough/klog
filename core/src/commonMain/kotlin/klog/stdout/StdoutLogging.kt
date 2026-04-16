@@ -21,7 +21,7 @@ var colorString: StdoutLogging.(level: Level, s: String) -> String =
 val defaultMessageFormatter: StdoutMessageFormatter = { level, name, message ->
   colorString(
     level,
-    "${level.toString().let { if (it.length == 4) " $it" else it }}:$name: ${message()}"
+    "${level.toString().let { if (it.length == 4) "$it " else it }}:$name: ${message()}"
   )
 }
 

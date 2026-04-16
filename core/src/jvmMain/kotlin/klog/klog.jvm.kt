@@ -11,9 +11,6 @@ actual fun <T : Any> loggerName(clazz: KClass<T>): String = unwrapCompanionClass
 
 private fun <T : Any> unwrapCompanionClass(clazz: Class<T>): Class<*> {
   return clazz.enclosingClass?.let { enclosingClass ->
-    runBlocking {
-
-    }
     try {
       enclosingClass.declaredFields
         .find { field ->
@@ -31,4 +28,3 @@ private fun <T : Any> unwrapCompanionClass(clazz: Class<T>): Class<*> {
 }
 
 
-actual fun getEnv(name: String): String? = System.getenv(name)

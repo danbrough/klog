@@ -9,6 +9,7 @@ expect fun <T : Any> loggerName(clazz: KClass<T>): String
 
 internal expect fun klogDefaultFactory(): KLogFactory
 
+
 var klogFactory: KLogFactory = klogDefaultFactory()
 
 fun <T : KLogFactory> installLogging(logging: T, block: T.() -> Unit = {}) {
@@ -16,14 +17,12 @@ fun <T : KLogFactory> installLogging(logging: T, block: T.() -> Unit = {}) {
   block.invoke(logging)
 }
 
-fun kloggingStdout() {
-  klogFactory = StdoutLogging()
+fun kloggingStdout(block: StdoutLogging.() -> Unit = {}) {
+  klogFactory = StdoutLogging().apply(block)
 }
 
 fun kloggingDisabled() {
-  klogFactory = object : KLogFactory() {
-    override fun logger(logName: String) = NOOPLogger
-  }
+  klogFactory = klogFactoryNOOP
 }
 
 fun logger(name: String): Logger = klogFactory.logger(name)
@@ -32,4 +31,3 @@ inline fun <reified T : Any> T.logger(): Lazy<Logger> = lazy {
   klogFactory.logger(loggerName(T::class))
 }
 
-expect fun getEnv(name: String): String?

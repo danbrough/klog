@@ -1,7 +1,6 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class)
 
 
-import org.danbrough.klog.support.Constants
 import org.danbrough.xtras.TaskNames
 import org.danbrough.xtras.xError
 import org.danbrough.xtras.xInfo
@@ -19,9 +18,9 @@ import shadow.bundletool.com.android.tools.r8.internal.xE
 plugins {
   alias(libs.plugins.kotlin.multiplatform) apply false
   //alias(libs.plugins.android.library) apply false
-  //alias(libs.plugins.xtras)
+  alias(libs.plugins.shadow) apply false
   alias(libs.plugins.xtras)
-  id("org.danbrough.klog.support")
+//  id("org.danbrough.klog.support")
   alias(libs.plugins.kotlin.jvm) apply false
   alias(libs.plugins.kotlin.android.library) apply false
   alias(libs.plugins.dokka)
@@ -51,8 +50,8 @@ subprojects {
     pluginManager.apply("signing")
 
     extensions.findByType<JavaPluginExtension>()?.apply {
-      sourceCompatibility = Constants.JAVA_VERSION
-      targetCompatibility = Constants.JAVA_VERSION
+      sourceCompatibility = JavaVersion.VERSION_11
+      targetCompatibility = JavaVersion.VERSION_11
     }
 
     extensions.findByType<KotlinMultiplatformExtension>()?.apply {
@@ -65,7 +64,7 @@ subprojects {
 
       androidNativeX64()
       androidNativeArm64()
-      androidNativeArm32()
+      //androidNativeArm32()
 
       if (HostManager.hostIsMac) {
         macosArm64()
@@ -73,9 +72,7 @@ subprojects {
         iosArm64()
         iosX64()
         iosSimulatorArm64()
-        watchosX64()
         watchosArm64()
-        tvosX64()
         tvosArm64()
       }
     }
@@ -104,24 +101,28 @@ subprojects {
 
 
 afterEvaluate {
+  if (name != "test") xtrasPublishing()
 
 
+  /*
   val mavenDir = project.xtrasMavenDir
-
-  val deleteMavenTask = tasks.register("deleteMavenDir") {
-    doFirst {
-      xWarn("deleting $mavenDir!")
-      mavenDir.deleteRecursively()
+    val deleteMavenTask = tasks.register("deleteMavenDir") {
+      doFirst {
+        xWarn("deleting $mavenDir!")
+        mavenDir.deleteRecursively()
+      }
     }
-  }
 
-  tasks.register<Exec>("publishToXtras") {
-    dependsOn(deleteMavenTask)
-    group = TaskNames.XTRAS_TASK_GROUP
-    dependsOn(rootProject.childProjects.values.flatMap { it.tasks.filter { task -> task.name == "publishAllPublicationsToXtrasRepository" } })
-    workingDir(mavenDir)
-    commandLine("rsync", "-avHSx", "./", "maven:~/m2/")
-  }
+
+
+      tasks.register<Exec>("publishToXtras") {
+        dependsOn(deleteMavenTask)
+        group = TaskNames.XTRAS_TASK_GROUP
+        dependsOn(rootProject.childProjects.values.flatMap { it.tasks.filter { task -> task.name == "publishAllPublicationsToXtrasRepository" } })
+        workingDir(mavenDir)
+        commandLine("rsync", "-avHSx", "./", "maven:~/m2/")
+      }
+    */
 
 
 }

@@ -5,8 +5,8 @@ import kotlin.test.Test
 class NativeTests {
 
 
-	@Test
-	fun test1() {
+  @Test
+  fun test1() {
 
-	}
+  }
 }

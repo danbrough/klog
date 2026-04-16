@@ -1,7 +1,7 @@
-@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class, ExperimentalWasmDsl::class)
 
-import org.danbrough.klog.support.Constants
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 
 plugins {
@@ -21,12 +21,13 @@ repositories {
 
 kotlin {
 
+  applyDefaultHierarchyTemplate()
 
   android {
-    compileSdk = Constants.Android.COMPILE_SDK
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
     namespace = project.group.toString()
 
-    minSdk = Constants.Android.MIN_SDK
+    minSdk = libs.versions.android.minSdk.get().toInt()
 
 
     /*defaultConfig {
@@ -35,7 +36,10 @@ kotlin {
     }*/
   }
 
-  
+  wasmJs {
+    // binaries.executable()
+    nodejs()
+  }
 
   jvm {}
 
@@ -86,6 +90,17 @@ kotlin {
           }
         }*/
 
+    val androidJvmMain by creating {
+      dependsOn(commonMain)
+    }
+
+    jvmMain {
+      dependsOn(androidJvmMain)
+    }
+
+    androidMain {
+      dependsOn(androidJvmMain)
+    }
 
     nativeMain {
       dependencies {}

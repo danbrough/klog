@@ -7,10 +7,10 @@ pluginManagement {
     gradlePluginPortal()
   }
 }
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
-  @Suppress("UnstableApiUsage")
-  repositories {
+  @Suppress("UnstableApiUsage") repositories {
     /*  google {
         mavenContent {
           includeGroupAndSubgroups("org.jetbrains")
@@ -22,8 +22,6 @@ dependencyResolutionManagement {
 
     maven("https://maven.danbrough.org")
     mavenCentral()
-
-
   }
 }
 
@@ -31,9 +29,9 @@ dependencyResolutionManagement {
 plugins {
   id("de.fayard.refreshVersions") version "0.60.6"
 }
-includeBuild("support")
+//includeBuild("support")
 //includeBuild("../xtras/plugin")
-
+include(":test")
 
 rootProject.name = "klog"
 

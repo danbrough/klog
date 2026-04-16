@@ -10,5 +10,4 @@ actual fun <T : Any> loggerName(clazz: KClass<T>): String =
 
 actual fun klogDefaultFactory(): KLogFactory = StdoutLogging()
 
-@OptIn(ExperimentalForeignApi::class)
-actual fun getEnv(name: String): String? = platform.posix.getenv(name)?.toKString()
+
