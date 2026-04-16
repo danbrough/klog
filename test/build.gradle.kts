@@ -45,7 +45,7 @@ kotlin {
     binaries.executable()
     nodejs()
   }
-  
+
   jvm {
     mainRun {
       mainClass = "org.danbrough.klog.JvmMain"
@@ -55,6 +55,7 @@ kotlin {
   sourceSets {
     commonMain.dependencies {
       implementation(projects.core)
+      implementation(libs.kotlinx.coroutines)
     }
   }
 

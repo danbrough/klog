@@ -4,6 +4,12 @@ import klog.Utils
 import klog.kloggingStdout
 import klog.stdout.StdoutLogging
 import klog.stdout.defaultMessageFormatter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.seconds
 
 val log = kloggingStdout {
   formatter = defaultMessageFormatter
@@ -11,6 +17,19 @@ val log = kloggingStdout {
 }.let { klog.logger("TEST") }
 
 expect fun test()
+
+
+suspend fun coroutineTest() {
+  log.debug { "coroutineTEst(): running at ${Clock.System.now()} thread:${Utils.getThreadName()}" }
+  val scope = CoroutineScope(Dispatchers.Default)
+  scope.launch {
+    log.debug { "launched coroutine" }
+    delay(2.seconds)
+    log.debug { "launched coroutine finished thread:${Utils.getThreadName()}" }
+  }
+
+  delay(5.seconds)
+}
 
 fun main(args: Array<String>) {
   println("running main() args: ${args.joinToString(",")}")
@@ -22,4 +41,6 @@ fun main(args: Array<String>) {
   test()
 
   log.debug { $$"$HOME is $${Utils.getEnv("HOME")}" }
+
+
 }

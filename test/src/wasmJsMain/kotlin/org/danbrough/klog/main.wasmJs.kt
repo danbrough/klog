@@ -1,5 +1,8 @@
 package org.danbrough.klog
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.time.Clock
 
 
@@ -16,5 +19,12 @@ actual fun test() {
   println("$name = ${getEnvWasmJS(name)}")
   name = "HOMEs"
   println("$name = ${getEnvWasmJS(name)}")
+
+
+  val scope = CoroutineScope(Dispatchers.Default)
+  scope.launch {
+    coroutineTest()
+  }
+
 
 }
