@@ -41,6 +41,10 @@ kotlin {
     nodejs()
   }
 
+  js {
+    nodejs()
+  }
+
   jvm {}
 
   /*  js {

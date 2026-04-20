@@ -41,6 +41,11 @@ kotlin {
     macosArm64()
   }
 
+  js {
+    binaries.executable()
+    nodejs()
+  }
+
   wasmJs {
     binaries.executable()
     nodejs()

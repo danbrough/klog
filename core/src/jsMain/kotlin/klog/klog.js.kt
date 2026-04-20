@@ -25,4 +25,3 @@ internal actual fun klogDefaultFactory(): KLogFactory = JsLogFactory
 
 actual fun <T : Any> loggerName(clazz: KClass<T>): String = "KOTLIN"
 
-actual fun getEnv(name: String): String? = null
