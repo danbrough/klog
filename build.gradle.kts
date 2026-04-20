@@ -100,12 +100,11 @@ subprojects {
   }
 }
 
-
+/*
 afterEvaluate {
-  if (name != "test") xtrasPublishing()
 
 
-  /*
+
   val mavenDir = project.xtrasMavenDir
     val deleteMavenTask = tasks.register("deleteMavenDir") {
       doFirst {
@@ -123,7 +122,8 @@ afterEvaluate {
         workingDir(mavenDir)
         commandLine("rsync", "-avHSx", "./", "maven:~/m2/")
       }
-    */
+
 
 
 }
+ */
