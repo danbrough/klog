@@ -41,7 +41,8 @@ subprojects {
   afterEvaluate {
 
     xInfo("project: $name")
-    xtrasPublishing()
+    if (name != "test")
+      xtrasPublishing()
 
     xInfo("xtras maven dir: $xtrasMavenDir")
     //logWarn("kotlin extension $kotlinExtension ${kotlinExtension::class.java}")*/
