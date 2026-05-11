@@ -34,7 +34,7 @@ repositories {
 
 dependencies {
   implementation(libs.slf4j.api)
-  implementation(project(":core"))
+  implementation(project(":klog"))
   implementation(kotlin("stdlib-jdk8"))
   testImplementation(kotlin("test"))
 }

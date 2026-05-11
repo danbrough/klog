@@ -7,7 +7,7 @@ pluginManagement {
     gradlePluginPortal()
   }
 }
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
   @Suppress("UnstableApiUsage") repositories {
@@ -37,4 +37,6 @@ rootProject.name = "klog"
 
 
 //include(":core", ":slf4j", ":oshai")
-include(":core", ":slf4j")
+include(":core")
+
+

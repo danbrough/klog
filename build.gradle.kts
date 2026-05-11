@@ -23,7 +23,7 @@ plugins {
 //  id("org.danbrough.klog.support")
   alias(libs.plugins.kotlin.jvm) apply false
   alias(libs.plugins.kotlin.android.library) apply false
-  alias(libs.plugins.dokka)
+  alias(libs.plugins.dokka) apply false
   `maven-publish`
   signing
 }
