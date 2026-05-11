@@ -6,7 +6,8 @@ import platform.posix.pthread_self
 
 actual fun test() {
   log.debug { "doing native test thread:${Utils.getThreadName()}" }
-  log.debug { "doing native test thread:${Utils.getThreadName()}" }
+  log.info { "doing native test thread:${Utils.getThreadName()}" }
+  log.info { "Home is ${Utils.getEnv("HOME")}" }
 
   runBlocking {
     coroutineTest()
