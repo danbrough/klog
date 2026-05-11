@@ -1,5 +1,8 @@
 package klog
 
+import kotlin.js.ExperimentalWasmJsInterop
+import kotlin.js.js
+
 
 @Suppress("RedundantNullableReturnType")
 @OptIn(ExperimentalWasmJsInterop::class)

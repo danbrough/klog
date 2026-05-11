@@ -31,8 +31,8 @@ suspend fun coroutineTest() {
   delay(5.seconds)
 }
 
-fun main(args: Array<String>) {
-  println("running main() args: ${args.joinToString(",")}")
+fun testMain(args: Array<String>) {
+  println("running testMain() args: ${args.joinToString(",")}")
   log.trace { "trace()" }
   log.debug { "debug()" }
   log.info { "info()" }
@@ -41,6 +41,7 @@ fun main(args: Array<String>) {
   test()
 
   log.debug { $$"$HOME is $${Utils.getEnv("HOME")}" }
+  log.debug { $$"$HOMEZ is $${Utils.getEnv("HOMEZ")}" }
 
 
 }
