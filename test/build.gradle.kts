@@ -43,12 +43,14 @@ kotlin {
 
   js {
     binaries.executable()
+    browser()
     nodejs()
   }
 
   wasmJs {
     binaries.executable()
     nodejs()
+    browser()
   }
 
   jvm {
