@@ -1,5 +1,6 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class, ExperimentalWasmDsl::class)
 
+import com.android.tools.r8.shaking.d8
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
@@ -7,7 +8,6 @@ import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.kotlin.android.library)
-  //alias(libs.plugins.android.library)
   `maven-publish`
   signing
 }
@@ -121,7 +121,7 @@ kotlin {
 
   targets.withType<KotlinJvmTarget> {
     mainRun {
-      mainClass = "klog.TestApp"
+      mainClass = "org.danbrough.klog.TestApp"
       classpath(compilations["test"])
     }
   }

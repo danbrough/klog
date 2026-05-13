@@ -9,6 +9,7 @@ import kotlin.js.ExperimentalWasmJsInterop
 @OptIn(ExperimentalWasmJsInterop::class)
 actual fun test() {
 
+  println("test()")
 
   val scope = CoroutineScope(Dispatchers.Default)
   scope.launch {

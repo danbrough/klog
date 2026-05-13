@@ -1,17 +1,15 @@
 package org.danbrough.klog
 
 import org.danbrough.klog.stdout.Printer
+import org.danbrough.klog.stdout.StdoutLogging
 import kotlin.reflect.KClass
 
-actual object Utils : KLogUtils {
-  actual override fun getEnv(name: String): String? = null
+actual object Utils : KLogUtils() {
+  actual override val environment: Map<String, String?> = mapOf("KLOG_LEVEL" to "TRACE")
 
   actual override fun getThreadName(): String = "main"
 
-  actual override val stdoutPrinter: Printer = {
-    println("WRITING $it")
-    console.info(it)
-  }
+  actual override val stdoutPrinter: Printer = console::info
 
   actual override val stderrPrinter: Printer = stdoutPrinter
 

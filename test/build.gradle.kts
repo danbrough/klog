@@ -1,6 +1,6 @@
 @file:OptIn(
   ExperimentalKotlinGradlePluginApi::class, InternalKotlinGradlePluginApi::class,
-  ExperimentalWasmDsl::class
+  ExperimentalWasmDsl::class, ExperimentalMainFunctionArgumentsDsl::class
 )
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.InternalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
+import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalMainFunctionArgumentsDsl
 import org.jetbrains.kotlin.konan.target.HostManager
 import org.jetbrains.kotlin.konan.target.KonanTarget
 
@@ -43,14 +44,17 @@ kotlin {
 
   js {
     binaries.executable()
-    browser()
-    nodejs()
+    nodejs {
+      passCliArgumentsToMainFunction()
+    }
   }
 
   wasmJs {
     binaries.executable()
-    nodejs()
-    browser()
+    nodejs {
+      passCliArgumentsToMainFunction()
+      //passProcessArgvToMainFunction()
+    }
   }
 
   jvm {

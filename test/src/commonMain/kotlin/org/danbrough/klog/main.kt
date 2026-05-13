@@ -37,8 +37,8 @@ fun testMain(args: Array<String>) {
   log.error { "error()" }
   test()
 
-  log.debug { $$"$HOME is $${Utils.getEnv("HOME")}" }
-  log.debug { $$"$HOMEZ is $${Utils.getEnv("HOMEZ")}" }
+  log.debug { $$"$HOME is $${Utils.environment["HOME"]}" }
+  log.debug { $$"$HOMEZ is $${Utils.environment["HOMEZ"]}" }
 
 
 }

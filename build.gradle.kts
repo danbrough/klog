@@ -41,7 +41,7 @@ subprojects {
   afterEvaluate {
 
     xInfo("project: $name")
-    if (name != "test")
+    if (name != "test" && name != "webtest")
       xtrasPublishing()
 
     xInfo("xtras maven dir: $xtrasMavenDir")

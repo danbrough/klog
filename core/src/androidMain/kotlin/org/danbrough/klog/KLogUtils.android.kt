@@ -1,3 +1,7 @@
-package klog
+package org.danbrough.klog
 
-actual object Utils : BaseUtilsJvm()
+import org.danbrough.klog.stdout.StdoutLogging
+
+actual object Utils : BaseUtilsJvm() {
+  actual override fun defaultLogFactory(): KLogFactory = AndroidLogging
+}

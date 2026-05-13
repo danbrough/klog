@@ -1,8 +1,7 @@
-package klog
+package org.danbrough.klog
 
 import android.util.Log
 import java.lang.reflect.Modifier
-import kotlin.reflect.KClass
 
 class AndroidLogger(override val name: String) : DelegatingLogger {
 
@@ -38,9 +37,6 @@ fun kloggingAndroid(block: AndroidLogging.() -> Unit = {}) {
   installLogging(AndroidLogging, block)
 }
 
-actual fun klogDefaultFactory(): KLogFactory = AndroidLogging
-
-actual fun <T : Any> loggerName(clazz: KClass<T>): String = unwrapCompanionClass(clazz.java).name
 
 private fun <T : Any> unwrapCompanionClass(clazz: Class<T>): Class<*> {
   return clazz.enclosingClass?.let { enclosingClass ->

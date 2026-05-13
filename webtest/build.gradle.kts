@@ -11,18 +11,12 @@ import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalMainFunctionArgume
 import org.jetbrains.kotlin.konan.target.KonanTarget
 
 plugins {
-  //alias(libs.plugins.kmp)
-  //alias(libs.plugins.kotlinx.serialization)
-  //alias(libs.plugins.kmp.android.library)
-  /*alias(libs.plugins.compose.compiler)
-  alias(libs.plugins.compose.hotreload)
-  alias(libs.plugins.ksp)*/
-  //alias(libs.plugins.compose.multiplatform)
+
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.compose.multiplatform)
   alias(libs.plugins.compose.compiler)
 
-  // alias(libs.plugins.shadow)
+
 }
 
 
@@ -31,6 +25,11 @@ kotlin {
 
 
   js {
+    binaries.executable()
+    browser()
+  }
+
+  wasmJs {
     binaries.executable()
     browser()
   }
@@ -57,7 +56,25 @@ kotlin {
 
       }
     }
+    wasmJsMain {
+      //dependsOn(sqliteMain)
+      dependencies {
 
+        implementation(project(":core"))
+        implementation(libs.compose.runtime)
+
+        implementation(npm("highlight.js", "10.7.2"))
+
+        //        implementation(libs.compose.html.core)
+
+
+//        implementation(libs.androidx.sqlite.web)
+        //      implementation(libs.kotlinx.browser) // Or latest version
+        //implementation(libs.androidx.sqlite.bundled)
+
+
+      }
+    }
 
   }
 

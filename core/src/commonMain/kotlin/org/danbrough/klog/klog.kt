@@ -5,7 +5,13 @@ package org.danbrough.klog
 import org.danbrough.klog.stdout.StdoutLogging
 
 
-var klogFactory: KLogFactory = StdoutLogging()
+private var logFactory: KLogFactory? = null
+var klogFactory: KLogFactory
+  set(value) {
+    logFactory = value
+  }
+  get() = logFactory ?: Utils.defaultLogFactory().also { logFactory = it }
+
 
 fun <T : KLogFactory> installLogging(logging: T, block: T.() -> Unit = {}) {
   klogFactory = logging

@@ -1,15 +1,18 @@
 package org.danbrough.klog
 
 import org.danbrough.klog.stdout.Printer
+import org.danbrough.klog.stdout.StdoutLogging
 import java.lang.reflect.Modifier
 import kotlin.reflect.KClass
 
-open class BaseUtilsJvm : KLogUtils {
-  override fun getEnv(name: String): String? = System.getenv(name)
+open class BaseUtilsJvm : KLogUtils() {
+  override val environment: Map<String, String?> = System.getenv()
+
   override fun getThreadName(): String = Thread.currentThread().name
   override val stderrPrinter: Printer = System.err::println
   override val stdoutPrinter: Printer = System.out::println
   override fun <T : Any> loggerName(clazz: KClass<T>): String = unwrapCompanionClass(clazz.java).name
+  
 }
 
 
