@@ -1,9 +1,6 @@
 package org.danbrough.klog
 
-import klog.Utils
-import klog.kloggingStdout
-import klog.stdout.StdoutLogging
-import klog.stdout.defaultMessageFormatter
+import org.danbrough.klog.stdout.defaultMessageFormatter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -14,7 +11,7 @@ import kotlin.time.Duration.Companion.seconds
 val log = kloggingStdout {
   formatter = defaultMessageFormatter
   coloredOutput = true
-}.let { klog.logger("TEST") }
+}.let { logger("TEST") }
 
 expect fun test()
 

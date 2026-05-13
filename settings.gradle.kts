@@ -22,6 +22,7 @@ dependencyResolutionManagement {
 
     maven("https://maven.danbrough.org")
     mavenCentral()
+    google()
   }
 }
 
@@ -31,12 +32,14 @@ plugins {
 }
 //includeBuild("support")
 //includeBuild("../xtras/plugin")
-include(":test")
+//include(":core", ":slf4j", ":oshai")
+include(":core")
+
+include(":test", ":webtest")
 
 rootProject.name = "klog"
 
 
-//include(":core", ":slf4j", ":oshai")
-include(":core")
+
 
 
