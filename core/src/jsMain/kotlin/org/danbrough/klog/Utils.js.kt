@@ -1,12 +1,47 @@
 package org.danbrough.klog
 
+import org.danbrough.klog.Logger.Level
 import org.danbrough.klog.stdout.Printer
 import org.danbrough.klog.stdout.StdoutLogging
+import org.danbrough.klog.stdout.colorString
 import kotlin.reflect.KClass
 
 
 private fun getEnvJS(name: String): String? =
   js("typeof process === 'object' ? process.env[name] : null")
+
+
+private object JSLoggingFactory : StdoutLogging() {
+
+  init {
+
+    log = { level, name, message, t ->
+      @Suppress("UNCHECKED_CAST") val printMethod: Printer = when (level) {
+        Level.TRACE, Level.DEBUG -> { o: Any? ->
+          js("console.debug(o)")
+        }
+
+        Level.INFO -> { o: Any? ->
+          js("console.info(o)")
+        }
+
+        Level.WARN -> { o: Any? ->
+          js("console.warn(o)")
+        }
+
+        Level.ERROR -> { o: Any? ->
+          js("console.error(o)")
+        }
+
+        Level.NONE -> {}
+      } as Printer
+      if (level != Level.NONE) {
+        printMethod(formatter.invoke(this@JSLoggingFactory, level, name, message))
+        if (t != null) printer(colorString(Level.ERROR, t.stackTraceToString()))
+      }
+    }
+  }
+}
 
 actual object Utils : KLogUtils() {
   actual override val environment: Map<String, String?> =
@@ -21,4 +56,7 @@ actual object Utils : KLogUtils() {
   actual override val stderrPrinter: Printer = stdoutPrinter
 
   actual override fun <T : Any> loggerName(clazz: KClass<T>): String = "KLogger"
+
+  actual override fun defaultLogFactory(): KLogFactory = JSLoggingFactory
+
 }

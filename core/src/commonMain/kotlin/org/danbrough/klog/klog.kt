@@ -19,7 +19,7 @@ fun <T : KLogFactory> installLogging(logging: T, block: T.() -> Unit = {}) {
 }
 
 fun kloggingStdout(block: StdoutLogging.() -> Unit = {}) {
-  klogFactory = StdoutLogging().apply(block)
+  klogFactory = klogFactoryStdout.apply(block)
 }
 
 fun kloggingDisabled() {

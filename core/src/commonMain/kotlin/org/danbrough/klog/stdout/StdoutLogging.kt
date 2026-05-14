@@ -2,13 +2,8 @@
 
 package org.danbrough.klog.stdout
 
-import org.danbrough.klog.CachingPropertyResolver
-import org.danbrough.klog.EnvPropertyResolver
-import org.danbrough.klog.KLogFactory
+import org.danbrough.klog.*
 import org.danbrough.klog.Logger.Level
-import org.danbrough.klog.LoggerImpl
-import org.danbrough.klog.LoggerMethod
-import org.danbrough.klog.Utils
 
 
 typealias StdoutMessageFormatter = StdoutLogging.(level: Level, name: String, message: () -> Any?) -> String
@@ -26,7 +21,7 @@ val defaultMessageFormatter: StdoutMessageFormatter = { level, name, message ->
 }
 
 
-class StdoutLogging(
+open class StdoutLogging(
   override var defaultLogLevel: Level = EnvPropertyResolver.resolve("KLOG_LEVEL") ?: Level.NONE,
   val propertyResolver: CachingPropertyResolver<Level> = EnvPropertyResolver
 ) : KLogFactory() {

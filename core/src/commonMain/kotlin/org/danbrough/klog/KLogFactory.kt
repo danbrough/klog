@@ -1,6 +1,7 @@
 package org.danbrough.klog
 
 import org.danbrough.klog.Logger.Level
+import org.danbrough.klog.stdout.StdoutLogging
 
 
 abstract class KLogFactory {
@@ -11,6 +12,9 @@ abstract class KLogFactory {
 val klogFactoryNOOP = object : KLogFactory() {
   override fun logger(logName: String) = NOOPLogger
 }
+
+val klogFactoryStdout = StdoutLogging()
+
 
 abstract class PropertyResolver<T>(
   protected val nameDelimiter: String = "."
