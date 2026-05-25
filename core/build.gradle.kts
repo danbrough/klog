@@ -24,11 +24,14 @@ kotlin {
   applyDefaultHierarchyTemplate()
 
   android {
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
     namespace = project.group.toString()
+    compileSdk {
+      version = release(libs.versions.android.compileSdk.get().toInt())
+    }
 
-    minSdk = libs.versions.android.minSdk.get().toInt()
-
+    minSdk {
+      version = release(libs.versions.android.minSdk.get().toInt())
+    }
 
     /*defaultConfig {
       minSdk = Constants.Android.MIN_SDK

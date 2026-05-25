@@ -6,18 +6,24 @@ import org.danbrough.klog.stdout.StdoutLogging
 import org.danbrough.klog.stdout.colorString
 import kotlin.reflect.KClass
 
+val inNode: Boolean = js("typeof process === 'object'")
 
-private fun getEnvJS(name: String): String? =
-  js("typeof process === 'object' ? process.env[name] : null")
+private fun getEnvJS(name: String): String? = if (inNode) js("process.env[name]") else null
 
 
 private object JSLoggingFactory : StdoutLogging() {
+
 
   init {
 
     log = { level, name, message, t ->
       @Suppress("UNCHECKED_CAST") val printMethod: Printer = when (level) {
-        Level.TRACE, Level.DEBUG -> { o: Any? ->
+        Level.TRACE -> { o: Any? ->
+          if (inNode) js("console.debug(o)")
+          else js("console.trace(o)")
+        }
+
+        Level.DEBUG -> { o: Any? ->
           js("console.debug(o)")
         }
 
