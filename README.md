@@ -1,6 +1,7 @@
 # Kotlin multiplatform logging facade
 
 Light-weight logging facade for kotlin multi-platform.
+[Try out Kermit instead](https://github.com/touchlab/Kermit)
 
 Implementations default to simple stdout loggers on native targets,
 [SLFJ](https://www.slf4j.org/) on jvm and
@@ -13,7 +14,7 @@ Initial demo builds are available via maven at:
 
 ```kotlin
 dependencies {
-  implementation("org.danbrough.klog:core:0.0.3-beta02")
+  implementation("org.danbrough.klog:core:0.1.0")
 }
 ```
 
