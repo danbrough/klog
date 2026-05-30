@@ -1,9 +1,8 @@
 package org.danbrough.klog
 
-import org.danbrough.klog.stdout.Printer
+import org.danbrough.klog.std.Printer
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.toKString
-import org.danbrough.klog.stdout.StdoutLogging
 import platform.posix.fprintf
 import platform.posix.getenv
 import platform.posix.pthread_self
@@ -13,9 +12,10 @@ import kotlin.reflect.KClass
 
 actual object Utils : KLogUtils() {
   @OptIn(ExperimentalForeignApi::class)
-  actual override val environment: Map<String, String?> = object : Map<String, String?> by emptyMap() {
-    override fun get(key: String): String? = getenv(key)?.toKString()
-  }
+  actual override val environment: Map<String, String?> =
+    object : Map<String, String?> by emptyMap() {
+      override fun get(key: String): String? = getenv(key)?.toKString()
+    }
 
 
   //

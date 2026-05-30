@@ -1,30 +1,31 @@
 package org.danbrough.klog
 
-import org.danbrough.klog.Logger.Level
-import org.danbrough.klog.stdout.StdoutLogging
+import org.danbrough.klog.std.BaseStandardLogFactory
 
 
 abstract class KLogFactory {
   open var defaultLogLevel = Level.NONE
-  abstract fun logger(logName: String): Logger
+  abstract fun logger(logName: String): LoggerBase
 }
 
 val klogFactoryNOOP = object : KLogFactory() {
   override fun logger(logName: String) = NOOPLogger
 }
 
-val klogFactoryStdout = StdoutLogging()
+val klogFactoryStandard = BaseStandardLogFactory()
 
 
 abstract class PropertyResolver<T>(
   protected val nameDelimiter: String = "."
 ) {
-  protected abstract fun getValue(name: String): T?
-  protected abstract fun setValue(name: String, value: T)
+
+
+  abstract operator fun get(name: String): T?
+  abstract operator fun set(name: String, value: T)
 
   open fun resolve(name: String): T? {
     //println("resolve: $name")
-    getValue(name)?.also {
+    get(name)?.also {
       //println("got value: $it")
       return it
     }
@@ -37,7 +38,7 @@ abstract class PropertyResolver<T>(
     if (parentName == null) return null
     return resolve(parentName)?.also {
       //println("$name: saving value $it to cache")
-      setValue(name, it)
+      set(name, it)
     }
   }
 }
@@ -46,15 +47,13 @@ open class CachingPropertyResolver<T>(nameDelimiter: String, val getter: (String
   PropertyResolver<T>(nameDelimiter) {
   private val cache = mutableMapOf<String, T>()
 
-  override fun getValue(name: String): T? = cache[name] ?: getter(name)?.also { cache[name] = it }
+  override fun get(name: String): T? = cache[name] ?: getter(name)?.also { cache[name] = it }
 
-  override fun setValue(name: String, value: T) {
+  override fun set(name: String, value: T) {
     cache[name] = value
   }
 }
 
-object EnvPropertyResolver :
-  CachingPropertyResolver<Level>(
-    "_",
-    { name -> Utils.environment[name]?.let { Level.valueOf(it) } })
+object EnvPropertyResolver : CachingPropertyResolver<Level>(
+  "_", { name -> Utils.environment[name]?.let { Level.valueOf(it) } })
 

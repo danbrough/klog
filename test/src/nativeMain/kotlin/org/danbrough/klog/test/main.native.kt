@@ -1,6 +1,7 @@
-package org.danbrough.klog
+package org.danbrough.klog.test
 
 import kotlinx.coroutines.runBlocking
+import org.danbrough.klog.Utils
 
 fun main(args: Array<String>) = testMain(args)
 

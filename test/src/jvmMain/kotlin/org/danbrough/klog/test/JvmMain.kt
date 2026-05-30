@@ -1,4 +1,4 @@
-package org.danbrough.klog
+package org.danbrough.klog.test
 
 class JvmMain {
   companion object {

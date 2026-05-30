@@ -1,9 +1,8 @@
 package org.danbrough.klog
 
-import org.danbrough.klog.Logger.Level
-import org.danbrough.klog.stdout.Printer
-import org.danbrough.klog.stdout.StdoutLogging
-import org.danbrough.klog.stdout.colorString
+import org.danbrough.klog.std.Printer
+import org.danbrough.klog.std.BaseStandardLogFactory
+import org.danbrough.klog.std.colorString
 import kotlin.reflect.KClass
 
 val inNode: Boolean = js("typeof process === 'object'")
@@ -11,7 +10,7 @@ val inNode: Boolean = js("typeof process === 'object'")
 private fun getEnvJS(name: String): String? = if (inNode) js("process.env[name]") else null
 
 
-private object JSLoggingFactory : StdoutLogging() {
+private object JSLoggingFactory : BaseStandardLogFactory() {
 
 
   init {
@@ -63,6 +62,6 @@ actual object Utils : KLogUtils() {
 
   actual override fun <T : Any> loggerName(clazz: KClass<T>): String = "KLogger"
 
-  actual override fun defaultLogFactory(): KLogFactory = JSLoggingFactory
+  actual fun standardLogFactory(): KLogFactory = JSLoggingFactory
 
 }

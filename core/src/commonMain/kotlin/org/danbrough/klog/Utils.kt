@@ -1,6 +1,6 @@
 package org.danbrough.klog
 
-import org.danbrough.klog.stdout.Printer
+import org.danbrough.klog.std.Printer
 import kotlin.reflect.KClass
 
 
@@ -14,7 +14,7 @@ abstract class KLogUtils {
 
   abstract fun <T : Any> loggerName(clazz: KClass<T>): String
 
-  open fun defaultLogFactory(): KLogFactory = klogFactoryStdout
+  open fun standardLogFactory(): KLogFactory = klogFactoryStandard
 }
 
 expect object Utils : KLogUtils {
@@ -23,6 +23,4 @@ expect object Utils : KLogUtils {
   override val stderrPrinter: Printer
   override val stdoutPrinter: Printer
   override fun <T : Any> loggerName(clazz: KClass<T>): String
-
-  override fun defaultLogFactory(): KLogFactory
 }

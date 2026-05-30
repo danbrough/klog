@@ -1,7 +1,6 @@
 package org.danbrough.klog
 
-import org.danbrough.klog.stdout.Printer
-import org.danbrough.klog.stdout.StdoutLogging
+import org.danbrough.klog.std.Printer
 import java.lang.reflect.Modifier
 import kotlin.reflect.KClass
 
@@ -11,8 +10,9 @@ open class BaseUtilsJvm : KLogUtils() {
   override fun getThreadName(): String = Thread.currentThread().name
   override val stderrPrinter: Printer = System.err::println
   override val stdoutPrinter: Printer = System.out::println
-  override fun <T : Any> loggerName(clazz: KClass<T>): String = unwrapCompanionClass(clazz.java).name
-  
+  override fun <T : Any> loggerName(clazz: KClass<T>): String =
+    unwrapCompanionClass(clazz.java).name
+
 }
 
 

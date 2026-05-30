@@ -1,8 +1,8 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package org.danbrough.klog.stdout
+package org.danbrough.klog.std
 
-import org.danbrough.klog.Logger
+import org.danbrough.klog.Level
 
 object ANSIConstants {
   const val ESC_START = "\u001b["
@@ -21,15 +21,15 @@ object ANSIConstants {
 }
 
 
-val Logger.Level.color: String
+val Level.color: String
   get() = when (this) {
-    Logger.Level.ERROR -> ANSIConstants.BOLD + ANSIConstants.RED_FG
-    Logger.Level.WARN -> ANSIConstants.YELLOW_FG
-    Logger.Level.INFO -> ANSIConstants.GREEN_FG
-    Logger.Level.DEBUG -> ANSIConstants.CYAN_FG
-    Logger.Level.TRACE -> ANSIConstants.MAGENTA_FG
+    Level.ERROR -> ANSIConstants.BOLD + ANSIConstants.RED_FG
+    Level.WARN -> ANSIConstants.YELLOW_FG
+    Level.INFO -> ANSIConstants.GREEN_FG
+    Level.DEBUG -> ANSIConstants.CYAN_FG
+    Level.TRACE -> ANSIConstants.MAGENTA_FG
     else -> ANSIConstants.DEFAULT_FG
   }
 
-fun Logger.Level.colored(s: String) =
+fun Level.colored(s: String) =
   "${ANSIConstants.ESC_START}${color}m$s${ANSIConstants.RESET}"

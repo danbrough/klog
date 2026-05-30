@@ -3,16 +3,16 @@ package org.danbrough.klog
 import android.util.Log
 import java.lang.reflect.Modifier
 
-class AndroidLogger(override val name: String) : DelegatingLogger {
+class AndroidLogger(name: String) : LoggerBase(name) {
 
   override var log: LoggerMethod = { level, _, message, t ->
     val androidLevel = when (level) {
-      Logger.Level.TRACE -> Log.VERBOSE
-      Logger.Level.DEBUG -> Log.DEBUG
-      Logger.Level.INFO -> Log.INFO
-      Logger.Level.WARN -> Log.WARN
-      Logger.Level.ERROR -> Log.ERROR
-      Logger.Level.NONE -> -1
+      Level.TRACE -> Log.VERBOSE
+      Level.DEBUG -> Log.DEBUG
+      Level.INFO -> Log.INFO
+      Level.WARN -> Log.WARN
+      Level.ERROR -> Log.ERROR
+      else -> -1
     }
 
     if (Log.isLoggable(name, androidLevel)) {
@@ -26,7 +26,7 @@ class AndroidLogger(override val name: String) : DelegatingLogger {
       }
     }
   }
-  override var level: Logger.Level = Logger.Level.TRACE
+  override var level: Level = Level.TRACE
 }
 
 object AndroidLogging : KLogFactory() {
@@ -41,13 +41,9 @@ fun kloggingAndroid(block: AndroidLogging.() -> Unit = {}) {
 private fun <T : Any> unwrapCompanionClass(clazz: Class<T>): Class<*> {
   return clazz.enclosingClass?.let { enclosingClass ->
     try {
-      enclosingClass.declaredFields
-        .find { field ->
-          field.name == clazz.simpleName &&
-              Modifier.isStatic(field.modifiers) &&
-              field.type == clazz
-        }
-        ?.run { enclosingClass }
+      enclosingClass.declaredFields.find { field ->
+          field.name == clazz.simpleName && Modifier.isStatic(field.modifiers) && field.type == clazz
+        }?.run { enclosingClass }
     } catch (se: SecurityException) {
       // The security manager isn't properly set up, so it won't be possible
       // to search for the target declared field.

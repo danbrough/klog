@@ -1,58 +1,49 @@
 package org.danbrough.klog
 
-import org.danbrough.klog.Logger.Level
 
-typealias LoggerMethod = Logger.(level: Level, name: String, message: () -> Any?, t: Throwable?) -> Unit
+typealias MessageBlock = () -> Any?
 
-interface Logger {
+enum class Level {
+  TRACE, DEBUG, INFO, WARN, ERROR, NONE;
+}
 
-  val name: String
+open class LoggerBase(val name: String = "") {
 
-  var level: Level
+  var logWriters: MutableList<BaseLogWriter> = mutableListOf()
 
-  enum class Level {
-    TRACE, DEBUG, INFO, WARN, ERROR, NONE;
+  open var level: Level = Level.TRACE
+
+  inline fun write(level: Level, name: String, message: MessageBlock, t: Throwable? = null) {
+    val messageString = message().toString()
+    logWriters.forEach {
+      it.writeLog(this, level, name, messageString, t)
+    }
   }
 
-  fun trace(t: Throwable? = null, message: () -> Any?)
-  fun debug(t: Throwable? = null, message: () -> Any?)
-  fun info(t: Throwable? = null, message: () -> Any?)
-  fun warn(t: Throwable? = null, message: () -> Any?)
-  fun error(t: Throwable? = null, message: () -> Any?)
-}
+  inline fun verbose(t: Throwable? = null, message: MessageBlock) = trace(t, message)
 
-interface DelegatingLogger : Logger {
+  inline fun v(t: Throwable? = null, message: MessageBlock) = trace(t, message)
+  inline fun trace(t: Throwable? = null, message: MessageBlock) =
+    if (level <= Level.TRACE) write(Level.TRACE, name, message, t) else Unit
 
-  var log: LoggerMethod
+  inline fun d(t: Throwable? = null, message: MessageBlock) = debug(t, message)
+  inline fun debug(t: Throwable? = null, message: MessageBlock) =
+    if (level <= Level.DEBUG) write(Level.DEBUG, name, message, t) else Unit
 
-  override fun trace(t: Throwable?, message: () -> Any?) =
-    if (level <= Level.TRACE) log.invoke(this, Level.TRACE, name, message, t) else Unit
+  inline fun i(t: Throwable? = null, message: MessageBlock) = info(t, message)
 
-  override fun debug(t: Throwable?, message: () -> Any?) =
-    if (level <= Level.DEBUG) log.invoke(this, Level.DEBUG, name, message, t) else Unit
+  inline fun info(t: Throwable? = null, message: MessageBlock) =
+    if (level <= Level.INFO) write(Level.INFO, name, message, t) else Unit
 
-  override fun info(t: Throwable?, message: () -> Any?) =
-    if (level <= Level.INFO) log.invoke(this, Level.INFO, name, message, t) else Unit
+  inline fun w(t: Throwable? = null, message: MessageBlock) = warn(t, message)
+  inline fun warn(t: Throwable? = null, message: MessageBlock) =
+    if (level <= Level.WARN) write(Level.WARN, name, message, t) else Unit
 
-  override fun warn(t: Throwable?, message: () -> Any?) =
-    if (level <= Level.WARN) log.invoke(this, Level.WARN, name, message, t) else Unit
-
-  override fun error(t: Throwable?, message: () -> Any?) =
-    if (level <= Level.ERROR) log.invoke(this, Level.ERROR, name, message, t) else Unit
-
+  inline fun e(t: Throwable? = null, message: MessageBlock) = error(t, message)
+  inline fun error(t: Throwable? = null, message: MessageBlock) =
+    if (level <= Level.ERROR) write(Level.ERROR, name, message, t) else Unit
 
 }
 
-object NOOPLogger : DelegatingLogger {
-  override var log: LoggerMethod = { _, _, _, _ -> }
-  override var level: Level = Level.NONE
-  override val name: String = ""
-}
-
-
-open class LoggerImpl(
-  override val name: String,
-  override var log: LoggerMethod,
-  override var level: Level,
-) : DelegatingLogger
+object NOOPLogger : LoggerBase()
 

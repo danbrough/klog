@@ -1,4 +1,4 @@
-package org.danbrough.klog
+package org.danbrough.klog.test
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

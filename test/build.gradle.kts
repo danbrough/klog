@@ -59,7 +59,7 @@ kotlin {
 
   jvm {
     mainRun {
-      mainClass = "org.danbrough.klog.JvmMain"
+      mainClass = "org.danbrough.klog.test.JvmMain"
     }
   }
 
@@ -81,7 +81,7 @@ afterEvaluate {
     binaries {
       executable("klogDemo", buildTypes = setOf(NativeBuildType.DEBUG)) {
         //compilation = compilations["test"]
-        entryPoint = "org.danbrough.klog.main"
+        entryPoint = "org.danbrough.klog.test.main"
         //if (buildType == NativeBuildType.DEBUG && konanTarget == KonanTarget.LINUX_X64) linkerOpts += "--allow-multiple-definition"
 
         runTaskProvider?.configure {
@@ -97,7 +97,7 @@ afterEvaluate {
 
 
   tasks.withType<ShadowJar> {
-    mainClass = "org.danbrough.krch.JvmMain"
+    mainClass = "org.danbrough.krch.test.JvmMain"
   }
 }
 

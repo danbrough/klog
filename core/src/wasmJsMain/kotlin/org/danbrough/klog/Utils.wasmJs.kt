@@ -2,7 +2,7 @@
 
 package org.danbrough.klog
 
-import org.danbrough.klog.stdout.Printer
+import org.danbrough.klog.std.Printer
 import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.js
 import kotlin.reflect.KClass

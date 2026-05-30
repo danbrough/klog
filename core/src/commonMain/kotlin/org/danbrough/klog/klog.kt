@@ -2,7 +2,8 @@
 
 package org.danbrough.klog
 
-import org.danbrough.klog.stdout.StdoutLogging
+import org.danbrough.klog.std.BaseStandardLogFactory
+import org.danbrough.klog.std.StandardLogFactory
 
 
 private var logFactory: KLogFactory? = null
@@ -10,7 +11,7 @@ var klogFactory: KLogFactory
   set(value) {
     logFactory = value
   }
-  get() = logFactory ?: Utils.defaultLogFactory().also { logFactory = it }
+  get() = logFactory ?: Utils.standardLogFactory().also { logFactory = it }
 
 
 fun <T : KLogFactory> installLogging(logging: T, block: T.() -> Unit = {}) {
@@ -18,17 +19,17 @@ fun <T : KLogFactory> installLogging(logging: T, block: T.() -> Unit = {}) {
   block.invoke(logging)
 }
 
-fun kloggingStdout(block: StdoutLogging.() -> Unit = {}) {
-  klogFactory = klogFactoryStdout.apply(block)
+fun kloggingStandard(block: BaseStandardLogFactory.() -> Unit = {}) {
+  klogFactory = StandardLogFactory.apply(block)
 }
 
 fun kloggingDisabled() {
   klogFactory = klogFactoryNOOP
 }
 
-fun logger(name: String): Logger = klogFactory.logger(name)
+fun logger(name: String): LoggerBase = klogFactory.logger(name)
 
-inline fun <reified T : Any> T.logger(): Lazy<Logger> = lazy {
+inline fun <reified T : Any> T.logger(): Lazy<LoggerBase> = lazy {
   klogFactory.logger(Utils.loggerName(T::class))
 }
 

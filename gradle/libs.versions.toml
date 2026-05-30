@@ -28,13 +28,16 @@ agp = "9.2.1"
 ##⬆= "9.3.0-alpha05"
 ##⬆= "9.3.0-alpha06"
 ##⬆= "9.3.0-alpha07"
+##⬆= "9.3.0-alpha08"
+##⬆= "9.3.0-alpha09"
 
 kotlin = "2.3.21"
 ##  ⬆ = "2.4.0-Beta1"
 ##  ⬆ = "2.4.0-Beta2"
 ##  ⬆ = "2.4.0-RC"
+##  ⬆ = "2.4.0-RC2"
 
-shadow = "9.4.1"
+shadow = "9.4.2"
 
 xtrasPackage = "org.danbrough.xtras"
 xtras-core = "0.0.1-alpha01"
@@ -53,8 +56,8 @@ compose-multiplatform = "1.11.0"
 compose-html = "1.11.0"
 ##        ⬆ = "1.12.0-alpha01"
 
-slf4j-api = "2.0.17"
-slf4j-simple = "2.0.17"
+slf4j-api = "2.0.18"
+slf4j-simple = "2.0.18"
 logback-classic = "1.5.32"
 
 kotlinx-coroutines = "1.11.0"
