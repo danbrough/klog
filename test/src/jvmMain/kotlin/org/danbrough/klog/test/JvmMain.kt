@@ -6,3 +6,9 @@ class JvmMain {
     fun main(args: Array<String>) = testMain(args)
   }
 }
+
+actual fun test() {
+  /*runBlocking {
+    coroutineTest()
+  }*/
+}
