@@ -7,7 +7,7 @@ enum class Level {
   TRACE, DEBUG, INFO, WARN, ERROR, NONE;
 }
 
-open class LoggerBase(val name: String = "") {
+open class LoggerBase(override val name: String = "") : Named {
 
   var logWriters: MutableList<BaseLogWriter> = mutableListOf()
 
@@ -18,6 +18,11 @@ open class LoggerBase(val name: String = "") {
     logWriters.forEach {
       it.writeLog(this, level, name, messageString, t)
     }
+  }
+
+  fun copy(name: String): LoggerBase = LoggerBase(name).also {
+    it.logWriters = logWriters
+    it.level = level
   }
 
   inline fun verbose(t: Throwable? = null, message: MessageBlock) = trace(t, message)
@@ -42,6 +47,7 @@ open class LoggerBase(val name: String = "") {
   inline fun e(t: Throwable? = null, message: MessageBlock) = error(t, message)
   inline fun error(t: Throwable? = null, message: MessageBlock) =
     if (level <= Level.ERROR) write(Level.ERROR, name, message, t) else Unit
+
 
 }
 

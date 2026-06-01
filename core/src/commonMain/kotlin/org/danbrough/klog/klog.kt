@@ -5,6 +5,9 @@ package org.danbrough.klog
 import org.danbrough.klog.std.BaseStandardLogFactory
 import org.danbrough.klog.std.StandardLogFactory
 
+interface Named {
+  val name: String
+}
 
 private var logFactory: KLogFactory? = null
 var klogFactory: KLogFactory

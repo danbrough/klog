@@ -1,5 +1,8 @@
 package org.danbrough.klog.test
 
+import org.danbrough.klog.LoggerBase
+import org.danbrough.klog.Named
+
 
 expect fun test()
 
@@ -23,11 +26,7 @@ val log = kloggingStandard {
   delay(5.seconds)
 }*/
 
-interface Named {
 
-  val name: String
-  fun createCopy(newName: String): Named
-}
 
 abstract class PropertyResolver<T : Named>(
   val root: T, protected val nameDelimiter: String = "."
@@ -54,9 +53,11 @@ abstract class PropertyResolver<T : Named>(
   }
 }
 
-open class TestResolver<T : Named>(root: T, nameDelimiter: String, val creator: (T, String) -> T) :
-  PropertyResolver<T>(root, nameDelimiter) {
-  private val cache = mutableMapOf<String, T>()
+
+open class CachingResolver<T : Named>(
+  root: T, nameDelimiter: String, val provider: (T, String) -> T
+) : PropertyResolver<T>(root, nameDelimiter) {
+  protected open val cache = mutableMapOf<String, T>()
   override fun get(name: String): T? = cache[name]
   override fun set(name: String, value: T) {
     cache[name] = value
@@ -64,29 +65,28 @@ open class TestResolver<T : Named>(root: T, nameDelimiter: String, val creator: 
 
   @Suppress("UNCHECKED_CAST")
   fun resolveOrCreate(name: String): T = get(name) ?: super.resolve(name).let {
-    if (it.name != name) creator(it, name).also { copy ->
+    if (it.name != name) provider(it, name).also { copy ->
       set(copy.name, copy)
     } else it
-  }/*
-    override fun resolve(name: String, copier: (Named, String) -> T): Named =
+  }
+}
 
-  */
+class Thang(name: String, val age: Int = count++) : LoggerBase(name) {
+  companion object {
+    private var count = 0
+  }
 
-
+  override fun toString(): String = "$name:$age"
 }
 
 fun testMain(args: Array<String>) {
   println("running testMain() args: ${args.joinToString(",")}")
 
-  var id = 0
 
-  data class Thang(override val name: String, val age: Int = id++) : Named {
-    override fun createCopy(newName: String): Named = copy(name = newName, age = this.age + 1)
+  val props = CachingResolver(Thang("ROOT", 0), "_") { parent, newName ->
+    Thang(newName)
   }
 
-  val props = TestResolver(Thang("ROOT", 0), "_") { parent, name ->
-    parent.createCopy(name) as Thang
-  }
   props["ROOT_C"] = Thang("ROOT_C", 100)
   props["ANOTHER_ROOT"] = Thang("ANOTHER_ROOT", 1000)
 
@@ -100,14 +100,14 @@ fun testMain(args: Array<String>) {
   println("$key = ${props.resolveOrCreate(key)}")
   key = "ROOT_C_A"
   println("$key = ${props.resolveOrCreate(key)}")
+  key = "ANOTHER_ROOT_A"
+  println("$key = ${props.resolveOrCreate(key)}")
   key = "ANOTHER_ROOT_A_B"
   println("$key = ${props.resolveOrCreate(key)}")
   key = "ANOTHER_ROOT_A_B_C"
   println("$key = ${props.resolveOrCreate(key)}")
-  key = "ANOTHER_ROOT_A"
-  println("$key = ${props.resolveOrCreate(key)}")
-
-  /*  log.trace { "trace()" }
+  key = "ANOTHER_ROOT_A_B"
+  println("$key = ${props.resolveOrCreate(key)}")/*  log.trace { "trace()" }
     log.debug { "debug()" }
     log.info { "info()" }
     log.warn { "warn()" }
