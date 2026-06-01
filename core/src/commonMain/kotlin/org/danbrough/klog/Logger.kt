@@ -7,7 +7,7 @@ enum class Level {
   TRACE, DEBUG, INFO, WARN, ERROR, NONE;
 }
 
-open class LoggerBase(override val name: String = "") : Named {
+open class LoggerBase(val name: String = "") {
 
   var logWriters: MutableList<BaseLogWriter> = mutableListOf()
 

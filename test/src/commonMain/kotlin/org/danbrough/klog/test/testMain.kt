@@ -1,7 +1,6 @@
 package org.danbrough.klog.test
 
 import org.danbrough.klog.LoggerBase
-import org.danbrough.klog.Named
 
 
 expect fun test()
@@ -50,7 +49,7 @@ abstract class PropertyResolver<T>(
 }
 
 
-open class CachingResolver<T : Named>(
+open class CachingResolver<T>(
   nameDelimiter: String, val provider: (T?, String) -> T
 ) : PropertyResolver<T>(nameDelimiter) {
   protected open val cache = mutableMapOf<String, T>()
@@ -62,7 +61,7 @@ open class CachingResolver<T : Named>(
   @Suppress("UNCHECKED_CAST")
   fun resolveOrCreate(name: String): T = get(name) ?: super.resolve(name).let {
     provider(it, name).also { copy ->
-      set(copy.name, copy)
+      set(name, copy)
     }
   }
 }
@@ -78,7 +77,6 @@ fun testMain(args: Array<String>) {
 
 
   val props = CachingResolver<Thang>("_") { parent, newName ->
-    //println("creating for parent: $parent and new name: $newName")
     Thang(newName, parent?.parentID ?: -1)
   }
 
