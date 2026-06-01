@@ -28,35 +28,31 @@ val log = kloggingStandard {
 
 
 
-abstract class PropertyResolver<T : Named>(
-  val root: T, protected val nameDelimiter: String = "."
+abstract class PropertyResolver<T>(
+  protected val nameDelimiter: String = "."
 ) {
 
 
   abstract operator fun get(name: String): T?
   abstract operator fun set(name: String, value: T)
 
-  fun resolve(name: String): T {
+  fun resolve(name: String): T? {
     //println("resolve: $name")
     get(name)?.also {
       //println("got value: $it")
       return it
     }
-    val names = name.split(nameDelimiter).toMutableList()
-    val parentName = if (names.size > 1) names.let {
-      it.removeLast()
-      it.joinToString(nameDelimiter)
-    } else return root
-    //println("$name: parentName: $parentName")
 
-    return resolve(parentName)
+    val i = name.lastIndexOf(nameDelimiter)
+    return if (i > -1) resolve(name.substring(0, i))
+    else null
   }
 }
 
 
 open class CachingResolver<T : Named>(
-  root: T, nameDelimiter: String, val provider: (T, String) -> T
-) : PropertyResolver<T>(root, nameDelimiter) {
+  nameDelimiter: String, val provider: (T?, String) -> T
+) : PropertyResolver<T>(nameDelimiter) {
   protected open val cache = mutableMapOf<String, T>()
   override fun get(name: String): T? = cache[name]
   override fun set(name: String, value: T) {
@@ -65,32 +61,33 @@ open class CachingResolver<T : Named>(
 
   @Suppress("UNCHECKED_CAST")
   fun resolveOrCreate(name: String): T = get(name) ?: super.resolve(name).let {
-    if (it.name != name) provider(it, name).also { copy ->
+    provider(it, name).also { copy ->
       set(copy.name, copy)
-    } else it
+    }
   }
 }
 
-class Thang(name: String, val age: Int = count++) : LoggerBase(name) {
-  companion object {
-    private var count = 0
-  }
+class Thang(name: String, val parentID: Int = -1) : LoggerBase(name) {
 
-  override fun toString(): String = "$name:$age"
+
+  override fun toString(): String = "$name:$parentID"
 }
 
 fun testMain(args: Array<String>) {
   println("running testMain() args: ${args.joinToString(",")}")
 
 
-  val props = CachingResolver(Thang("ROOT", 0), "_") { parent, newName ->
-    Thang(newName)
+  val props = CachingResolver<Thang>("_") { parent, newName ->
+    //println("creating for parent: $parent and new name: $newName")
+    Thang(newName, parent?.parentID ?: -1)
   }
 
-  props["ROOT_C"] = Thang("ROOT_C", 100)
+  props["ROOT"] = Thang("ROOT", 100)
   props["ANOTHER_ROOT"] = Thang("ANOTHER_ROOT", 1000)
 
   var key = "ROOT"
+  println("$key = ${props.resolveOrCreate(key)}")
+  key = "ANOTHER_ROOT"
   println("$key = ${props.resolveOrCreate(key)}")
   key = "ROOT_A"
   println("$key = ${props.resolveOrCreate(key)}")
