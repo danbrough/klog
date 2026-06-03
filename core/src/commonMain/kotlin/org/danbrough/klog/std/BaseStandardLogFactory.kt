@@ -6,6 +6,7 @@ import org.danbrough.klog.CachingPropertyResolver
 import org.danbrough.klog.EnvPropertyResolver
 import org.danbrough.klog.KLogFactory
 import org.danbrough.klog.Level
+import org.danbrough.klog.MappingPropertyResolver
 import org.danbrough.klog.Utils
 
 
@@ -18,15 +19,18 @@ var colorString: BaseStandardLogFactory.(level: Level, s: String) -> String =
 
 val defaultMessageFormatter: StdoutMessageFormatter = { level, name, message ->
   colorString(
-    level,
-    message.toString()
+    level, message.toString()
   )
 }
 
 
 open class BaseStandardLogFactory : KLogFactory() {
 
-  val propertyResolver: CachingPropertyResolver<Level> = EnvPropertyResolver
+  val propertyResolver: CachingPropertyResolver<Level> = MappingPropertyResolver(
+    "_",
+    EnvPropertyResolver,
+    map = { it?.let { Level.valueOf(it) } },
+    provider = { _, name: String -> Level.valueOf(name) })
   override var defaultLogLevel: Level = propertyResolver.resolve("KLOG_LEVEL") ?: Level.TRACE
 
   var coloredOutput: Boolean = true

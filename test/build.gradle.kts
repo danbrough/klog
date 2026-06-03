@@ -65,7 +65,7 @@ kotlin {
 
   sourceSets {
     commonMain.dependencies {
-      implementation(project(":core"))
+      //implementation(project(":core"))
       implementation(libs.kotlinx.coroutines)
     }
   }

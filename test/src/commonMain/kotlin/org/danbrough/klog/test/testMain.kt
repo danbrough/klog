@@ -1,7 +1,5 @@
 package org.danbrough.klog.test
 
-import org.danbrough.klog.LoggerBase
-
 
 expect fun test()
 
@@ -26,83 +24,113 @@ val log = kloggingStandard {
 }*/
 
 
+interface PropertyResolver<T> {
+  fun parentName(name: String): String? = null
+  operator fun get(name: String): T?
 
-abstract class PropertyResolver<T>(
-  protected val nameDelimiter: String = "."
-) {
+  fun parent(name: String): T?
 
-
-  abstract operator fun get(name: String): T?
-  abstract operator fun set(name: String, value: T)
-
-  fun resolve(name: String): T? {
-    //println("resolve: $name")
-    get(name)?.also {
-      //println("got value: $it")
-      return it
-    }
-
-    val i = name.lastIndexOf(nameDelimiter)
-    return if (i > -1) resolve(name.substring(0, i))
-    else null
-  }
 }
 
+interface MutablePropertyResolver<T> : PropertyResolver<T> {
+  operator fun set(name: String, value: T)
+}
 
-open class CachingResolver<T>(
-  nameDelimiter: String, val provider: (T?, String) -> T
-) : PropertyResolver<T>(nameDelimiter) {
-  protected open val cache = mutableMapOf<String, T>()
-  override fun get(name: String): T? = cache[name]
+interface PropertyResolverWithDefault<T> : PropertyResolver<T> {
+  val defaultValue: (String, T?) -> T?
+}
+
+abstract class BasePropertyResolver<T>(val nameDelimiter: String = ".") : PropertyResolver<T> {
+  override fun parentName(name: String): String? =
+    name.lastIndexOf(nameDelimiter).takeIf { it > 0 }?.let {
+      name.substring(0, it)
+    }
+
+  private fun parent(name: String, originalName: String): T? =
+    get(name) ?: parentName(name)?.let { parentName ->
+      parent(parentName, originalName)
+    }
+
+  override fun parent(name: String): T? = parent(name, name)
+}
+
+fun <T> propertyResolver(
+  nameDelimiter: String = ".",
+  getter: ((String) -> T?)? = null,
+): PropertyResolver<T> = object : BasePropertyResolver<T>(nameDelimiter) {
+  override fun get(name: String): T? = getter?.invoke(name)
+}
+
+private class CachedPropertyResolver<T>(private val resolver: PropertyResolver<T>) :
+  MutablePropertyResolver<T> {
+  private val cache = mutableMapOf<String, T>()
+
+  override fun get(name: String): T? = cache[name] ?: resolver[name]?.also {
+    cache[name] = it
+  }
+
+  override fun parent(name: String): T? = resolver.parent(name)?.also {
+    cache[name] = it
+  }
+
   override fun set(name: String, value: T) {
     cache[name] = value
-  }
-
-  @Suppress("UNCHECKED_CAST")
-  fun resolveOrCreate(name: String): T = get(name) ?: super.resolve(name).let {
-    provider(it, name).also { copy ->
-      set(name, copy)
-    }
+    //if (resolver is MutablePropertyResolver) resolver[name] = value
   }
 }
 
-class Thang(name: String, val parentID: Int = -1) : LoggerBase(name) {
+fun <T> PropertyResolver<T>.cached(): MutablePropertyResolver<T> =
+  this as? CachedPropertyResolver<T> ?: CachedPropertyResolver(this)
+
+fun <A, B> PropertyResolver<A>.map(mapper: (A) -> B): PropertyResolver<B> =
+  object : PropertyResolver<B> {
+
+    override fun get(name: String): B? = this@map[name]?.let(mapper)
+
+    override fun parent(name: String): B? = this@map.parent(name)?.let(mapper)
+  }
 
 
+class Thang(val name: String, val parentID: Int = -1) {
   override fun toString(): String = "$name:$parentID"
 }
+
 
 fun testMain(args: Array<String>) {
   println("running testMain() args: ${args.joinToString(",")}")
 
+  val props = propertyResolver<String>("_").cached()
 
-  val props = CachingResolver<Thang>("_") { parent, newName ->
-    Thang(newName, parent?.parentID ?: -1)
-  }
+  props["ROOT"] = "ROOT"
+  props["ANOTHER_ROOT"] = "ANOTHER_ROOT"
 
-  props["ROOT"] = Thang("ROOT", 100)
-  props["ANOTHER_ROOT"] = Thang("ANOTHER_ROOT", 1000)
 
   var key = "ROOT"
-  println("$key = ${props.resolveOrCreate(key)}")
+  println("$key = ${props[key]}")
   key = "ANOTHER_ROOT"
-  println("$key = ${props.resolveOrCreate(key)}")
+  println("$key = ${props[key]}")
   key = "ROOT_A"
-  println("$key = ${props.resolveOrCreate(key)}")
+  println("$key = ${props[key]}")
   key = "ROOT_A_B"
-  println("$key = ${props.resolveOrCreate(key)}")
+  println("$key = ${props[key]}")
   key = "ROOT_A"
-  println("$key = ${props.resolveOrCreate(key)}")
+  println("$key = ${props[key]}")
   key = "ROOT_C_A"
-  println("$key = ${props.resolveOrCreate(key)}")
+  println("$key = ${props[key]}")
   key = "ANOTHER_ROOT_A"
-  println("$key = ${props.resolveOrCreate(key)}")
+  println("$key = ${props[key]}")
   key = "ANOTHER_ROOT_A_B"
-  println("$key = ${props.resolveOrCreate(key)}")
+  println("$key = ${props[key]}")
   key = "ANOTHER_ROOT_A_B_C"
-  println("$key = ${props.resolveOrCreate(key)}")
+  println("$key = ${props[key]}")
   key = "ANOTHER_ROOT_A_B"
-  println("$key = ${props.resolveOrCreate(key)}")/*  log.trace { "trace()" }
+  println("$key = ${props[key]}")
+
+  val props2 = props.map { Thang(it) }
+  println("$key = ${props2[key]}")
+
+
+  /*  log.trace { "trace()" }
     log.debug { "debug()" }
     log.info { "info()" }
     log.warn { "warn()" }
