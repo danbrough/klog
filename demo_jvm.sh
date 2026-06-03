@@ -1,1 +1,1 @@
-./gradlew :test:jvmRun
+./gradlew :test:jvmRun --args="$@"

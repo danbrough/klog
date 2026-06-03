@@ -1,2 +1,2 @@
 
-./gradlew :test:runKlogDemoDebugExecutableLinuxX64
+./gradlew :test:runKlogDemoDebugExecutableLinuxX64 -Pargs="$@"

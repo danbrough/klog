@@ -7,7 +7,7 @@ pluginManagement {
     gradlePluginPortal()
   }
 }
-//enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
   @Suppress("UnstableApiUsage") repositories {

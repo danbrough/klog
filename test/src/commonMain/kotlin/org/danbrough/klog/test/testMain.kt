@@ -1,5 +1,7 @@
 package org.danbrough.klog.test
 
+import org.danbrough.klog.test.test2.test2
+
 
 expect fun test()
 
@@ -36,9 +38,6 @@ interface MutablePropertyResolver<T> : PropertyResolver<T> {
   operator fun set(name: String, value: T)
 }
 
-interface PropertyResolverWithDefault<T> : PropertyResolver<T> {
-  val defaultValue: (String, T?) -> T?
-}
 
 abstract class BasePropertyResolver<T>(val nameDelimiter: String = ".") : PropertyResolver<T> {
   override fun parentName(name: String): String? =
@@ -96,7 +95,7 @@ class Thang(val name: String, val parentID: Int = -1) {
 }
 
 
-fun testMain(args: Array<String>) {
+suspend fun testMain(args: Array<String>) {
   println("running testMain() args: ${args.joinToString(",")}")
 
   val props = propertyResolver<String>("_").cached()
@@ -139,6 +138,7 @@ fun testMain(args: Array<String>) {
 
     log.debug { $$"$HOME is $${Utils.environment["HOME"]}" }
     log.debug { $$"$HOMEZ is $${Utils.environment["HOMEZ"]}" }*/
-
+  println("RUNNING TEST2")
+  test2(args)
 
 }
