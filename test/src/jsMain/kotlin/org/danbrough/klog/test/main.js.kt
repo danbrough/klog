@@ -1,7 +1,10 @@
 package org.danbrough.klog.test
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.danbrough.klog.logger
 
 actual fun test() {
@@ -21,4 +24,9 @@ actual fun test() {
 }
 
 
-fun main(args: Array<String>) = testMain(args)
+@OptIn(DelicateCoroutinesApi::class)
+fun main(args: Array<String>) {
+  GlobalScope.launch {
+    testMain(args)
+  }
+}

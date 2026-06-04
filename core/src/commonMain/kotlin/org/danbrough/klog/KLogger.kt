@@ -40,6 +40,7 @@ open class KLogger(
 ) {
 
 
+
   fun copy(
     name: String, level: Level = this.level, conf: KLogConfiguration = this.conf
   ) = KLogger(name, level, conf)
