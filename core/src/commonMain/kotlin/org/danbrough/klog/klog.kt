@@ -30,9 +30,9 @@ fun kloggingDisabled() {
   klogFactory = klogFactoryNOOP
 }
 
-fun logger(name: String): LoggerBase = klogFactory.logger(name)
+fun logger(name: String): KLogger = klogFactory.logger(name)
 
-inline fun <reified T : Any> T.logger(): Lazy<LoggerBase> = lazy {
+inline fun <reified T : Any> T.logger(): Lazy<KLogger> = lazy {
   klogFactory.logger(Utils.loggerName(T::class))
 }
 

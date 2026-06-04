@@ -3,9 +3,8 @@
 package org.danbrough.klog.std
 
 import org.danbrough.klog.KLogFactory
+import org.danbrough.klog.KLogger
 import org.danbrough.klog.Level
-import org.danbrough.klog.LogWriter
-import org.danbrough.klog.LoggerBase
 import org.danbrough.klog.Utils
 import org.danbrough.klog.cached
 import org.danbrough.klog.propertyResolver
@@ -51,19 +50,19 @@ open class BaseStandardLogFactory : KLogFactory() {
 
   fun getLogLevel(logName: String): Level = logLevels[logName] ?: defaultLogLevel
 
-  override fun logger(logName: String) = LoggerBase(logName, getLogLevel(logName)).apply {
-    logWriters.add(object : LogWriter {
-      override fun writeLog(
-        logger: LoggerBase,
-        level: Level,
-        name: String,
-        message: String,
-        t: Throwable?
-      ) {
-        println(formatter.invoke(this@BaseStandardLogFactory, level, name, message))
-      }
-    })
-  }
+  override fun logger(logName: String) = KLogger(logName, getLogLevel(logName))
 }
+
+/*object StdLogWriter : KLogWriter {
+  override fun writeLog(
+    logger: KLogger,
+    level: Level,
+    name: String,
+    message: String,
+    t: Throwable?
+  ) {
+    println(this@BaseStandardLogFactory, level, name, message)
+  }
+}*/
 
 object StandardLogFactory : BaseStandardLogFactory()
