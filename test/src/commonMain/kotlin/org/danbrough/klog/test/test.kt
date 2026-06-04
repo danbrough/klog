@@ -1,6 +1,7 @@
 package org.danbrough.klog.test
 
 import org.danbrough.klog.test.test2.test2
+import org.danbrough.klog.test.test3.test3
 
 
 expect fun test()
@@ -94,8 +95,9 @@ class Thang(val name: String, val parentID: Int = -1) {
   override fun toString(): String = "$name:$parentID"
 }
 
+suspend fun testMain(args: Array<String>) = test3(args)
 
-suspend fun testMain(args: Array<String>) {
+suspend fun testMain2(args: Array<String>) {
   println("running testMain() args: ${args.joinToString(",")}")
 
   val props = propertyResolver<String>("_").cached()

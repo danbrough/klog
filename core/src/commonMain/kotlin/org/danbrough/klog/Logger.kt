@@ -7,11 +7,16 @@ enum class Level {
   TRACE, DEBUG, INFO, WARN, ERROR, NONE;
 }
 
-open class LoggerBase(val name: String = "") {
+open class LoggerBase(val name: String = "", open var level: Level = Level.TRACE) {
 
-  var logWriters: MutableList<BaseLogWriter> = mutableListOf()
+  var logWriters: MutableList<LogWriter> = mutableListOf(object : LogWriter {
+    override fun writeLog(
+      logger: LoggerBase, level: Level, name: String, message: String, t: Throwable?
+    ) {
+      println("$level $name $message logger: $logger")
+    }
+  })
 
-  open var level: Level = Level.TRACE
 
   inline fun write(level: Level, name: String, message: MessageBlock, t: Throwable? = null) {
     val messageString = message().toString()
