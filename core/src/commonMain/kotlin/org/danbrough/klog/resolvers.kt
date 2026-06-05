@@ -7,21 +7,6 @@ interface PropertyResolver<T> {
   fun parent(name: String): T?
 }
 
-private interface CachedPropertyResolver
-
-fun <T> PropertyResolver<T>.cached(cache: MutableMap<String, T> = mutableMapOf()): PropertyResolver<T> =
-  if (this is CachedPropertyResolver) this else object : PropertyResolver<T> by this,
-    CachedPropertyResolver {
-    override fun get(name: String): T? = cache[name] ?: this@cached[name]?.also {
-      cache[name] = it
-    }
-
-    override fun set(name: String, value: T) {
-      cache[name] = value
-      this@cached[name] = value
-    }
-  }
-
 fun <T> propertyResolver(
   nameDelimiter: String = ".", getter: (String) -> T?
 ): PropertyResolver<T> = object : PropertyResolver<T> {
@@ -34,19 +19,49 @@ fun <T> propertyResolver(
       name.substring(0, it)
     }
 
-  private fun parent(name: String, originalName: String): T? =
-    get(name) ?: parentName(name)?.let { parentName ->
+  private fun parent(name: String, originalName: String): T? {
+
+    return (get(name) ?: parentName(name)?.let { parentName ->
       parent(parentName, originalName)
+    }).also {
+      println("parent: name:$name originalName:$originalName get=${get(name)}")
     }
+  }
 
   override fun parent(name: String): T? = parent(name, name)
 }
+
+private interface CachedPropertyResolver
+
+fun <T> PropertyResolver<T>.cached(cache: MutableMap<String, T> = mutableMapOf()): PropertyResolver<T> =
+  if (this is CachedPropertyResolver) this else object : PropertyResolver<T>,
+    CachedPropertyResolver {
+    override fun get(name: String): T? {
+      println("cached:get $name cached:${cache[name]}")
+      return (cache[name] ?: this@cached[name]?.also {
+        cache[name] = it
+      }).also { value ->
+        println("CACHE:result $name = $value")
+      }
+    }
+
+    override fun set(name: String, value: T) {
+      println("cached: set( $name = $value) ")
+      cache[name] = value
+      // this@cached[name] = value
+    }
+
+    override fun parentName(name: String): String? = this@cached.parentName(name)
+
+    override fun parent(name: String): T? = this@cached.parent(name)
+  }
+
 
 interface PropertyResolverWithDefaultParent<T> : PropertyResolver<T> {
   fun defaultValue(name: String): T
 }
 
-fun <T> PropertyResolver<T>.default(defaultValue: (String, T?) -> T): PropertyResolverWithDefaultParent<T> =
+fun <T> PropertyResolver<T>.default(defaultValue: (name: String, parent: T?) -> T): PropertyResolverWithDefaultParent<T> =
   if (this is PropertyResolverWithDefaultParent<*>) error("$this already has a default")
   else object : PropertyResolver<T> by this, PropertyResolverWithDefaultParent<T> {
     override fun defaultValue(name: String): T =

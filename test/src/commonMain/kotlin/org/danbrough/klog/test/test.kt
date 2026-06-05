@@ -2,6 +2,7 @@ package org.danbrough.klog.test
 
 import org.danbrough.klog.Utils
 import org.danbrough.klog.cached
+import org.danbrough.klog.default
 import org.danbrough.klog.propertyResolver
 
 
@@ -39,32 +40,18 @@ suspend fun testMain2(args: Array<String>) {
   println("running testMain() args: ${args.joinToString(",")}")
 
 
-  val props = propertyResolver("_", Utils.environment::get).cached()
+  val cache = mutableMapOf<String, String>()
+  val props = propertyResolver("_", {
+    println("env lookup: $it")
+    Utils.environment[it]
+  }).cached(cache)
+    .default { name, parent -> "[$name:$parent]" }
 
-  props["ROOT"] = "ROOT"
-  props["ANOTHER_ROOT"] = "ANOTHER_ROOT"
 
+  println("--ROOT: ${props["ROOT"]} ..setting property to root")
+  props["--ROOT"] = "root"
+  println("cache has ROOT: ${cache["ROOT"]}")
 
-  var key = "ROOT"
-  println("$key = ${props[key]}")
-  key = "ANOTHER_ROOT"
-  println("$key = ${props[key]}")
-  key = "ROOT_A"
-  println("$key = ${props[key]}")
-  key = "ROOT_A_B"
-  println("$key = ${props[key]}")
-  key = "ROOT_A"
-  println("$key = ${props[key]}")
-  key = "ROOT_C_A"
-  println("$key = ${props[key]}")
-  key = "ANOTHER_ROOT_A"
-  println("$key = ${props[key]}")
-  key = "ANOTHER_ROOT_A_B"
-  println("$key = ${props[key]}")
-  key = "ANOTHER_ROOT_A_B_C"
-  println("$key = ${props[key]}")
-  key = "ANOTHER_ROOT_A_B"
-  println("$key = ${props[key]}")
 
   /*
     val props2 = props.map { Thang(it) }
