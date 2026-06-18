@@ -37,7 +37,7 @@ fun <T> PropertyResolver<T>.cached(cache: MutableMap<String, T> = mutableMapOf()
   if (this is CachedPropertyResolver) this else object : PropertyResolver<T>,
     CachedPropertyResolver {
     override fun get(name: String): T? {
-      println("cached:get $name cached:${cache[name]}")
+      println("CACHE:get $name cached:${cache[name]}")
       return (cache[name] ?: this@cached[name]?.also {
         cache[name] = it
       }).also { value ->
@@ -46,7 +46,7 @@ fun <T> PropertyResolver<T>.cached(cache: MutableMap<String, T> = mutableMapOf()
     }
 
     override fun set(name: String, value: T) {
-      println("cached: set( $name = $value) ")
+      println("CACHE: set( $name = $value) ")
       cache[name] = value
       // this@cached[name] = value
     }
@@ -57,17 +57,15 @@ fun <T> PropertyResolver<T>.cached(cache: MutableMap<String, T> = mutableMapOf()
   }
 
 
-interface PropertyResolverWithDefaultParent<T> : PropertyResolver<T> {
-  fun defaultValue(name: String): T
-}
-
-fun <T> PropertyResolver<T>.default(defaultValue: (name: String, parent: T?) -> T): PropertyResolverWithDefaultParent<T> =
-  if (this is PropertyResolverWithDefaultParent<*>) error("$this already has a default")
-  else object : PropertyResolver<T> by this, PropertyResolverWithDefaultParent<T> {
-    override fun defaultValue(name: String): T =
-      this@default[name] ?: defaultValue(name, this@default.parent(name)).also {
-        this@default[name] = it
-      }
+fun <T> PropertyResolver<T>.getOrDefaultToParent(
+  key: String, defaultValue: (key: String, parent: T?) -> T = { _, parent ->
+    parent ?: throw NoSuchElementException("key: $key is not set")
+  }
+): T? =
+  this[key] ?: (parentName(key)?.let { getOrDefaultToParent(it, defaultValue) } ?: defaultValue(
+    key, null
+  ))?.also {
+    this[key] = it
   }
 
 

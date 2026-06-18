@@ -2,7 +2,7 @@ package org.danbrough.klog.test
 
 import org.danbrough.klog.Utils
 import org.danbrough.klog.cached
-import org.danbrough.klog.default
+import org.danbrough.klog.getOrDefaultToParent
 import org.danbrough.klog.propertyResolver
 
 
@@ -40,17 +40,32 @@ suspend fun testMain2(args: Array<String>) {
   println("running testMain() args: ${args.joinToString(",")}")
 
 
-  val cache = mutableMapOf<String, String>()
+  //val cache = mutableMapOf<String, String>()
   val props = propertyResolver("_", {
     println("env lookup: $it")
     Utils.environment[it]
-  }).cached(cache)
-    .default { name, parent -> "[$name:$parent]" }
+  }).cached()/*  .default { name, parent ->
+      (parent ?: "GLOBAL_DEFAULT").also { println("returning default $it") }
+    }
+  */
 
+  props["ROOT"] ?: run {
+    props["ROOT"] = "root"
+  }
 
-  println("--ROOT: ${props["ROOT"]} ..setting property to root")
-  props["--ROOT"] = "root"
-  println("cache has ROOT: ${cache["ROOT"]}")
+  println("TEST: props[ROOT]: ${props["ROOT"]}")
+  val defaultValue = { key: String, parent: String? ->
+    "$key:$parent"
+  }
+  println(
+    "TEST: props.getOrDefaultToParent(\"ROOT_A\") ${
+      props.getOrDefaultToParent(
+        
+        "ROOT_A", defaultValue
+      )
+    }"
+  )
+  //println("cache[ROOT]: ${cache["ROOT"]}")
 
 
   /*
@@ -68,7 +83,8 @@ suspend fun testMain2(args: Array<String>) {
 
     log.debug { $$"$HOME is $${Utils.environment["HOME"]}" }
     log.debug { $$"$HOMEZ is $${Utils.environment["HOMEZ"]}" }*/
-  println("RUNNING TEST2")
 
+  test()
 
 }
+
