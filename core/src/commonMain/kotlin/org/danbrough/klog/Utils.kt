@@ -4,17 +4,17 @@ import org.danbrough.klog.std.Printer
 import kotlin.reflect.KClass
 
 
-abstract class KLogUtils {
+interface KLogUtils {
 
-  abstract val environment: Map<String, String?>
-  abstract fun getThreadName(): String
+  val environment: Map<String, String?>
+  fun getThreadName(): String
 
-  abstract val stderrPrinter: Printer
-  abstract val stdoutPrinter: Printer
+  val stderrPrinter: Printer
+  val stdoutPrinter: Printer
 
-  abstract fun <T : Any> loggerName(clazz: KClass<T>): String
+  fun <T : Any> loggerName(clazz: KClass<T>): String
 
-  open fun standardLogFactory(): KLogFactory = klogFactoryStandard
+  fun standardLogFactory(): KLogFactory = klogFactoryStandard
 }
 
 expect object Utils : KLogUtils {

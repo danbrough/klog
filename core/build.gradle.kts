@@ -1,6 +1,5 @@
 @file:OptIn(ExperimentalKotlinGradlePluginApi::class, ExperimentalWasmDsl::class)
 
-import com.android.tools.r8.shaking.d8
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
@@ -77,7 +76,7 @@ kotlin {
 
   sourceSets {
 
-    val commonMain by getting {
+    val commonMain = getByName("commonMain") {
       dependencies {
         implementation(kotlin("reflect"))
         implementation(libs.kotlinx.coroutines)
@@ -98,7 +97,7 @@ kotlin {
           }
         }*/
 
-    val androidJvmMain by creating {
+    val androidJvmMain = create("androidJvmMain") {
       dependsOn(commonMain)
     }
 

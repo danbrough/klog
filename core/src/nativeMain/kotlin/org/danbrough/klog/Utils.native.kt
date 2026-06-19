@@ -10,7 +10,7 @@ import platform.posix.stderr
 import platform.posix.stdout
 import kotlin.reflect.KClass
 
-actual object Utils : KLogUtils() {
+actual object Utils : KLogUtils {
   @OptIn(ExperimentalForeignApi::class)
   actual override val environment: Map<String, String?> =
     object : Map<String, String?> by emptyMap() {
