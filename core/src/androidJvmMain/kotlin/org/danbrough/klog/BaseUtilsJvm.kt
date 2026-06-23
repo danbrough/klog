@@ -4,7 +4,7 @@ import org.danbrough.klog.std.Printer
 import java.lang.reflect.Modifier
 import kotlin.reflect.KClass
 
-open class BaseUtilsJvm : KLogUtils() {
+open class BaseUtilsJvm : KLogUtils {
   override val environment: Map<String, String?> = System.getenv()
 
   override fun getThreadName(): String = Thread.currentThread().name

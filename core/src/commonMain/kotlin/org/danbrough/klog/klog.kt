@@ -3,7 +3,6 @@
 package org.danbrough.klog
 
 import org.danbrough.klog.std.BaseStandardLogFactory
-import org.danbrough.klog.std.StandardLogFactory
 
 interface Named {
   val name: String
@@ -23,11 +22,12 @@ fun <T : KLogFactory> installLogging(logging: T, block: T.() -> Unit = {}) {
 }
 
 fun kloggingStandard(block: BaseStandardLogFactory.() -> Unit = {}) {
-  klogFactory = StandardLogFactory.apply(block)
+  logFactory = null
+  (klogFactory as BaseStandardLogFactory).block()
 }
 
 fun kloggingDisabled() {
-  klogFactory = klogFactoryNOOP
+  klogFactory = LOG_FACTORY_NOOP
 }
 
 fun logger(name: String): KLogger = klogFactory.logger(name)

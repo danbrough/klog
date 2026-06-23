@@ -8,10 +8,11 @@ abstract class KLogFactory {
   abstract fun logger(logName: String): KLogger
 }
 
-val klogFactoryNOOP = object : KLogFactory() {
+@Suppress("ClassName")
+object LOG_FACTORY_NOOP : KLogFactory() {
   override fun logger(logName: String) = NOOPLogger
 }
 
-val klogFactoryStandard = BaseStandardLogFactory()
+internal val klogFactoryStandard = BaseStandardLogFactory()
 
 

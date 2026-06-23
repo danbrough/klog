@@ -8,6 +8,7 @@ import org.danbrough.klog.Level
 import org.danbrough.klog.Utils
 import org.danbrough.klog.cached
 import org.danbrough.klog.propertyResolver
+import org.danbrough.klog.withSuffix
 
 
 typealias StdoutMessageFormatter = BaseStandardLogFactory.(level: Level, name: String, message: String?) -> String
@@ -23,13 +24,13 @@ val defaultMessageFormatter: StdoutMessageFormatter = { level, name, message ->
   )
 }
 
+internal val logLevels =
+  propertyResolver("_") { name -> Utils.environment[name]?.let { Level.valueOf(it) } }
+    .cached()
 
 open class BaseStandardLogFactory : KLogFactory() {
 
-  val logLevels =
-    propertyResolver(getter = { name -> Utils.environment[name]?.let { Level.valueOf(it) } }).cached()
-
-  override var defaultLogLevel: Level = logLevels["KLOG"] ?: Level.TRACE
+  override var defaultLogLevel: Level = logLevels["KLOG_LEVEL"] ?: Level.ERROR
 
   var coloredOutput: Boolean = true
 
@@ -65,4 +66,4 @@ open class BaseStandardLogFactory : KLogFactory() {
   }
 }*/
 
-object StandardLogFactory : BaseStandardLogFactory()
+//object StandardLogFactory : BaseStandardLogFactory()
