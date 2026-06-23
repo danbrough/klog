@@ -9,9 +9,7 @@ enum class Level {
 
 
 open class KLogger(
-  val name: String = "",
-  val level: Level = Level.TRACE,
-  val conf: KLogConfiguration = DefaultKLogConfiguration
+  val name: String = "", val level: Level = Level.TRACE, val conf: KLogConfiguration
 ) {
 
 
