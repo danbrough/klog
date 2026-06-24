@@ -1,7 +1,13 @@
 package org.danbrough.klog
 
+/**
+ * Provides the parent property name
+ */
 typealias ParentNameResolver = (name: String) -> String?
 
+/**
+ * Provides the value of a property
+ */
 interface PropertyResolver<T> {
   operator fun get(name: String): T?
   operator fun set(name: String, value: T)
@@ -11,11 +17,15 @@ interface PropertyResolver<T> {
 }
 
 
+/**
+ * Treats the property name as a [nameDelimiter] delimited string and returns the parent name
+ */
 fun defaultParentNameResolver(nameDelimiter: String): ParentNameResolver = { name ->
   name.lastIndexOf(nameDelimiter).takeIf { it > 0 }?.let {
     name.substring(0, it)
   }
 }
+/*
 
 fun ParentNameResolver.withSuffix(suffix: String): ParentNameResolver = { name ->
   name.lastIndexOf(suffix).takeIf { it > 0 }?.let { i ->
@@ -27,6 +37,7 @@ fun ParentNameResolver.withPrefix(prefix: String): ParentNameResolver = { name -
   if (!name.startsWith(prefix)) null else "".let { name.substring(prefix.length) }.let { this(it) }
     ?.let { "$prefix$it" }
 }
+*/
 
 fun <T> propertyResolver(
   nameDelimiter: String = ".", getter: (String) -> T?
@@ -38,9 +49,9 @@ fun <T> propertyResolver(
   private fun parent(name: String, originalName: String): T? {
     return (get(name) ?: parentName(name)?.let { parentName ->
       parent(parentName, originalName)
-    }).also {
+    })/*.also {
       println("parent: name:$name originalName:$originalName get=${get(name)}")
-    }
+    }*/
   }
 
   override fun parent(name: String): T? = parent(name, name)
@@ -48,20 +59,23 @@ fun <T> propertyResolver(
 
 private interface CachedPropertyResolver
 
+/**
+ * Caches the value of the property in a map
+ */
 fun <T> PropertyResolver<T>.cached(cache: MutableMap<String, T> = mutableMapOf()): PropertyResolver<T> =
   if (this is CachedPropertyResolver) this else object : PropertyResolver<T>,
     CachedPropertyResolver {
     override fun get(name: String): T? {
-      println("CACHE:get $name cached:${cache[name]}")
+      //println("CACHE:get $name cached:${cache[name]}")
       return (cache[name] ?: this@cached[name]?.also {
         cache[name] = it
-      }).also { value ->
+      })/*.also { value ->
         println("CACHE:result $name = $value")
-      }
+      }*/
     }
 
     override fun set(name: String, value: T) {
-      println("CACHE: set( $name = $value) ")
+      //println("CACHE: set( $name = $value) ")
       cache[name] = value
       // this@cached[name] = value
     }
@@ -84,8 +98,10 @@ fun <T> PropertyResolver<T>.getOrDefaultToParent(
     this[key] = it
   }
 
+/*
 fun <T> PropertyResolver<T>.parentName(resolver: ParentNameResolver): PropertyResolver<T> = apply {
   parentName = resolver
 }
+*/
 
 

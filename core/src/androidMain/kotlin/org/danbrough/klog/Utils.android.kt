@@ -50,27 +50,24 @@ val Level.androidLogLevel: Int
     else -> -1
   }
 
+internal val Level.androidLogMethod: (String, String?, Throwable?) -> Unit
+  get() = when (this) {
+    Level.TRACE -> Log::v
+    Level.DEBUG -> Log::d
+    Level.INFO -> Log::i
+    Level.WARN -> Log::w
+    Level.ERROR -> Log::e
+    else -> error("Invalid log level: $this")
+  }
+
+
 val AndroidLogWriter: KLogWriter =
   { conf: KLogConfiguration, level: Level, name: String, message: String, t: Throwable? ->
-    TODO("Not yet implemented")
+    level.androidLogMethod(name, message, t)
   }
 
 
 object AndroidLogFactory : KLogFactory(KLogConfiguration(AndroidLogWriter))
-
-private fun <T : Any> unwrapCompanionClass(clazz: Class<T>): Class<*> {
-  return clazz.enclosingClass?.let { enclosingClass ->
-    try {
-      enclosingClass.declaredFields.find { field ->
-        field.name == clazz.simpleName && Modifier.isStatic(field.modifiers) && field.type == clazz
-      }?.run { enclosingClass }
-    } catch (se: SecurityException) {
-      // The security manager isn't properly set up, so it won't be possible
-      // to search for the target declared field.
-      null
-    }
-  } ?: clazz
-}
 
 
 actual object Utils : BaseUtilsJvm() {

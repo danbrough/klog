@@ -1,12 +1,11 @@
 package org.danbrough.klog
 
 
-typealias MessageBlock = () -> Any?
-
 enum class Level {
   TRACE, DEBUG, INFO, WARN, ERROR, NONE;
 }
 
+typealias MessageBlock = () -> Any?
 
 open class KLogger(
   val name: String = "", val level: Level = Level.TRACE, val conf: KLogConfiguration

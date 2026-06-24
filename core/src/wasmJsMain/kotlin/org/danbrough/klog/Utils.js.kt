@@ -2,8 +2,6 @@
 
 package org.danbrough.klog
 
-import kotlin.js.ExperimentalWasmJsInterop
-import kotlin.js.js
 import kotlin.reflect.KClass
 
 val inNode: Boolean = js("typeof process === 'object'")
