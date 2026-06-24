@@ -12,13 +12,10 @@ fun KLogConfiguration.colorString(level: Level, message: String): String =
   if (coloredOutput) level.colored(message) else message
 
 
-val StdOutWriter = object : KLogWriter {
-  override fun writeLog(
-    conf: KLogConfiguration, level: Level, name: String, message: String, t: Throwable?
-  ) {
+val StdOutWriter: KLogWriter =
+  { conf: KLogConfiguration, level: Level, name: String, message: String, t: Throwable? ->
     println(conf.colorString(level, "$level $name $message conf: $conf"))
   }
-}
 
 
 object StandardLogFactory : KLogFactory(KLogConfiguration(StdOutWriter))

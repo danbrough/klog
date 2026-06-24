@@ -1,6 +1,5 @@
 package org.danbrough.klog
 
-import org.danbrough.klog.std.Printer
 import java.lang.reflect.Modifier
 import kotlin.reflect.KClass
 

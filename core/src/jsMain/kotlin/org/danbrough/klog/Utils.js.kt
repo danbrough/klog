@@ -48,7 +48,7 @@ private object JSLoggingFactory : StandardLogFactory() {
   }
 }
 
-actual object Utils : KLogUtils() {
+actual object Utils : KLogUtils {
   actual override val environment: Map<String, String?> =
     object : Map<String, String?> by mapOf("KLOG_LEVEL" to "TRACE") {
       override fun get(key: String): String? = if (key == "KLOG_LEVEL") "TRACE" else getEnvJS(key)

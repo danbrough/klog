@@ -1,5 +1,6 @@
 package org.danbrough.klog
 
+import android.util.Log
 import java.lang.reflect.Modifier
 
 /*
@@ -38,17 +39,22 @@ fun kloggingAndroid(block: AndroidLogging.() -> Unit = {}) {
 }
 
 */
-object AndroidLogWriter : KLogWriter {
-  override fun writeLog(
-    conf: KLogConfiguration,
-    level: Level,
-    name: String,
-    message: String,
-    t: Throwable?
-  ) {
+
+val Level.androidLogLevel: Int
+  get() = when (this) {
+    Level.TRACE -> Log.VERBOSE
+    Level.DEBUG -> Log.DEBUG
+    Level.INFO -> Log.INFO
+    Level.WARN -> Log.WARN
+    Level.ERROR -> Log.ERROR
+    else -> -1
+  }
+
+val AndroidLogWriter: KLogWriter =
+  { conf: KLogConfiguration, level: Level, name: String, message: String, t: Throwable? ->
     TODO("Not yet implemented")
   }
-}
+
 
 object AndroidLogFactory : KLogFactory(KLogConfiguration(AndroidLogWriter))
 

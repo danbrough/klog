@@ -13,7 +13,7 @@ open class KLogConfiguration(vararg writers: KLogWriter) {
     if (logWriters.isNotEmpty()) {
       val message: String = message().toString()
       logWriters.forEach {
-        it.writeLog(this, level, name, message, t)
+        it(this, level, name, message, t)
       }
     }
   }
