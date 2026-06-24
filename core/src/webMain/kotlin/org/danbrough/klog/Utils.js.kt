@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 val inNode: Boolean = js("typeof process === 'object'")
 
 
-private fun jsEnv(name: String): String = js("process.env[name]")
+private fun jsEnv(name: String): String? = js("process.env[name]")
 private fun getEnvJS(name: String): String? = if (inNode) jsEnv(name) else null
 
 
