@@ -81,12 +81,9 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin" }
 kotlinx-browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.ref = "kotlinx-browser" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test-runner" }
 dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
-
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j-api" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j-simple" }
 gradle-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
-
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-runtime" }
 compose-html-core = { module = "org.jetbrains.compose.html:html-core", version.ref = "compose-html" }
