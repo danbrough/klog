@@ -1,24 +1,32 @@
 package org.danbrough.klog.test
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.danbrough.klog.logger
 
-
-@OptIn(ExperimentalWasmJsInterop::class)
-fun consoleInfo(m: String?): Unit = js("console.info(m)")
-
-@OptIn(ExperimentalWasmJsInterop::class)
 actual fun test() {
 
   println("test()")
 
-  consoleInfo("written via the console")
+  //log.info { "info test" }
+  logger("THANG").info { "info from THANG logger" }
+  val scope = CoroutineScope(Dispatchers.Default)
+  /*
+    scope.launch {
+      coroutineTest()
+    }
+  */
 
 
 }
 
 
+@OptIn(DelicateCoroutinesApi::class)
 fun main(args: Array<String>) {
-  CoroutineScope(Dispatchers.Default).launch { testMain(args) }
+  GlobalScope.launch {
+    testMain(args)
+  }
 }
