@@ -1,7 +1,10 @@
 package org.danbrough.klog
 
 
-open class KLogConfiguration(open val logWriters: List<KLogWriter> = emptyList()) {
+open class KLogConfiguration(vararg writers: KLogWriter) {
+
+  open val logWriters: List<KLogWriter> = writers.toList()
+
   var coloredOutput: Boolean = true
 
   inline fun write(
@@ -14,6 +17,5 @@ open class KLogConfiguration(open val logWriters: List<KLogWriter> = emptyList()
       }
     }
   }
-
 }
 

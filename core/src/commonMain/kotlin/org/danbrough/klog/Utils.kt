@@ -1,10 +1,9 @@
 package org.danbrough.klog
 
 import org.danbrough.klog.std.StandardLogFactory
-import org.danbrough.klog.std.Printer
 import kotlin.reflect.KClass
 
-private val klogFactoryStandard = StandardLogFactory()
+typealias Printer = (Any?) -> Unit
 
 interface KLogUtils {
 
@@ -16,8 +15,7 @@ interface KLogUtils {
 
   fun <T : Any> loggerName(clazz: KClass<T>): String
 
-  fun defaultLogFactory(): KLogFactory = klogFactoryStandard
-
+  fun defaultLogFactory(): KLogFactory = StandardLogFactory
 }
 
 expect object Utils : KLogUtils {

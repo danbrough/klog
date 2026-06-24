@@ -1,6 +1,5 @@
 package org.danbrough.klog
 
-import org.danbrough.klog.std.Printer
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.toKString
 import platform.posix.fprintf

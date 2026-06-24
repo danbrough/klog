@@ -38,10 +38,19 @@ fun kloggingAndroid(block: AndroidLogging.() -> Unit = {}) {
 }
 
 */
-
-object AndroidLogFactory : KLogFactory() {
-  override fun logger(logName: String) = TODO()
+object AndroidLogWriter : KLogWriter {
+  override fun writeLog(
+    conf: KLogConfiguration,
+    level: Level,
+    name: String,
+    message: String,
+    t: Throwable?
+  ) {
+    TODO("Not yet implemented")
+  }
 }
+
+object AndroidLogFactory : KLogFactory(KLogConfiguration(AndroidLogWriter))
 
 private fun <T : Any> unwrapCompanionClass(clazz: Class<T>): Class<*> {
   return clazz.enclosingClass?.let { enclosingClass ->

@@ -44,5 +44,5 @@ open class KLogger(
 
 }
 
-object NOOPLogger : KLogger(conf = KLogConfiguration(emptyList()))
+
 

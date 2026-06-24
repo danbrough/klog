@@ -27,7 +27,7 @@ fun kloggingStandard(block: StandardLogFactory.() -> Unit = {}) {
 }
 
 fun kloggingDisabled() {
-  klogFactory = LOG_FACTORY_NOOP
+  klogFactory = NOOPLogFactory
 }
 
 fun logger(name: String): KLogger = klogFactory.logger(name)
