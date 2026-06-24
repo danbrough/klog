@@ -2,7 +2,7 @@
 
 package org.danbrough.klog
 
-import org.danbrough.klog.std.BaseStandardLogFactory
+import org.danbrough.klog.std.StandardLogFactory
 
 interface Named {
   val name: String
@@ -13,17 +13,17 @@ var klogFactory: KLogFactory
   set(value) {
     logFactory = value
   }
-  get() = logFactory ?: Utils.standardLogFactory().also { logFactory = it }
+  get() = logFactory ?: Utils.defaultLogFactory().also { logFactory = it }
 
 
 fun <T : KLogFactory> installLogging(logging: T, block: T.() -> Unit = {}) {
-  klogFactory = logging
+  if (klogFactory != logging) klogFactory = logging
   block.invoke(logging)
 }
 
-fun kloggingStandard(block: BaseStandardLogFactory.() -> Unit = {}) {
+fun kloggingStandard(block: StandardLogFactory.() -> Unit = {}) {
   logFactory = null
-  (klogFactory as BaseStandardLogFactory).block()
+  (klogFactory as StandardLogFactory).block()
 }
 
 fun kloggingDisabled() {

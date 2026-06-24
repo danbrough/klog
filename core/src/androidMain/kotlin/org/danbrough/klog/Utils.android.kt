@@ -1,8 +1,8 @@
 package org.danbrough.klog
 
-import android.util.Log
 import java.lang.reflect.Modifier
 
+/*
 class AndroidLogger(name: String) : LoggerBase(name) {
 
   override var log: LoggerMethod = { level, _, message, t ->
@@ -37,13 +37,18 @@ fun kloggingAndroid(block: AndroidLogging.() -> Unit = {}) {
   installLogging(AndroidLogging, block)
 }
 
+*/
+
+object AndroidLogFactory : KLogFactory() {
+  override fun logger(logName: String) = TODO()
+}
 
 private fun <T : Any> unwrapCompanionClass(clazz: Class<T>): Class<*> {
   return clazz.enclosingClass?.let { enclosingClass ->
     try {
       enclosingClass.declaredFields.find { field ->
-          field.name == clazz.simpleName && Modifier.isStatic(field.modifiers) && field.type == clazz
-        }?.run { enclosingClass }
+        field.name == clazz.simpleName && Modifier.isStatic(field.modifiers) && field.type == clazz
+      }?.run { enclosingClass }
     } catch (se: SecurityException) {
       // The security manager isn't properly set up, so it won't be possible
       // to search for the target declared field.
@@ -53,4 +58,6 @@ private fun <T : Any> unwrapCompanionClass(clazz: Class<T>): Class<*> {
 }
 
 
-
+actual object Utils : BaseUtilsJvm() {
+  override fun defaultLogFactory(): KLogFactory = AndroidLogFactory
+}

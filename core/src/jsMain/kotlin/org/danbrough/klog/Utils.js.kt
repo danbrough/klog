@@ -1,7 +1,7 @@
 package org.danbrough.klog
 
 import org.danbrough.klog.std.Printer
-import org.danbrough.klog.std.BaseStandardLogFactory
+import org.danbrough.klog.std.StandardLogFactory
 import org.danbrough.klog.std.colorString
 import kotlin.reflect.KClass
 
@@ -10,7 +10,7 @@ val inNode: Boolean = js("typeof process === 'object'")
 private fun getEnvJS(name: String): String? = if (inNode) js("process.env[name]") else null
 
 
-private object JSLoggingFactory : BaseStandardLogFactory() {
+private object JSLoggingFactory : StandardLogFactory() {
 
 
   init {
