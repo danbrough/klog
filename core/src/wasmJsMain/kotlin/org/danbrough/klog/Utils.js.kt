@@ -6,10 +6,33 @@ import kotlin.reflect.KClass
 
 val inNode: Boolean = js("typeof process === 'object'")
 
-private fun getEnvJS(name: String): String? = if (inNode) js("process.env[name]") else null
+
+private fun jsEnv(name: String): String = js("process.env[name]")
+private fun getEnvJS(name: String): String? = if (inNode) jsEnv(name) else null
 
 
 /*
+@Suppress("RedundantNullableReturnType")
+private fun getEnvJS(name: String): String? =
+  js("typeof process === 'object' ? process.env[name] : null")
+
+private fun console(s: String?): Unit = js("console.info(s)")
+
+actual object Utils : KLogUtils() {
+  @OptIn(ExperimentalWasmJsInterop::class)
+  actual override val environment: Map<String, String?> =
+    object : Map<String, String?> by emptyMap() {
+      override fun get(key: String): String? = if (key == "KLOG_LEVEL") "TRACE" else getEnvJS(key)
+    }
+
+  actual override fun getThreadName(): String = ""
+
+  actual override val stderrPrinter: Printer = { console("$it") }
+  actual override val stdoutPrinter: Printer = stderrPrinter
+  actual override fun <T : Any> loggerName(clazz: KClass<T>): String = "KLogger"
+
+}
+
 private object JSLoggingFactory : StandardLogFactory() {
 
 
@@ -49,14 +72,21 @@ private object JSLoggingFactory : StandardLogFactory() {
 }
 */
 
+private fun consoleInfo(s: String?): Unit = js("console.info(s)")
+private fun consoleDebug(s: String?): Unit = js("console.debug(s)")
+private fun consoleTrace(s: String?): Unit = js("console.trace(s)")
+private fun consoleWarn(s: String?): Unit = js("console.warn(s)")
+private fun consoleError(s: String?): Unit = js("console.error(s)")
+
+
 val JSLogWriter: KLogWriter =
   { conf: KLogConfiguration, level: Level, name: String, message: String, t: Throwable? ->
     when (level) {
-      Level.TRACE -> if (inNode) js("console.debug(message)") else js("console.trace(message)")
-      Level.DEBUG -> js("console.debug(message)")
-      Level.INFO -> js("console.info(message)")
-      Level.WARN -> js("console.warn(message)")
-      Level.ERROR -> js("console.error(message)")
+      Level.TRACE -> if (inNode) consoleDebug(message) else consoleTrace(message)
+      Level.DEBUG -> consoleDebug(message)
+      Level.INFO -> consoleInfo(message)
+      Level.WARN -> consoleWarn(message)
+      Level.ERROR -> consoleError(message)
       else -> {}
     }
   }
