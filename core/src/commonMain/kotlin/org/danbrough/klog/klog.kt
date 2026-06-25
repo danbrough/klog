@@ -8,6 +8,10 @@ interface Named {
   val name: String
 }
 
+object Env {
+  val klogColored = Utils.environment.containsKey("KLOG_COLOR")
+}
+
 private var logFactory: KLogFactory? = null
 var klogFactory: KLogFactory
   set(value) {

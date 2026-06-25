@@ -3,6 +3,7 @@ package org.danbrough.klog
 
 enum class Level {
   TRACE, DEBUG, INFO, WARN, ERROR, NONE;
+
 }
 
 typealias MessageBlock = () -> Any?

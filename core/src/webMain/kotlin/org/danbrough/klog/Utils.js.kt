@@ -2,6 +2,9 @@
 
 package org.danbrough.klog
 
+import org.danbrough.klog.std.colored
+import kotlin.js.ExperimentalWasmJsInterop
+import kotlin.js.js
 import kotlin.reflect.KClass
 
 val inNode: Boolean = js("typeof process === 'object'")
@@ -80,7 +83,8 @@ private fun consoleError(s: String?): Unit = js("console.error(s)")
 
 
 val JSLogWriter: KLogWriter =
-  { conf: KLogConfiguration, level: Level, name: String, message: String, t: Throwable? ->
+  { conf: KLogConfiguration, level: Level, name: String, msg: String, t: Throwable? ->
+    val message = level.colored(conf.formatMessage(level, name, msg, t))
     when (level) {
       Level.TRACE -> if (inNode) consoleDebug(message) else consoleTrace(message)
       Level.DEBUG -> consoleDebug(message)
@@ -95,6 +99,10 @@ object JSLoggingFactory : KLogFactory(KLogConfiguration(JSLogWriter))
 actual object Utils : KLogUtils {
   actual override val environment: Map<String, String?> =
     object : Map<String, String?> by mapOf("KLOG_LEVEL" to "TRACE") {
+      override fun containsKey(key: String): Boolean = when(key) {
+        "KLOG_COLOR" -> inNode
+        else -> false
+      }
       override fun get(key: String): String? = if (key == "KLOG_LEVEL") "TRACE" else getEnvJS(key)
     }
 

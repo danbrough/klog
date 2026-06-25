@@ -14,7 +14,7 @@ fun KLogConfiguration.colorString(level: Level, message: String): String =
 
 val StdOutWriter: KLogWriter =
   { conf: KLogConfiguration, level: Level, name: String, message: String, t: Throwable? ->
-    println(conf.colorString(level, "$level $name $message conf: $conf"))
+    println(conf.colorString(level, conf.formatMessage(level, name, message, t)))
   }
 
 

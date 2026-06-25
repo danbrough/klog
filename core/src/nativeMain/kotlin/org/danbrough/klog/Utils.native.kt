@@ -13,6 +13,7 @@ actual object Utils : KLogUtils {
   @OptIn(ExperimentalForeignApi::class)
   actual override val environment: Map<String, String?> =
     object : Map<String, String?> by emptyMap() {
+      override fun containsKey(key: String): Boolean = getenv(key) != null
       override fun get(key: String): String? = getenv(key)?.toKString()
     }
 
