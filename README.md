@@ -2,6 +2,7 @@
 
 Light-weight logging facade for kotlin multi-platform.
 [Try out Kermit instead](https://github.com/touchlab/Kermit)
+[or Log4k](https://github.com/smyrgeorge/log4k)
 
 Implementations default to simple stdout loggers on native targets,
 [SLFJ](https://www.slf4j.org/) on jvm and
