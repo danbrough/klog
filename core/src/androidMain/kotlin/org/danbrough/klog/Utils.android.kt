@@ -67,7 +67,9 @@ val AndroidLogWriter: KLogWriter =
   }
 
 
-object AndroidLogFactory : KLogFactory(KLogConfiguration(AndroidLogWriter))
+object AndroidLogFactory : KLogFactory(KLogConfiguration(AndroidLogWriter)){
+  override val defaultLogLevel: Level = Level.TRACE
+}
 
 
 actual object Utils : BaseUtilsJvm() {

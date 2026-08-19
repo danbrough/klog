@@ -6,7 +6,7 @@ internal val logLevels =
 abstract class KLogFactory(val defaultConfiguration: KLogConfiguration) {
   //open val defaultLogLevel = Level.NONE
 
-  open val defaultLogLevel: Level = logLevels["KLOG_LEVEL"] ?: Level.ERROR
+  open var defaultLogLevel: Level = logLevels["KLOG_LEVEL"] ?: Level.ERROR
 
   fun getLogLevel(logName: String): Level = logLevels[logName] ?: defaultLogLevel
 
