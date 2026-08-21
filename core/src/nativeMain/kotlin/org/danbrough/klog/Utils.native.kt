@@ -9,30 +9,29 @@ import platform.posix.stderr
 import platform.posix.stdout
 import kotlin.reflect.KClass
 
-actual object Utils : KLogUtils {
+open class UtilsPosix : KLogUtils {
   @OptIn(ExperimentalForeignApi::class)
-  actual override val environment: Map<String, String?> =
+  override val environment: Map<String, String?> =
     object : Map<String, String?> by emptyMap() {
       override fun containsKey(key: String): Boolean = getenv(key) != null
       override fun get(key: String): String? = getenv(key)?.toKString()
     }
 
-
   //
 
-  actual override fun getThreadName(): String = pthread_self().toString()
+  override fun getThreadName(): String = pthread_self().toString()
 
   @OptIn(ExperimentalForeignApi::class)
-  actual override val stderrPrinter: Printer = {
+  override val stderrPrinter: Printer = {
     fprintf(stderr, "${it?.toString()}\n")
   }
 
   @OptIn(ExperimentalForeignApi::class)
-  actual override val stdoutPrinter: Printer = {
+  override val stdoutPrinter: Printer = {
     fprintf(stdout, "${it?.toString()}\n")
   }
 
-  actual override fun <T : Any> loggerName(clazz: KClass<T>): String =
+  override fun <T : Any> loggerName(clazz: KClass<T>): String =
     clazz.qualifiedName!!.substringBefore(".Companion")
 
 }
