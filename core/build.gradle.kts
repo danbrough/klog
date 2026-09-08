@@ -2,6 +2,7 @@
 
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.jvm.KotlinJvmTarget
 
 plugins {
@@ -48,7 +49,12 @@ kotlin {
     browser()
   }
 
-  jvm {}
+  jvm {
+
+    compilerOptions {
+      jvmTarget = JvmTarget.JVM_17
+    }
+  }
 
   /*  js {
       nodejs()
