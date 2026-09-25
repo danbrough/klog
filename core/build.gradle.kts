@@ -38,16 +38,21 @@ kotlin {
       testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }*/
   }
+  js {
+    nodejs()
+    browser()
+  }
 
   wasmJs {
     nodejs()
     browser()
   }
 
-  js {
+  wasmWasi{
     nodejs()
-    browser()
   }
+
+
 
   jvm {
 
