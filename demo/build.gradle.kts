@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalMainFunctionArgumentsDsl
 import org.jetbrains.kotlin.konan.target.HostManager
-import org.jetbrains.kotlin.konan.target.KonanTarget
 
 plugins {
   alias(libs.plugins.kotlin.multiplatform)
@@ -55,6 +54,13 @@ kotlin {
       passCliArgumentsToMainFunction()
       //passProcessArgvToMainFunction()
     }
+  }
+
+  wasmWasi {
+    nodejs {
+      passCliArgumentsToMainFunction()
+    }
+    binaries.executable()
   }
 
   jvm {

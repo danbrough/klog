@@ -1,1 +1,1 @@
-./gradlew :test:wasmJsNodeDevelopmentRun
+./gradlew :demo:wasmJsNodeDevelopmentRun

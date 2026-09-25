@@ -35,7 +35,7 @@ plugins {
 //include(":core", ":slf4j", ":oshai")
 include(":core")
 
-include(":test", ":webtest")
+include(":demo", ":webtest")
 
 rootProject.name = "klog"
 

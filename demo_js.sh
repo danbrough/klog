@@ -1,1 +1,1 @@
-./gradlew :test:jsNodeDevelopmentRun
+./gradlew :demo:jsNodeDevelopmentRun

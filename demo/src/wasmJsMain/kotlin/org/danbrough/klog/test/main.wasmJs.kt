@@ -4,8 +4,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.danbrough.klog.logger
+import kotlin.time.Duration.Companion.seconds
 
 actual fun test() {
 
@@ -24,9 +27,13 @@ actual fun test() {
 }
 
 
-@OptIn(DelicateCoroutinesApi::class)
 fun main(args: Array<String>) {
-  GlobalScope.launch {
+  CoroutineScope(Dispatchers.Default).launch {
     testMain(args)
+    println("finished testMain")
+    delay(2.seconds)
+    println("finished delay")
+  }.invokeOnCompletion {
+    println("done")
   }
 }
