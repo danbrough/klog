@@ -33,6 +33,10 @@ kotlin {
       version = release(libs.versions.android.minSdk.get().toInt())
     }
 
+
+    compilerOptions {
+      jvmTarget = JvmTarget.JVM_17
+    }
     /*defaultConfig {
       minSdk = Constants.Android.MIN_SDK
       testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -48,7 +52,7 @@ kotlin {
     browser()
   }
 
-  wasmWasi{
+  wasmWasi {
     nodejs()
   }
 
