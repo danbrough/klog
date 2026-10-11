@@ -1,7 +1,7 @@
 package org.danbrough.klog
 
 internal val logLevels =
-  propertyResolver("_") { name -> Utils.environment[name]?.let { Level.valueOf(it) } }.cached()
+  propertyResolver("_") { name -> Utils.environment["KLOG_$name"]?.let { Level.valueOf(it) } }.cached()
 
 abstract class KLogFactory(val defaultConfiguration: KLogConfiguration) {
   //open val defaultLogLevel = Level.NONE
