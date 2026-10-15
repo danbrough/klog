@@ -43,6 +43,14 @@ fun ParentNameResolver.withPrefix(prefix: String): ParentNameResolver = { name -
  */
 typealias ParentNameResolver = (name: String) -> String?
 
+/*
+fun ParentNameResolver.withSuffix(suffix: String): ParentNameResolver = { name ->
+  name.lastIndexOf(suffix).takeIf { it > 0 }?.let { i ->
+    this(name.substring(0, i))?.let { "$it$suffix" }
+  }
+}
+*/
+
 /**
  * Provides the value of a property
  */
